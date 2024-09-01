@@ -12,18 +12,20 @@
 (defvar *rafi-stream* nil)
 
 (defun open-port (&optional (port *default-port*))
+  (uiop:run-program (format nil "stty < ~A crtscts" port)
+                    :output *standard-output*
+                    :error-output *standard-output*)
   (setf *rafi-stream*
         (cserial-port:make-serial-stream (cserial-port:open-serial port :baud-rate 9600))))
 
 (defun to-octets (things)
-  (loop for x in things
-        if (stringp x)
-          append (coerce (sb-ext:string-to-octets x) 'list)
-        else
-          if (characterp x)
-               collect (char-code x)
-        else
-          collect x))
+  (flex:with-output-to-sequence (s)
+    (dolist (thing things)
+      (etypecase thing
+        (string (write-sequence (flex:string-to-octets thing) s))
+        ((array (unsigned-byte 8)) (write-sequence thing s))
+        (character (write-byte (char-code thing) s))
+        (number (write-byte thing s))))))
 
 (defun write-rafi (&rest stuff)
   (let ((octets (to-octets stuff)))
@@ -42,7 +44,10 @@
 (defun disable-system-line ()
   (write-rafi 1 #x6b))
 
-(defun get-current-page ()
+(defun clear-page ()
+  (write-rafi #x0c))
+
+(defun send-current-page ()
   (write-rafi 1 #x4c))
 
 (defun switch-to (page-no)
@@ -63,15 +68,59 @@
 
 (defun setup ()
   (set-pc-mode)
-  (switch-to 1)
   (show-cursor))
+
+(defvar *page-no* 0)
+
+(defun copy-until-end-of-page (input-stream output-stream)
+  "Reads from input-stream and writes to output-stream until the sequence 9B 32 3B 39 56 is encountered."
+  (let ((end-sequence #(#x9B #x32 #x3B #x39 #x56))
+        (buffer (make-array 5 :element-type 'unsigned-byte :initial-element 0)))
+    (loop
+       ;; Shift the buffer left and read the next byte
+       for byte = (read-byte input-stream)
+       do
+          ;; Shift buffer to the left and add the new byte at the end
+          (dotimes (i 4)
+            (setf (aref buffer i) (aref buffer (1+ i))))
+          (setf (aref buffer 4) byte)
+
+          ;; Check if the buffer matches the end-sequence
+          (when (equalp buffer end-sequence)
+            (return)) ; Stop reading if the end sequence is detected
+
+          ;; Write the oldest byte in the buffer to the output stream
+          (write-byte (aref buffer 0) output-stream))
+
+    ;; If the loop exited because of the end sequence, write the remaining valid bytes
+    (dotimes (i 4)
+      (write-byte (aref buffer i) output-stream))))
+
+
+(defun save-page (&optional (filename (format nil "page-~A.cept" (incf *page-no*))))
+  (send-current-page)
+  (with-open-file (f filename
+                     :element-type '(unsigned-byte 8)
+                     :direction :output
+                     :if-does-not-exist :create
+                     :if-exists :supersede)
+    (unwind-protect
+         (copy-until-end-of-page *rafi-stream* f)
+      (format t "~A written~%" f)
+      (close f))))
+
+(defun load-page (filename)
+  (clear-page)
+  (write-rafi (read-file-into-byte-vector filename)))
 
 (defmacro with-rafi-stream ((stream) &body body)
   `(let ((*rafi-stream* ,stream))
      ,@body))
 
 (defun local-command ()
-  (constant-input))
+  (case (code-char (read-byte *rafi-stream*))
+    (#\l (load-page "page.cept"))
+    (#\s (save-page "page.cept"))))
 
 (defun handle-byte (stream byte)
   (format t "<~2,'0X~%" byte)
