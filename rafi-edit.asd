@@ -1,5 +1,5 @@
 (defsystem "rafi-edit"
-  :description "rafi-edit: A simple editing and signage system for the RAFI C4 Bildschirmtext terminal"
+  :description "rafi-edit: A simple editing and signage system for the RAFI C14 Bildschirmtext terminal"
   :author "Hans Hübner <hans.huebner@example.com>"
   :license "MIT"
   :version "0.1"

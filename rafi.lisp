@@ -110,12 +110,21 @@
       (close f))))
 
 (defun load-page (filename)
+  (format t "~&; loading page ~A~%" filename)
   (clear-page)
   (write-rafi (read-file-into-byte-vector filename)))
 
 (defmacro with-rafi-stream ((stream) &body body)
   `(let ((*rafi-stream* ,stream))
      ,@body))
+
+(defmacro with-rafi-port ((&optional (port *default-port*)) &body body)
+  `(let ((*rafi-stream* (open-port ,port)))
+     (unwind-protect
+          (progn
+            (setup)
+            ,@body)
+       (close *rafi-stream*))))
 
 (defun local-command ()
   (case (code-char (read-byte *rafi-stream*))
@@ -131,17 +140,23 @@
                 (write-byte byte stream)
                 (finish-output stream))))
 
-(defun do-editing-commands (stream)
-  (with-rafi-stream (stream)
-    (catch 'exit
-      (loop for byte = (read-byte stream)
-            do (handle-byte stream byte)))))
+(defun do-editing-commands ()
+  (catch 'exit
+    (loop for byte = (read-byte *rafi-stream*)
+          do (handle-byte *rafi-stream* byte))))
+
+(defun slideshow (&key (dir "pages") (sleep 10) (port *default-port*))
+  (let* ((cept-files (directory (merge-pathnames (format nil "~A/*.cept" dir))))
+         (cept-files (sort cept-files 'string-lessp :key 'pathname-name)))
+    (assert cept-files)
+    (with-rafi-port (port)
+      (setup)
+      (loop
+        (dolist (file cept-files)
+          (load-page file)
+          (sleep sleep))))))
 
 (defun editor (&optional (port *default-port*))
-  (let ((stream (open-port port)))
-    (with-rafi-stream (stream)
-        (setup))
-    (unwind-protect
-         (do-editing-commands stream)
-      (close stream))))
+  (with-rafi-port (port)
+    (do-editing-commands)))
 
