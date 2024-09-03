@@ -41,8 +41,8 @@
 (defun test ()
   (write-rafi 1 #x78))
 
-(defun disable-system-line ()
-  (write-rafi 1 #x6b))
+(defun disable-system-line (&optional permanentp)
+  (write-rafi 1 (if permanentp #x6b #x6a)))
 
 (defun clear-page ()
   (write-rafi #x0c))
@@ -50,7 +50,7 @@
 (defun send-current-page ()
   (write-rafi 1 #x4c))
 
-(defun switch-to (page-no)
+(defun switch-to-page (page-no)
   (write-rafi 1 (ecase page-no
                   (0 #x6c)
                   (1 #x6d)
@@ -60,15 +60,23 @@
 (defun constant-input ()
   (write-rafi 1 #x49))
 
+(defun service-jump (&optional (line 23))
+  (write-rafi #x1f #x2f #x40 (+ #x41 line)))
+
+(defun jump-return ()
+  (write-rafi #x1F #x2F #x4F))
+
 (defun reset-page (&optional (arg #x42))
   (write-rafi #x1f #x2f arg))
 
 (defun show-cursor ()
   (write-rafi #x11))
 
+(defun hide-cursor ()
+  (write-rafi #x14))
+
 (defun setup ()
-  (set-pc-mode)
-  (show-cursor))
+  (set-pc-mode))
 
 (defvar *page-no* 0)
 
@@ -96,7 +104,6 @@
     (dotimes (i 4)
       (write-byte (aref buffer i) output-stream))))
 
-
 (defun save-page (&optional (filename (format nil "page-~A.cept" (incf *page-no*))))
   (send-current-page)
   (with-open-file (f filename
@@ -112,7 +119,8 @@
 (defun load-page (filename)
   (format t "~&; loading page ~A~%" filename)
   (clear-page)
-  (write-rafi (read-file-into-byte-vector filename)))
+  (write-rafi (read-file-into-byte-vector filename))
+  (disable-system-line))
 
 (defmacro with-rafi-stream ((stream) &body body)
   `(let ((*rafi-stream* ,stream))
@@ -151,6 +159,8 @@
     (assert cept-files)
     (with-rafi-port (port)
       (setup)
+      (hide-cursor)
+      (disable-system-line)
       (loop
         (dolist (file cept-files)
           (load-page file)
@@ -158,5 +168,7 @@
 
 (defun editor (&optional (port *default-port*))
   (with-rafi-port (port)
+    (setup)
+    (show-cursor)
     (do-editing-commands)))
 
