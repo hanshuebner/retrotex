@@ -10,6 +10,7 @@
 (defvar *default-port* "/dev/ttyUSB0")
 
 (defvar *rafi-stream* nil)
+(defvar *current-filename* #p"pages/page.cept")
 
 (defun open-port (&optional (port *default-port*))
   (uiop:run-program (format nil "stty < ~A crtscts" port)
@@ -63,7 +64,7 @@
 (defun service-jump (&optional (line 23))
   (write-rafi #x1f #x2f #x40 (+ #x41 line)))
 
-(defun jump-return ()
+(defun service-jump-return ()
   (write-rafi #x1F #x2F #x4F))
 
 (defun reset-page (&optional (arg #x42))
@@ -117,10 +118,15 @@
       (close f))))
 
 (defun load-page (filename)
-  (format t "~&; loading page ~A~%" filename)
-  (clear-page)
-  (write-rafi (read-file-into-byte-vector filename))
-  (disable-system-line))
+  (cond
+    ((probe-file filename)
+     (format t "~&; loading page ~A~%" filename)
+     (clear-page)
+     (write-rafi (read-file-into-byte-vector filename))
+     (disable-system-line))
+    (t
+     (format t "~&; File ~S does not exist~%" filename)
+     (write-rafi #\return (format nil "Page ~A does not exist" (pathname-name filename))))))
 
 (defmacro with-rafi-stream ((stream) &body body)
   `(let ((*rafi-stream* ,stream))
@@ -134,15 +140,58 @@
             ,@body)
        (close *rafi-stream*))))
 
+(defun clear-input-line ()
+  (write-rafi #\return (make-string 40 :initial-element #\space)))
+
+(defun get-input (prompt)
+  (write-rafi #\return prompt ": ")
+  (let ((buffer (make-array 40 :element-type 'character :adjustable t :fill-pointer 0)))
+    (loop
+      (let ((char (code-char (read-byte *rafi-stream*)))
+            (current-position (+ (length prompt) 2 (length buffer))))
+        (cond
+          ((equal char #\return)
+           (return))
+          ((member char '(#\backspace #\delete #\can))
+           (when (plusp (length buffer))
+             (vector-pop buffer)
+             (if (< current-position 40)
+                 (write-rafi #\backspace #\space #\backspace)
+                 (write-rafi #\space))))
+          ((and (graphic-char-p char)
+                (< current-position 40))
+           (vector-push char buffer)
+           (write-rafi char))
+          (t (format t "; ignored: ~S~%" char)))))
+    (clear-input-line)
+    (coerce buffer 'string)))
+
+(defun set-filename ()
+  (let ((new-filename (get-input (format nil "Page name [~A]" (pathname-name *current-filename*) (pathname-type *current-filename*)))))
+    (unless (emptyp new-filename)
+      (setf *current-filename* (merge-pathnames new-filename *current-filename*)))
+    (format t "; filename ~S~%" *current-filename*)))
+
+
 (defun local-command ()
-  (case (code-char (read-byte *rafi-stream*))
-    (#\l (load-page "page.cept"))
-    (#\s (save-page "page.cept"))))
+  (service-jump 23)
+  (write-rafi "[L]oad [S]ave [F]ilename [Q]uit")
+  (unwind-protect
+       (case (code-char (prog1
+                            (read-byte *rafi-stream*)
+                          (clear-input-line)))
+         (#\l (load-page *current-filename*))
+         (#\s (save-page *current-filename*))
+         (#\f (set-filename))
+         (#\q (throw 'exit nil)))
+    (service-jump-return)))
 
 (defun handle-byte (stream byte)
-  (format t "<~2,'0X~%" byte)
+  (format t "<~2,'0X ~C~%" byte (if (<= 32 byte 127) (code-char byte) #\?))
              (case byte
-               (#x13 (throw 'exit nil)) ;; DC3 => '*'
+               (#x13 ;; DC3 => '*'
+                ; (write-rafi 1 #x42 0 #x0 0 0) ; send stack line (?)
+                )
                (#x1a (local-command))
                (t
                 (write-byte byte stream)
@@ -151,7 +200,8 @@
 (defun do-editing-commands ()
   (catch 'exit
     (loop for byte = (read-byte *rafi-stream*)
-          do (handle-byte *rafi-stream* byte))))
+          do (handle-byte *rafi-stream* byte)))
+  (hide-cursor))
 
 (defun slideshow (&key (dir "pages") (sleep 10) (port *default-port*))
   (let* ((cept-files (directory (merge-pathnames (format nil "~A/*.cept" dir))))
