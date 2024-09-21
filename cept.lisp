@@ -2,11 +2,109 @@
 
 (defpackage :cept
   (:use :cl :alexandria)
-  (:export *mode-0-conversion-table*
-           *mode-1-conversion-table*
-           string-to-bytes))
+  (:export #:*mode-0-conversion-table*
+           #:*mode-1-conversion-table*
+           #:string-to-bytes
+           #:*cept-stream*
+           #:write-cept
+           #:reset
+           #:test
+           #:disable-system-line
+           #:clear-page
+           #:service-jump
+           #:service-jump-return
+           #:reset-page
+           #:show-cursor
+           #:hide-cursor
+           #:set-scroll-region
+           #:enable-scrolling
+           #:disable-scrolling
+           #:scroll-up
+           #:scroll-down
+           #:goto
+           #:double-height
+           #:double-width
+           #:quad-size
+           #:constant-input))
 
 (in-package :cept)
+
+(defvar *cept-stream* nil)
+
+(defun to-octets (things)
+  (flex:with-output-to-sequence (s)
+    (dolist (thing things)
+      (etypecase thing
+        (string (write-sequence (cept:string-to-bytes thing) s))
+        ((array (unsigned-byte 8)) (write-sequence thing s))
+        (character (write-byte (char-code thing) s))
+        (number (write-byte thing s))))))
+
+(defun write-cept (&rest stuff)
+  (let ((octets (to-octets stuff)))
+    (write-sequence (make-array (length octets) :element-type '(unsigned-byte 8) :initial-contents octets)
+                    *cept-stream*)))
+
+(defun reset ()
+  (write-cept 1 #x64))
+
+(defun test ()
+  (write-cept 1 #x78))
+
+(defun disable-system-line (&optional permanentp)
+  (write-cept 1 (if permanentp #x6b #x6a)))
+
+(defun clear-page ()
+  (write-cept #x0c))
+
+(defun service-jump (&optional (line 23))
+  (write-cept #x1f #x2f #x40 (+ #x41 line)))
+
+(defun service-jump-return ()
+  (write-cept #x1F #x2F #x4F))
+
+(defun reset-page (&optional (arg #x42))
+  (write-cept #x1f #x2f arg))
+
+(defun show-cursor ()
+  (write-cept #x11))
+
+(defun hide-cursor ()
+  (write-cept #x14))
+
+(defun set-scroll-region (top bottom)
+  (let ((top (1+ top))
+        (bottom (1+ bottom)))
+    (write-cept #x9B
+                (+ #x30 (floor top 10)) (+ #x30 (mod top 10)) #x3B
+                (+ #x30 (floor bottom 10)) (+ #x30 (mod bottom 10)) #x55)))
+
+(defun enable-scrolling ()
+  (write-cept #x9B #x32 #x60))
+
+(defun disable-scrolling ()
+  (write-cept #x9B #x33 #x60))
+
+(defun scroll-up ()
+  (write-cept #x9B #x30 #x60))
+
+(defun scroll-down ()
+  (write-cept #x9B #x31 #x60))
+
+(defun goto (row col)
+  (write-cept #x1f (+ #x41 row) (+ #x41 col)))
+
+(defun double-height ()
+  (write-cept #x8d))
+
+(defun double-width ()
+  (write-cept #x8e))
+
+(defun quad-size ()
+  (write-cept #x8f))
+
+(defun constant-input ()
+  (write-cept 1 #x49))
 
 (defun g2code (mode c &optional extra)
   `(,@(if (zerop mode)

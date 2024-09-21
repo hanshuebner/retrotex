@@ -11,106 +11,27 @@
 
 (defvar *default-port* "/dev/ttyUSB0")
 
-(defvar *rafi-stream* nil)
 (defvar *current-filename* #p"pages/page.cept")
 
 (defun open-port (&optional (port *default-port*))
   (uiop:run-program (format nil "stty < ~A crtscts" port)
                     :output *standard-output*
                     :error-output *standard-output*)
-  (setf *rafi-stream*
+  (setf cept:*cept-stream*
         (cserial-port:make-serial-stream (cserial-port:open-serial port :baud-rate 9600))))
 
-(defun to-octets (things)
-  (flex:with-output-to-sequence (s)
-    (dolist (thing things)
-      (etypecase thing
-        (string (write-sequence (cept:string-to-bytes thing) s))
-        ((array (unsigned-byte 8)) (write-sequence thing s))
-        (character (write-byte (char-code thing) s))
-        (number (write-byte thing s))))))
-
-(defun write-rafi (&rest stuff)
-  (let ((octets (to-octets stuff)))
-    (write-sequence (make-array (length octets) :element-type '(unsigned-byte 8) :initial-contents octets)
-                    *rafi-stream*)))
-
-(defun reset ()
-  (write-rafi 1 #x64))
-
 (defun set-pc-mode ()
-  (write-rafi 1 #x75 "pacdfx"))          ; Datenverteiler setzen
-
-(defun test ()
-  (write-rafi 1 #x78))
-
-(defun disable-system-line (&optional permanentp)
-  (write-rafi 1 (if permanentp #x6b #x6a)))
-
-(defun clear-page ()
-  (write-rafi #x0c))
+  (cept:write-cept 1 #x75 "pacdfx"))          ; Datenverteiler setzen
 
 (defun send-current-page ()
-  (write-rafi 1 #x4c))
+  (cept:write-cept 1 #x4c))
 
 (defun switch-to-page (page-no)
-  (write-rafi 1 (ecase page-no
+  (cept:write-cept 1 (ecase page-no
                   (0 #x6c)
                   (1 #x6d)
                   (2 #x6e)
                   (3 #x6f))))
-
-(defun constant-input ()
-  (write-rafi 1 #x49))
-
-(defun service-jump (&optional (line 23))
-  (write-rafi #x1f #x2f #x40 (+ #x41 line)))
-
-(defun service-jump-return ()
-  (write-rafi #x1F #x2F #x4F))
-
-(defun reset-page (&optional (arg #x42))
-  (write-rafi #x1f #x2f arg))
-
-(defun show-cursor ()
-  (write-rafi #x11))
-
-(defun hide-cursor ()
-  (write-rafi #x14))
-
-(defun set-scroll-region (top bottom)
-  (let ((top (1+ top))
-        (bottom (1+ bottom)))
-    (write-rafi #x9B
-                (+ #x30 (floor top 10)) (+ #x30 (mod top 10)) #x3B
-                (+ #x30 (floor bottom 10)) (+ #x30 (mod bottom 10)) #x55)))
-
-(defun enable-scrolling ()
-  (write-rafi #x9B #x32 #x60))
-
-(defun disable-scrolling ()
-  (write-rafi #x9B #x33 #x60))
-
-(defun scroll-up ()
-  (write-rafi #x9B #x30 #x60))
-
-(defun scroll-down ()
-  (write-rafi #x9B #x31 #x60))
-
-(defun goto (row col)
-  (write-rafi #x1f (+ #x41 row) (+ #x41 col)))
-
-(defun double-height ()
-  (write-rafi #x8d))
-
-(defun double-width ()
-  (write-rafi #x8e))
-
-(defun quad-size ()
-  (write-rafi #x8f))
-
-(defun setup ()
-  (set-pc-mode))
 
 (defvar *page-no* 0)
 
@@ -146,7 +67,7 @@
                      :if-does-not-exist :create
                      :if-exists :supersede)
     (unwind-protect
-         (copy-until-end-of-page *rafi-stream* f)
+         (copy-until-end-of-page cept:*cept-stream* f)
       (format t "~A written~%" f)
       (close f))))
 
@@ -154,33 +75,33 @@
   (cond
     ((probe-file filename)
      (format t "~&; loading page ~A~%" filename)
-     (clear-page)
-     (write-rafi (read-file-into-byte-vector filename))
-     (disable-system-line))
+     (cept:clear-page)
+     (cept:write-cept (read-file-into-byte-vector filename))
+     (cept:disable-system-line))
     (t
      (format t "~&; File ~S does not exist~%" filename)
-     (write-rafi #\return (format nil "Page ~A does not exist" (pathname-name filename))))))
+     (cept:write-cept #\return (format nil "Page ~A does not exist" (pathname-name filename))))))
 
 (defmacro with-rafi-stream ((stream) &body body)
-  `(let ((*rafi-stream* ,stream))
+  `(let ((cept:*cept-stream* ,stream))
      ,@body))
 
 (defmacro with-rafi-port ((&optional (port *default-port*)) &body body)
-  `(let ((*rafi-stream* (open-port ,port)))
+  `(let ((cept:*cept-stream* (open-port ,port)))
      (unwind-protect
           (progn
-            (setup)
+            (set-pc-mode)
             ,@body)
-       (close *rafi-stream*))))
+       (close cept:*cept-stream*))))
 
 (defun clear-input-line ()
-  (write-rafi #\return (make-string 40 :initial-element #\space)))
+  (cept:write-cept #\return (make-string 40 :initial-element #\space)))
 
 (defun get-input (prompt)
-  (write-rafi #\return prompt ": ")
+  (cept:write-cept #\return prompt ": ")
   (let ((buffer (make-array 40 :element-type 'character :adjustable t :fill-pointer 0)))
     (loop
-      (let ((char (code-char (read-byte *rafi-stream*)))
+      (let ((char (code-char (read-byte cept:*cept-stream*)))
             (current-position (+ (length prompt) 2 (length buffer))))
         (cond
           ((equal char #\return)
@@ -189,12 +110,12 @@
            (when (plusp (length buffer))
              (vector-pop buffer)
              (if (< current-position 40)
-                 (write-rafi #\backspace #\space #\backspace)
-                 (write-rafi #\space))))
+                 (cept:write-cept #\backspace #\space #\backspace)
+                 (cept:write-cept #\space))))
           ((and (graphic-char-p char)
                 (< current-position 40))
            (vector-push char buffer)
-           (write-rafi char))
+           (cept:write-cept char))
           (t (format t "; ignored: ~S~%" char)))))
     (clear-input-line)
     (coerce buffer 'string)))
@@ -208,29 +129,29 @@
       ((probe-file *current-filename*)
        (load-page *current-filename*))
       (t
-       (service-jump-return)
-       (clear-page)
-       (service-jump 23)))))
+       (cept:service-jump-return)
+       (cept:clear-page)
+       (cept:service-jump 23)))))
 
 (defun local-command ()
-  (service-jump 23)
-  (write-rafi "[L]oad [S]ave [F]ilename ")
+  (cept:service-jump 23)
+  (cept:write-cept "[L]oad [S]ave [F]ilename ")
   (unwind-protect
        (case (code-char (prog1
-                            (read-byte *rafi-stream*)
+                            (read-byte cept:*cept-stream*)
                           (clear-input-line)))
          (#\l (load-page *current-filename*))
          (#\s (save-page *current-filename*))
          (#\f (set-filename))
          #+(or)
          (#\q (throw 'exit nil)))
-    (service-jump-return)))
+    (cept:service-jump-return)))
 
 (defun handle-byte (stream byte)
   (format t "<~2,'0X ~C~%" byte (if (<= 32 byte 127) (code-char byte) #\?))
              (case byte
                (#x13 ;; DC3 => '*'
-                ; (write-rafi 1 #x42 0 #x0 0 0) ; send stack line (?)
+                ; (cept:write-cept 1 #x42 0 #x0 0 0) ; send stack line (?)
                 )
                (#x1a (local-command))
                (t
@@ -239,18 +160,18 @@
 
 (defun do-editing-commands ()
   (catch 'exit
-    (loop for byte = (read-byte *rafi-stream*)
-          do (handle-byte *rafi-stream* byte)))
-  (hide-cursor))
+    (loop for byte = (read-byte cept:*cept-stream*)
+          do (handle-byte cept:*cept-stream* byte)))
+  (cept:hide-cursor))
 
 (defun slideshow (&key (dir "pages") (sleep 10) (port *default-port*))
   (let* ((cept-files (directory (merge-pathnames (format nil "~A/*.cept" dir))))
          (cept-files (sort cept-files 'string-lessp :key 'pathname-name)))
     (assert cept-files)
     (with-rafi-port (port)
-      (setup)
-      (hide-cursor)
-      (disable-system-line)
+      (set-pc-mode)
+      (cept:hide-cursor)
+      (cept:disable-system-line)
       (loop
         (dolist (file cept-files)
           (load-page file)
@@ -258,8 +179,8 @@
 
 (defun editor (&optional (port *default-port*))
   (with-rafi-port (port)
-    (setup)
-    (show-cursor)
+    (set-pc-mode)
+    (cept:show-cursor)
     (do-editing-commands)))
 
 (defun read-text-to-articles (filename)
@@ -288,17 +209,22 @@
           collect (format s "~40A" (or (nth i chunk) "")))))
 
 (defun show-cc-article (title text &key (title-row 5) (text-start-row 8) (text-chunk-lines 14))
-  (load-page "pages/ccframe.cept")
-  (goto title-row 0)
-  (double-height)
-  (goto title-row 0)
-  (write-rafi title)
-  (set-scroll-region text-start-row (+ text-start-row text-chunk-lines))
-  (enable-scrolling)
+  (cept:goto title-row 0)
+  (cept:double-height)
+  (cept:goto title-row 0)
+  (cept:write-cept title)
+  (cept:set-scroll-region text-start-row (+ text-start-row text-chunk-lines))
+  (cept:enable-scrolling)
   (loop for chunk in (make-text-chunks text text-chunk-lines)
-        do (goto text-start-row 0)
-           (write-rafi (chunk-to-page chunk text-chunk-lines))
+        do (cept:goto text-start-row 0)
+           (cept:write-cept (chunk-to-page chunk text-chunk-lines))
            (sleep 10)))
 
 (defun cc-slideshow (&key (text-file "cc-exponate.md") (frame "pages/cc-frame") (sleep 10) (port *default-port*))
-  )
+  (with-rafi-port (port)
+    (set-pc-mode)
+    (cept:clear-page)
+    (load-page frame)
+    (loop
+      (dolist (article (read-text-to-articles text-file))
+        (show-cc-article :sleep sleep)))))
