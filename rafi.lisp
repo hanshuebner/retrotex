@@ -25,7 +25,7 @@
   (flex:with-output-to-sequence (s)
     (dolist (thing things)
       (etypecase thing
-        (string (write-sequence (flex:string-to-octets thing) s))
+        (string (write-sequence (cept:string-to-bytes thing) s))
         ((array (unsigned-byte 8)) (write-sequence thing s))
         (character (write-byte (char-code thing) s))
         (number (write-byte thing s))))))
@@ -212,7 +212,7 @@
           do (handle-byte *rafi-stream* byte)))
   (hide-cursor))
 
-(defun slideshow 
+(defun slideshow (&key (dir "pages") (sleep 10) (port *default-port*))
   (let* ((cept-files (directory (merge-pathnames (format nil "~A/*.cept" dir))))
          (cept-files (sort cept-files 'string-lessp :key 'pathname-name)))
     (assert cept-files)
@@ -231,11 +231,16 @@
     (show-cursor)
     (do-editing-commands)))
 
-(defun read-text-to-pages (filename)
+(defun read-text-to-articles (filename)
   (let* ((text (alexandria:read-file-into-string filename))
-         (paragraphs (ppcre:split )))))
+         (paragraphs (ppcre:split #?"\n(?=#)" text)))
+    (mapcar (lambda (paragraph)
+              (multiple-value-bind (match regs) (ppcre:scan-to-strings #?"#[ \t]*(.*)\n([\\s\\S]*)" paragraph)
+                (declare (ignore match))
+                (coerce regs 'list)))
+            paragraphs)))
 
-(defun show-cc-text (title text)
+(defun show-cc-article (title text)
   )
 
 (defun cc-slideshow (&key (text-file "cc-exponate.md") (frame "pages/cc-frame") (sleep 10) (port *default-port*))

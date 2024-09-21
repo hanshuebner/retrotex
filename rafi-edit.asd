@@ -10,4 +10,5 @@
                "cl-ppcre"
                "cl-interpol"
                "flexi-streams")
-  :components ((:file "rafi")))
+  :components ((:file "cept")
+               (:file "rafi")))
