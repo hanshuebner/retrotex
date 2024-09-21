@@ -4,5 +4,10 @@
   :license "MIT"
   :version "0.1"
   :serial t
-  :depends-on ("alexandria" "cserial-port" "flexi-streams")
+  :depends-on ("alexandria"
+               "cserial-port"
+               "flexi-streams"
+               "cl-ppcre"
+               "cl-interpol"
+               "flexi-streams")
   :components ((:file "rafi")))

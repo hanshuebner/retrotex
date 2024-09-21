@@ -1,5 +1,7 @@
 ;; -*- Lisp -*-
 
+(cl-interpol:enable-interpol-syntax)
+
 (defpackage :rafi
   (:use :cl :alexandria :cserial-port))
 
@@ -167,15 +169,21 @@
     (coerce buffer 'string)))
 
 (defun set-filename ()
-  (let ((new-filename (get-input (format nil "Page name [~A]" (pathname-name *current-filename*) (pathname-type *current-filename*)))))
+  (let ((new-filename (get-input (format nil "Page name [~A]" (pathname-name *current-filename*)))))
     (unless (emptyp new-filename)
       (setf *current-filename* (merge-pathnames new-filename *current-filename*)))
-    (format t "; filename ~S~%" *current-filename*)))
-
+    (format t "; filename ~S~%" *current-filename*)
+    (cond
+      ((probe-file *current-filename*)
+       (load-page *current-filename*))
+      (t
+       (service-jump-return)
+       (clear-page)
+       (service-jump 23)))))
 
 (defun local-command ()
   (service-jump 23)
-  (write-rafi "[L]oad [S]ave [F]ilename [Q]uit")
+  (write-rafi "[L]oad [S]ave [F]ilename ")
   (unwind-protect
        (case (code-char (prog1
                             (read-byte *rafi-stream*)
@@ -183,6 +191,7 @@
          (#\l (load-page *current-filename*))
          (#\s (save-page *current-filename*))
          (#\f (set-filename))
+         #+(or)
          (#\q (throw 'exit nil)))
     (service-jump-return)))
 
@@ -203,7 +212,7 @@
           do (handle-byte *rafi-stream* byte)))
   (hide-cursor))
 
-(defun slideshow (&key (dir "pages") (sleep 10) (port *default-port*))
+(defun slideshow 
   (let* ((cept-files (directory (merge-pathnames (format nil "~A/*.cept" dir))))
          (cept-files (sort cept-files 'string-lessp :key 'pathname-name)))
     (assert cept-files)
@@ -222,3 +231,12 @@
     (show-cursor)
     (do-editing-commands)))
 
+(defun read-text-to-pages (filename)
+  (let* ((text (alexandria:read-file-into-string filename))
+         (paragraphs (ppcre:split )))))
+
+(defun show-cc-text (title text)
+  )
+
+(defun cc-slideshow (&key (text-file "cc-exponate.md") (frame "pages/cc-frame") (sleep 10) (port *default-port*))
+  )
