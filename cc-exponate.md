@@ -66,7 +66,6 @@ triebenen Minicomputersystemen ist auch
 ein Bulletin Board System im Netz zu
 erreichen.
 
-
 # Exponat: Retrostar
 
 Retrostar ist ein Vernetzungs-Projekt
