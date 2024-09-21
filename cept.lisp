@@ -133,7 +133,9 @@
 
         ;;  used in phonetic alphabet
         #\ˈ (list (char-code #\'))
-        #\ː (list (char-code #\:))))
+        #\ː (list (char-code #\:))
+
+        #\linefeed (list (char-code #\return) (char-code #\linefeed))))
 
 (defun make-conversion-table (mode)
   (loop with result = (make-hash-table)

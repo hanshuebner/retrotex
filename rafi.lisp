@@ -78,6 +78,37 @@
 (defun hide-cursor ()
   (write-rafi #x14))
 
+(defun set-scroll-region (top bottom)
+  (let ((top (1+ top))
+        (bottom (1+ bottom)))
+    (write-rafi #x9B
+                (+ #x30 (floor top 10)) (+ #x30 (mod top 10)) #x3B
+                (+ #x30 (floor bottom 10)) (+ #x30 (mod bottom 10)) #x55)))
+
+(defun enable-scrolling ()
+  (write-rafi #x9B #x32 #x60))
+
+(defun disable-scrolling ()
+  (write-rafi #x9B #x33 #x60))
+
+(defun scroll-up ()
+  (write-rafi #x9B #x30 #x60))
+
+(defun scroll-down ()
+  (write-rafi #x9B #x31 #x60))
+
+(defun goto (row col)
+  (write-rafi #x1f (+ #x41 row) (+ #x41 col)))
+
+(defun double-height ()
+  (write-rafi #x8d))
+
+(defun double-width ()
+  (write-rafi #x8e))
+
+(defun quad-size ()
+  (write-rafi #x8f))
+
 (defun setup ()
   (set-pc-mode))
 
@@ -235,13 +266,39 @@
   (let* ((text (alexandria:read-file-into-string filename))
          (paragraphs (ppcre:split #?"\n(?=#)" text)))
     (mapcar (lambda (paragraph)
-              (multiple-value-bind (match regs) (ppcre:scan-to-strings #?"#[ \t]*(.*)\n([\\s\\S]*)" paragraph)
+              (multiple-value-bind (match regs) (ppcre:scan-to-strings #?"#[ \t]*(.*)\n+([\\s\\S]*)" paragraph)
                 (declare (ignore match))
                 (coerce regs 'list)))
             paragraphs)))
 
-(defun show-cc-article (title text)
-  )
+(defun make-text-chunks (text chunk-size)
+  (loop with lines = (ppcre:split #?"\n" text)
+        while lines
+        for this-chunk-size = (if (and (equal (nth (- chunk-size 2) lines) "")
+                                       (not (equal (nth (- chunk-size 1) lines) "")))
+                                  (- chunk-size 1)
+                                  (min chunk-size (length lines)))
+        collect (prog1
+                    (subseq lines 0 this-chunk-size)
+                  (setf lines (nthcdr this-chunk-size lines)))))
+
+(defun chunk-to-page (chunk chunk-size)
+  (with-output-to-string (s)
+    (loop for i below chunk-size
+          collect (format s "~40A" (or (nth i chunk) "")))))
+
+(defun show-cc-article (title text &key (title-row 5) (text-start-row 8) (text-chunk-lines 14))
+  (load-page "pages/ccframe.cept")
+  (goto title-row 0)
+  (double-height)
+  (goto title-row 0)
+  (write-rafi title)
+  (set-scroll-region text-start-row (+ text-start-row text-chunk-lines))
+  (enable-scrolling)
+  (loop for chunk in (make-text-chunks text text-chunk-lines)
+        do (goto text-start-row 0)
+           (write-rafi (chunk-to-page chunk text-chunk-lines))
+           (sleep 10)))
 
 (defun cc-slideshow (&key (text-file "cc-exponate.md") (frame "pages/cc-frame") (sleep 10) (port *default-port*))
   )
