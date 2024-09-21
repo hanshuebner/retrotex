@@ -3,7 +3,9 @@
 (cl-interpol:enable-interpol-syntax)
 
 (defpackage :rafi
-  (:use :cl :alexandria :cserial-port))
+  (:use :cl :alexandria :cserial-port)
+  (:export
+   #:cc-slideshow))
 
 (in-package :rafi)
 
@@ -208,23 +210,24 @@
     (loop for i below chunk-size
           collect (format s "~40A" (or (nth i chunk) "")))))
 
-(defun show-cc-article (title text &key (title-row 5) (text-start-row 8) (text-chunk-lines 14))
+(defun show-cc-article (title text &key (title-row 5) (text-start-row 8) (text-chunk-lines 14) (sleep 10))
   (cept:goto title-row 0)
   (cept:double-height)
   (cept:goto title-row 0)
-  (cept:write-cept title)
+  (cept:write-cept (format nil "~40A" title))
   (cept:set-scroll-region text-start-row (+ text-start-row text-chunk-lines))
   (cept:enable-scrolling)
+  (cept:goto text-start-row 0)
   (loop for chunk in (make-text-chunks text text-chunk-lines)
-        do (cept:goto text-start-row 0)
-           (cept:write-cept (chunk-to-page chunk text-chunk-lines))
-           (sleep 10)))
+        do (cept:write-cept (chunk-to-page chunk text-chunk-lines))
+           (sleep sleep)))
 
-(defun cc-slideshow (&key (text-file "cc-exponate.md") (frame "pages/cc-frame") (sleep 10) (port *default-port*))
+(defun cc-slideshow (&key (text-file "cc-exponate.md") (frame "pages/ccframe.cept") (sleep 15) (port *default-port*))
   (with-rafi-port (port)
     (set-pc-mode)
     (cept:clear-page)
     (load-page frame)
     (loop
       (dolist (article (read-text-to-articles text-file))
-        (show-cc-article :sleep sleep)))))
+        (destructuring-bind (title text) article
+          (show-cc-article title text :sleep sleep))))))
