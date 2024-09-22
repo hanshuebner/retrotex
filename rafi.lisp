@@ -15,12 +15,12 @@
 
 (defvar *current-filename* #p"pages/page.cept")
 
-(defun open-port (&optional (port *default-port*))
+(defun open-port (&optional (port *default-port*) (baud-rate 9600))
   (uiop:run-program (format nil "stty < ~A crtscts" port)
                     :output *standard-output*
                     :error-output *standard-output*)
   (setf cept:*cept-stream*
-        (cserial-port:make-serial-stream (cserial-port:open-serial port :baud-rate 9600))))
+        (cserial-port:make-serial-stream (cserial-port:open-serial port :baud-rate baud-rate))))
 
 (defun set-pc-mode ()
   (cept:write-cept 1 #x75 "pacdfx"))          ; Datenverteiler setzen
