@@ -211,6 +211,7 @@
           collect (format s "~40A" (or (nth i chunk) "")))))
 
 (defun show-cc-article (title text &key (title-row 5) (text-start-row 8) (text-chunk-lines 14) (sleep 10))
+  (cept:hide-cursor)
   (cept:goto title-row 0)
   (cept:double-height)
   (cept:goto title-row 0)
