@@ -1,3 +1,22 @@
+# Exponat: Televideo TeleXT
+
+Televideo war hauptsächlich als Herstel-
+ler von Terminals bekannt, produzierte
+aber auch Personal Computer - Zunächst
+mit CP/M und proprietären Mehrbenutzer-
+Fähigkeiten, später dann auch MS-DOS-
+kompatible 16 Bit-Systeme.
+
+Der ausgestellte Televideo TS-1605H ist
+ein IBM PC/XT-kompatibler Rechner in
+einem kompakten All-in-one Design. Sei-
+ne technische Ausstattung entspricht
+dem IBM 5160.  Seine Erweiterbarkeit
+beschränkt sich aufgrund der kompatken
+Bauweise auf einen ISA-Slot, der im
+ausgestellten System mit einer IBM 
+Bildschirmtext-Karte belegt ist.
+
 # Exponat: RAFI C14 Btx-Terminal
 
 Bildschirmtext (Btx) war ein frühes Vor-
@@ -35,7 +54,37 @@ die Produktion und auch die Darstellung
 von Btx-Seiten nur mit teurer Spezial-
 Hardware und -Software möglich.
 
-# Exponat: TELEBAHN
+# Exponat: NABU PC
+
+Der NABU PC ist eine Set-Top-Box aus
+Kanada, die zwischen 1982 und 1985 von
+einem Kabelfernsehnetz-Betreiber als
+Zusatzdienst vertrieben wurde.  Über
+einen gesonderten Kanal wurden Programme
+verschiedene Unterhaltungs- und Lern-
+programme ausgestrahlt.
+
+Technisch ähnelt der NABU PC einem MSX-
+Computer (Zilog Z80-CPU, Texas Instru-
+ments TMS9918 Videoprozessor, General
+Instruments AY-3-8910 Soundgenerator),
+im Gegensatz dazu verfügt es jedoch
+weder über eine Modulschnittstelle,
+noch über eine lokale Speichermöglich-
+keit.
+
+Nachdem das System 1985 eingestellt wur-
+de, verschwanden etwa 2000 neue, nicht
+verkaufte NABU PCs in einer Lager-
+halle. Sie wurden dort in 2023 wieder-
+entdeckt und an Retrocomputer-Fans über
+eBay verkauft.  Inzwischen gibt es,
+neben den Originalprogrammen, die in den
+1980ern ausgestrahlt wurden, verschie-
+dene Neuentwicklungen und Erweiterungen,
+die das System heute erlebbar machen.
+
+# Projekt: TELEBAHN
 
 Das weltweite X.25-Netz war ein weiterer
 Vorläufer des Internet, der hauptsäch-
@@ -66,28 +115,6 @@ triebenen Minicomputersystemen ist auch
 ein Bulletin Board System im Netz zu
 erreichen.
 
-# Exponat: Retrostar
-
-Retrostar ist ein Vernetzungs-Projekt
-des Vereins zum Erhalt historischer Com-
-puter e.V.  Es ermöglicht den Mit-
-gliedern, ihre historischen Systeme mit
-den entsprechenden Netzwerkprotokollen
-miteinander zu verbiinden.  Derzeit wer-
-den die Protokolle DECNET und LAT von
-Digital Equipment eingesetzt, Novell und
-Ethertalk sind jedoch auch möglich.
-
-# Exponat: Televideo PC + IBM BTX Decoder
-
-Der ausgestellte Televideo TS-1605H ist
-ein IBM PC/XT-kompatibler Rechner in
-einem kompakten All-in-one Design.  Er
-verfügt über 640 Kilobyte RAM und eine
-MFM-Festplatte mit 10 Megabyte.  Zusätz-
-lich ist es mit einer Btx-Decoderkarte
-ausgestattet.
-
 # Exponat: Tektronix 4207 Grafikterminal
 
 Das ausgestellte Tektronix 4207 Grafik-
@@ -103,3 +130,22 @@ Pixel mit 16 aus 64 Farben.  Die Grafik-
 fähigkeiten werden vom Host über einen
 speziellen Befehlssatz angesprochen, mit
 dem Vektordarstellungen möglich sind.
+Die zur Demonstration dargestellten
+Plot-Dateien wurden ursprünglich für das
+auf einem Vektorbildschirm basiernde
+Tektronix 4010 erzeugt und machen daher
+von den Farbfähigkeiten des 4207 keinen
+Gebrauch.
+
+# Projekt: Retrostar
+
+Retrostar ist ein Vernetzungs-Projekt
+des Vereins zum Erhalt historischer Com-
+puter e.V.  Es ermöglicht den Mit-
+gliedern, ihre historischen Systeme mit
+den entsprechenden Netzwerkprotokollen
+miteinander zu verbiinden.  Derzeit wer-
+den die Protokolle DECNET und LAT von
+Digital Equipment eingesetzt, Novell und
+Ethertalk sind jedoch auch möglich.
+
