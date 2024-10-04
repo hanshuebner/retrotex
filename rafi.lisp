@@ -94,8 +94,7 @@
     ((probe-file filename)
      (format t "~&; loading page ~A~%" filename)
      (cept:clear-page)
-     (cept:write-cept (read-file-into-byte-vector filename))
-     (cept:disable-system-line))
+     (cept:write-cept (read-file-into-byte-vector filename)))
     (t
      (format t "~&; File ~S does not exist~%" filename)
      (cept:write-cept #\return (format nil "Page ~A does not exist" (pathname-name filename)))))
@@ -234,7 +233,9 @@
   (loop for chunk in (make-text-chunks text text-chunk-lines)
         do (cept:write-cept (chunk-to-page chunk text-chunk-lines))
            (finish-output cept:*cept-stream*)
-           (sleep sleep)))
+           (if sleep
+               (sleep sleep)
+               (loop until (eql (code-char (read-byte cept:*cept-stream*)) #\space)))))
 
 (defun show-article-file (&key (text-file "cc-exponate.md") (frame "pages/ccframe.cept") (sleep 15))
   (cept:clear-page)
