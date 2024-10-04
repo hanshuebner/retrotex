@@ -6,6 +6,7 @@
   :serial t
   :depends-on ("alexandria"
                "cserial-port"
+               "usocket"
                "flexi-streams"
                "cl-ppcre"
                "cl-interpol"

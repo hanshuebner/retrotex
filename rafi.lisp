@@ -3,9 +3,10 @@
 (cl-interpol:enable-interpol-syntax)
 
 (defpackage :rafi
-  (:use :cl :alexandria :cserial-port)
+  (:use :cl :alexandria)
   (:export
-   #:cc-slideshow))
+   #:slideshow
+   #:editor))
 
 (in-package :rafi)
 
@@ -15,12 +16,27 @@
 
 (defvar *current-filename* #p"pages/page.cept")
 
+(defmacro with-rafi-stream ((stream) &body body)
+  `(let ((cept:*cept-stream* ,stream))
+     ,@body))
+
+(defmacro with-rafi-port ((&optional (port *default-port*)) &body body)
+  `(let ((cept:*cept-stream* (open-port ,port)))
+     (unwind-protect
+          (progn
+            ,@body)
+       (close cept:*cept-stream*))))
+
 (defun open-port (&optional (port *default-port*) (baud-rate 9600))
   (uiop:run-program (format nil "stty < ~A crtscts" port)
                     :output *standard-output*
                     :error-output *standard-output*)
-  (setf cept:*cept-stream*
-        (cserial-port:make-serial-stream (cserial-port:open-serial port :baud-rate baud-rate))))
+  (let ((stream (cserial-port:make-serial-stream (cserial-port:open-serial port :baud-rate baud-rate))))
+    (with-rafi-stream (stream)
+      (set-pc-mode)
+      (cept:hide-cursor)
+      (cept:disable-system-line))
+    stream))
 
 (defun set-pc-mode ()
   (cept:write-cept 1 #x75 "pacdfx"))          ; Datenverteiler setzen
@@ -82,19 +98,8 @@
      (cept:disable-system-line))
     (t
      (format t "~&; File ~S does not exist~%" filename)
-     (cept:write-cept #\return (format nil "Page ~A does not exist" (pathname-name filename))))))
-
-(defmacro with-rafi-stream ((stream) &body body)
-  `(let ((cept:*cept-stream* ,stream))
-     ,@body))
-
-(defmacro with-rafi-port ((&optional (port *default-port*)) &body body)
-  `(let ((cept:*cept-stream* (open-port ,port)))
-     (unwind-protect
-          (progn
-            (set-pc-mode)
-            ,@body)
-       (close cept:*cept-stream*))))
+     (cept:write-cept #\return (format nil "Page ~A does not exist" (pathname-name filename)))))
+  (finish-output cept:*cept-stream*))
 
 (defun clear-input-line ()
   (cept:write-cept #\return (make-string 40 :initial-element #\space)))
@@ -157,33 +162,40 @@
                 )
                (#x1a (local-command))
                (t
-                (write-byte byte stream)
-                (finish-output stream))))
+                (write-byte byte stream))))
 
 (defun do-editing-commands ()
   (catch 'exit
     (loop for byte = (read-byte cept:*cept-stream*)
-          do (handle-byte cept:*cept-stream* byte)))
+          do (handle-byte cept:*cept-stream* byte)
+             (finish-output cept:*cept-stream*)))
   (cept:hide-cursor))
 
-(defun slideshow (&key (dir "pages") (sleep 10) (port *default-port*))
+(defun slideshow (&key (dir "pages") sleep)
   (let* ((cept-files (directory (merge-pathnames (format nil "~A/*.cept" dir))))
          (cept-files (sort cept-files 'string-lessp :key 'pathname-name)))
     (assert cept-files)
-    (with-rafi-port (port)
-      (set-pc-mode)
-      (cept:hide-cursor)
-      (cept:disable-system-line)
-      (loop
-        (dolist (file cept-files)
-          (load-page file)
-          (sleep sleep))))))
+    (loop
+      (loop with i = 0
+            do (load-page (nth i cept-files))
+               (if sleep
+                   (sleep sleep)
+                   (case (code-char (read-byte cept:*cept-stream*))
+                     ((#\backspace #\delete)
+                      (when (zerop i)
+                        (setf i (length cept-files)))
+                      (decf i))
+                     ((#\space #\return)
+                      (incf i))
+                     (#\q
+                      (return-from slideshow))))
+               (when (= i (length cept-files))
+                 (setf i 0))))))
 
-(defun editor (&optional (port *default-port*))
-  (with-rafi-port (port)
-    (set-pc-mode)
-    (cept:show-cursor)
-    (do-editing-commands)))
+(defun editor ()
+  (set-pc-mode)
+  (cept:show-cursor)
+  (do-editing-commands))
 
 (defun read-text-to-articles (filename)
   (let* ((text (alexandria:read-file-into-string filename))
@@ -210,7 +222,7 @@
     (loop for i below chunk-size
           collect (format s "~40A" (or (nth i chunk) "")))))
 
-(defun show-cc-article (title text &key (title-row 5) (text-start-row 8) (text-chunk-lines 14) (sleep 10))
+(defun show-article (title text &key (title-row 5) (text-start-row 8) (text-chunk-lines 14) (sleep 10))
   (cept:hide-cursor)
   (cept:goto title-row 0)
   (cept:double-height)
@@ -221,14 +233,55 @@
   (cept:goto text-start-row 0)
   (loop for chunk in (make-text-chunks text text-chunk-lines)
         do (cept:write-cept (chunk-to-page chunk text-chunk-lines))
+           (finish-output cept:*cept-stream*)
            (sleep sleep)))
 
-(defun cc-slideshow (&key (text-file "cc-exponate.md") (frame "pages/ccframe.cept") (sleep 15) (port *default-port*))
-  (with-rafi-port (port)
-    (set-pc-mode)
-    (cept:clear-page)
-    (load-page frame)
-    (loop
-      (dolist (article (read-text-to-articles text-file))
-        (destructuring-bind (title text) article
-          (show-cc-article title text :sleep sleep))))))
+(defun show-article-file (&key (text-file "cc-exponate.md") (frame "pages/ccframe.cept") (sleep 15))
+  (cept:clear-page)
+  (load-page frame)
+  (loop
+    (dolist (article (read-text-to-articles text-file))
+      (destructuring-bind (title text) article
+        (show-article title text :sleep sleep)))))
+
+(defun handle-client (handler stream handler-arguments)
+  ;; for now, assume we're only handling one client at a time
+  (unwind-protect
+       (progn
+         (setf cept:*cept-stream* stream)
+         (apply handler handler-arguments))
+    (ignore-errors
+     (close stream))
+    (setf cept:*cept-stream* nil)))
+
+(defvar *tcp-server* nil)
+
+(defun stop-tcp-server ()
+  (when (and *tcp-server*
+             (bt:thread-alive-p *tcp-server*))
+    (bt:interrupt-thread *tcp-server* (lambda () (throw 'exit nil)))
+    (setf *tcp-server* nil)))
+
+(defun tcp-server (handler &rest handler-arguments &key (port 20000) &allow-other-keys)
+  (stop-tcp-server)
+  (setf *tcp-server*
+       (bt:make-thread
+        (lambda ()
+          (catch 'exit
+            (let ((socket (usocket:socket-listen "0.0.0.0" port :reuse-address t)))
+              (unwind-protect
+                   (loop
+                     (let ((client-socket (usocket:socket-accept socket :element-type '(unsigned-byte 8))))
+                       (format t "Connection accepted~%")
+                       (handler-case
+                           (handle-client handler (usocket:socket-stream client-socket)
+                                          (remove-from-plist handler-arguments :port))
+                         (error (e)
+                           (format t "Error handling client: ~a~%" e)))
+                       (usocket:socket-close client-socket)))
+                (usocket:socket-close socket)))))
+        :name (format nil "CEPT server on port ~A" port))))
+
+(defun serial-server (handler &rest handler-arguments &key (port *default-port*) &allow-other-keys)
+  (with-open-stream (stream (open-port port))
+    (handle-client handler stream handler-arguments)))
