@@ -1,0 +1,97 @@
+;; -*- Lisp -*-
+
+(defpackage :drc
+  (:use :cl :alexandria))
+
+(in-package :drc)
+
+(defconstant +drc-count+ (- #x7e #x21))
+
+(defun analyze-image (pathname)
+  (cl-gd:with-image-from-file* (pathname)
+    (assert (cl-gd:true-color-p))
+    (let ((colors (make-hash-table)))
+      (cl-gd:do-pixels ()
+        (setf (gethash (cl-gd:raw-pixel) colors) t))
+      (list :ncolors (hash-table-count colors)
+            :colors (hash-table-keys colors)
+            :width (cl-gd:image-width)
+            :height (cl-gd:image-height)))))
+
+(defun drc-16-count (&key width height &allow-other-keys)
+  (* (ceiling width 12)
+     (ceiling height 10)))
+
+(defun map-colors (pathname)
+  (destructuring-bind (&key colors &allow-other-keys) (analyze-image pathname)
+    (cl-gd:with-image-from-file* (pathname)
+      (let ((color-map (make-hash-table))
+            (mapped-colors (make-hash-table :test #'equal)))
+        (dolist (color colors)
+          (destructuring-bind (red green blue alpha) (cl-gd:color-components color)
+            (declare (ignore alpha))
+            (setf red (ash red -4)
+                  green (ash green -4)
+                  blue (ash blue -4))
+            (let ((mapped-color (list red green blue)))
+              (when (gethash mapped-color mapped-colors)
+                (warn "color ~A mapping to already mapped color ~A" color mapped-color))
+              (setf (gethash color color-map) mapped-color
+                    (gethash mapped-color mapped-colors) t))))
+        (let ((indexed-colors (hash-table-keys mapped-colors))
+              (mapping (make-hash-table)))
+          (maphash (lambda (color rgb)
+                     (setf (gethash color mapping) (position rgb indexed-colors :test #'equal)))
+                   color-map)
+          (list :indexed-colors indexed-colors
+                :mapping mapping))))))
+
+(defun color-component-cept-bits (red green blue)
+  (let ((first #x40)
+        (second #x40))
+    (setf (ldb (byte 1 5) first) (ldb (byte 1 3) red)
+          (ldb (byte 1 4) first) (ldb (byte 1 3) green)
+          (ldb (byte 1 3) first) (ldb (byte 1 3) blue)
+          (ldb (byte 1 2) first) (ldb (byte 1 2) red)
+          (ldb (byte 1 1) first) (ldb (byte 1 2) green)
+          (ldb (byte 1 0) first) (ldb (byte 1 2) blue)
+          (ldb (byte 1 5) second) (ldb (byte 1 1) red)
+          (ldb (byte 1 4) second) (ldb (byte 1 1) green)
+          (ldb (byte 1 3) second) (ldb (byte 1 1) blue)
+          (ldb (byte 1 2) second) (ldb (byte 1 0) red)
+          (ldb (byte 1 1) second) (ldb (byte 1 0) green)
+          (ldb (byte 1 0) second) (ldb (byte 1 0) blue))
+    (list first second)))
+
+(defun define-cept-colors (colors)
+  (dotimes (i (length colors))
+    (cept:write-cept #x1F #x26 #x20
+                     #x1F #x26
+                     (format nil "~2,'0D" (+ i 16))
+                     (apply 'color-component-cept-bits (nth i colors)))))
+
+(defun get-pixel-at (x y)
+  (cl-gd:get-pixel (if (< x (cl-gd:image-width))
+                       x
+                       0)
+                   (if (< y (cl-gd:image-height))
+                       y
+                       0)))
+
+(defun make-drcs (pathname &optional (char-code #x21))
+  (let ((color-mapping (getf (map-colors pathname) :mapping)))
+    (cept:write-cept #x1F #x23 #x20 #x4B #x44)
+    (cl-gd:with-image-from-file* (pathname)
+      (cept:write-cept #x1F #x23 char-code)
+      (dotimes (row (ceiling (cl-gd:image-height) 10))
+        (dotimes (col (ceiling (cl-gd:image-width) 6))
+          (dotimes (bit 4)
+            (cept:write-cept (+ #x30 bit))
+            (dotimes (pixel-y 10)
+              (let ((data #x40))
+                (dotimes (pixel-x 6)
+                  (let* ((x (+ (* col 6) pixel-x))
+                         (y (+ (* row 10) pixel-y))
+                         (color (gethash (get-pixel-at x y) color-mapping)))
+                    (setf (ldb (byte 1 (- 5 pixel-x)) data) (ldb (byte 1 (- 3 bit)) color))))
+                (cept:write-cept data)))))))))

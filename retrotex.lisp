@@ -2,13 +2,15 @@
 
 (cl-interpol:enable-interpol-syntax)
 
-(defpackage :rafi
+(defpackage :retrotex
   (:use :cl :alexandria)
   (:export
    #:slideshow
-   #:editor))
+   #:editor
+   #:start-serial-server
+   #:start-tcp-server))
 
-(in-package :rafi)
+(in-package :retrotex)
 
 ;; Port must be opened with crtscts enabled ("stty -aF /dev/ttyUSB0 crtscts" before opening)
 
@@ -16,11 +18,16 @@
 
 (defvar *current-filename* #p"pages/page.cept")
 
-(defmacro with-rafi-stream ((stream) &body body)
+(defun read-cept-byte ()
+  (let ((byte (read-byte cept:*cept-stream*)))
+    (format t "; read ~2,'0X (~A)~%" byte (code-char byte))
+    byte))
+
+(defmacro with-cept-stream ((stream) &body body)
   `(let ((cept:*cept-stream* ,stream))
      ,@body))
 
-(defmacro with-rafi-port ((&optional (port *default-port*)) &body body)
+(defmacro with-cept-port ((&optional (port *default-port*)) &body body)
   `(let ((cept:*cept-stream* (open-port ,port)))
      (unwind-protect
           (progn
@@ -32,7 +39,7 @@
                     :output *standard-output*
                     :error-output *standard-output*)
   (let ((stream (cserial-port:make-serial-stream (cserial-port:open-serial port :baud-rate baud-rate))))
-    (with-rafi-stream (stream)
+    (with-cept-stream (stream)
       (set-pc-mode)
       (cept:hide-cursor)
       (cept:disable-system-line))
@@ -107,7 +114,7 @@
   (cept:write-cept #\return prompt ": ")
   (let ((buffer (make-array 40 :element-type 'character :adjustable t :fill-pointer 0)))
     (loop
-      (let ((char (code-char (read-byte cept:*cept-stream*)))
+      (let ((char (code-char (read-cept-byte)))
             (current-position (+ (length prompt) 2 (length buffer))))
         (cond
           ((equal char #\return)
@@ -144,7 +151,7 @@
   (cept:write-cept "[L]oad [S]ave [F]ilename ")
   (unwind-protect
        (case (code-char (prog1
-                            (read-byte cept:*cept-stream*)
+                            (read-cept-byte)
                           (clear-input-line)))
          (#\l (load-page *current-filename*))
          (#\s (save-page *current-filename*))
@@ -165,7 +172,7 @@
 
 (defun do-editing-commands ()
   (catch 'exit
-    (loop for byte = (read-byte cept:*cept-stream*)
+    (loop for byte = (read-cept-byte)
           do (handle-byte cept:*cept-stream* byte)
              (finish-output cept:*cept-stream*)))
   (cept:hide-cursor))
@@ -179,7 +186,7 @@
             do (load-page (nth i cept-files))
                (if sleep
                    (sleep sleep)
-                   (case (code-char (read-byte cept:*cept-stream*))
+                   (case (code-char (read-cept-byte))
                      ((#\backspace #\delete)
                       (when (zerop i)
                         (setf i (length cept-files)))
@@ -235,7 +242,7 @@
            (finish-output cept:*cept-stream*)
            (if sleep
                (sleep sleep)
-               (loop until (eql (code-char (read-byte cept:*cept-stream*)) #\space)))))
+               (loop until (eql (code-char (read-cept-byte)) #\space)))))
 
 (defun show-article-file (&key (text-file "cc-exponate.md") (frame "pages/ccframe.cept") (sleep 15))
   (cept:clear-page)
@@ -244,6 +251,15 @@
     (dolist (article (read-text-to-articles text-file))
       (destructuring-bind (title text) article
         (show-article title text :sleep sleep)))))
+
+(defun emulate-modem-dialer (stream)
+  (loop with character-stream = (flex:make-flexi-stream stream :external-format (flex:make-external-format :latin-1 :eol-style :cr))
+        for line = (read-line character-stream)
+        do (format t "; got modem command ~A~%" line)
+        while (not (ppcre:scan "(?i)^AT.*D[PD]?[0-9]" line))
+        finally (format character-stream "CONNECT~%")
+                (finish-output character-stream))
+  (format t "; dial command detected, continuing"))
 
 (defun handle-client (handler stream handler-arguments)
   ;; for now, assume we're only handling one client at a time
@@ -263,7 +279,7 @@
     (bt:interrupt-thread *tcp-server* (lambda () (throw 'exit nil)))
     (setf *tcp-server* nil)))
 
-(defun tcp-server (handler &rest handler-arguments &key (port 20000) &allow-other-keys)
+(defun start-tcp-server (handler &rest handler-arguments &key (port 20000) emulate-modem-dialer-p &allow-other-keys)
   (stop-tcp-server)
   (setf *tcp-server*
        (bt:make-thread
@@ -275,14 +291,17 @@
                      (let ((client-socket (usocket:socket-accept socket :element-type '(unsigned-byte 8))))
                        (format t "Connection accepted~%")
                        (handler-case
-                           (handle-client handler (usocket:socket-stream client-socket)
-                                          (remove-from-plist handler-arguments :port))
+                           (progn
+                             (when emulate-modem-dialer-p
+                               (emulate-modem-dialer (usocket:socket-stream client-socket)))
+                             (handle-client handler (usocket:socket-stream client-socket)
+                                            (remove-from-plist handler-arguments :port :emulate-modem-dialer-p)))
                          (error (e)
                            (format t "Error handling client: ~a~%" e)))
                        (usocket:socket-close client-socket)))
                 (usocket:socket-close socket)))))
         :name (format nil "CEPT server on port ~A" port))))
 
-(defun serial-server (handler &rest handler-arguments &key (port *default-port*) &allow-other-keys)
+(defun start-serial-server (handler &rest handler-arguments &key (port *default-port*) &allow-other-keys)
   (with-open-stream (stream (open-port port))
     (handle-client handler stream handler-arguments)))

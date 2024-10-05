@@ -25,7 +25,9 @@
            #:double-height
            #:double-width
            #:quad-size
-           #:constant-input))
+           #:constant-input
+           #:screen-color
+           #:row-color))
 
 (in-package :cept)
 
@@ -38,7 +40,8 @@
         (string (write-sequence (cept:string-to-bytes thing) s))
         ((array (unsigned-byte 8)) (write-sequence thing s))
         (character (write-byte (char-code thing) s))
-        (number (write-byte thing s))))))
+        (number (write-byte thing s))
+        (list (write-sequence (funcall #'to-octets thing) s))))))
 
 (defun write-cept (&rest stuff)
   (let ((octets (to-octets stuff)))
@@ -102,6 +105,12 @@
 
 (defun quad-size ()
   (write-cept #x8f))
+
+(defun screen-color (i)
+  (write-cept #x1B #x23 #x20 (+ #x50 i)))
+
+(defun row-color (i)
+  (write-cept #x1B #x23 #x21 (+ #x40 i)))
 
 (defun constant-input ()
   (write-cept 1 #x49))
