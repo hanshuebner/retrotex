@@ -8,7 +8,9 @@
    #:slideshow
    #:editor
    #:start-serial-server
-   #:start-tcp-server))
+   #:start-tcp-server
+   #:show-article-file
+   #:stop-tcp-server))
 
 (in-package :retrotex)
 
@@ -291,10 +293,12 @@
                      (let ((client-socket (usocket:socket-accept socket :element-type '(unsigned-byte 8))))
                        (format t "Connection accepted~%")
                        (handler-case
-                           (progn
+                           (let ((stream (usocket:socket-stream client-socket)))
+                             #+sbcl
+                             (setf (sb-impl::fd-stream-buffering stream) :none)
                              (when emulate-modem-dialer-p
-                               (emulate-modem-dialer (usocket:socket-stream client-socket)))
-                             (handle-client handler (usocket:socket-stream client-socket)
+                               (emulate-modem-dialer stream))
+                             (handle-client handler stream
                                             (remove-from-plist handler-arguments :port :emulate-modem-dialer-p)))
                          (error (e)
                            (format t "Error handling client: ~a~%" e)))

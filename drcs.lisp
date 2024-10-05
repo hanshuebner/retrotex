@@ -107,7 +107,7 @@
                   (let* ((x (+ (* col 6) pixel-x))
                          (y (+ (* row 10) pixel-y))
                          (color (gethash (get-pixel-at x y) color-mapping)))
-                   (setf (ldb (byte 1 (- 5 pixel-x)) data) (ldb (byte 1 (- 3 bit)) color))))
+                   (setf (ldb (byte 1 (- 5 pixel-x)) data) (ldb (byte 1 bit) color))))
                 (cept:write-cept data)))))))))
 
 (defun upload-image-as-drcs (pathname &key (start-char-code #x21))
