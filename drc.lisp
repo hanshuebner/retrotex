@@ -63,7 +63,7 @@
           (ldb (byte 1 0) second) (ldb (byte 1 0) blue))
     (list first second)))
 
-(defun define-cept-colors (colors)
+(defun make-cept-colors (colors)
   (dotimes (i (length colors))
     (cept:write-cept #x1F #x26 #x20
                      #x1F #x26
@@ -78,7 +78,17 @@
                        y
                        0)))
 
+(defun ensure-image-fits (pathname)
+  (cl-gd:with-image-from-file* (pathname)
+    (let* ((x-cells (ceiling (cl-gd:image-width) 6))
+           (y-cells (ceiling (cl-gd:image-height) 10))
+           (needed (* x-cells y-cells))
+           (available (floor (- #x7f #x21) 2)))
+      (when (> needed available)
+        (error "Image too large, ~D cells available ~D cells needed" available needed)))))
+
 (defun make-drcs (pathname &optional (char-code #x21))
+  (ensure-image-fits pathname)
   (let ((color-mapping (getf (map-colors pathname) :mapping)))
     (cept:write-cept #x1F #x23 #x20 #x4B #x44)
     (cl-gd:with-image-from-file* (pathname)
@@ -95,3 +105,41 @@
                          (color (gethash (get-pixel-at x y) color-mapping)))
                     (setf (ldb (byte 1 (- 5 pixel-x)) data) (ldb (byte 1 (- 3 bit)) color))))
                 (cept:write-cept data)))))))))
+
+(defun drcs-demo (pathname)
+  (cept:reset)
+  (cept:reset-palette)
+  (cept:home)
+  (cept:clear-page)
+  (cept:normal-size)
+  (cept:screen-color 7)
+  (cept:write-cept #x80 "DRCS demo" #\return #\linefeed)
+  (make-cept-colors (getf (map-colors pathname) :indexed-colors))
+  (make-drcs pathname)
+  (cept:reset)
+  (cept:screen-color 7)
+  (cept:write-cept #x80 "Definitions uploaded" #\return #\linefeed)
+  (cept:write-cept #x1B #x2B #x20 #x40 #x1b #x6f)
+  (destructuring-bind (&key width height &allow-other-keys) (analyze-image pathname)
+    (let ((current-char-code #x21))
+      (dotimes (row (ceiling height 10))
+        (dotimes (col (ceiling width 6))
+          (cept:write-cept current-char-code)
+          (incf current-char-code 2))
+        (cept:write-cept #\return #\linefeed))
+      (format t "; wrote DRCS #x21-#x~2,'0X (~A)~%" current-char-code (- current-char-code #x21))))
+  (cept:write-cept #\return #\linefeed #x0f "done" #\return #\linefeed)
+  (finish-output cept:*cept-stream*))
+
+(defun scale-down (input-pathname output-pathname)
+  "Scale down the image in input-pathname to half its original
+dimensions by copying every other pixel to a new image, then save the
+scaled-down image to output-pathname, overwriting it if it exists."
+  (cl-gd:with-image-from-file (input input-pathname)
+    (cl-gd:with-image (output (floor (cl-gd:image-width input) 2) (floor (cl-gd:image-height input) 2) t)
+      (loop for y below (floor (cl-gd:image-height input) 2)
+            do (loop for x below (floor (cl-gd:image-width input) 2)
+                     do (cl-gd:set-pixel x y
+                                         :color (cl-gd:get-pixel (* x 2) (* y 2) :image input)
+                                         :image output)))
+      (cl-gd:write-image-to-file output-pathname :image output :if-exists :supersede))))

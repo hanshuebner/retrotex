@@ -13,4 +13,5 @@
                "flexi-streams"
                "usocket")
   :components ((:file "cept")
-               (:file "retrotex")))
+               (:file "retrotex")
+               (:file "drc")))

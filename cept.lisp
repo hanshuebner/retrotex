@@ -27,7 +27,10 @@
            #:quad-size
            #:constant-input
            #:screen-color
-           #:row-color))
+           #:row-color
+           #:normal-size
+           #:home
+           #:reset-palette))
 
 (in-package :cept)
 
@@ -97,6 +100,9 @@
 (defun goto (row col)
   (write-cept #x1f (+ #x41 row) (+ #x41 col)))
 
+(defun home ()
+  (write-cept #x1e))
+
 (defun double-height ()
   (write-cept #x8d))
 
@@ -106,11 +112,20 @@
 (defun quad-size ()
   (write-cept #x8f))
 
+(defun normal-size ()
+  (write-cept #x8c))
+
 (defun screen-color (i)
   (write-cept #x1B #x23 #x20 (+ #x50 i)))
 
 (defun row-color (i)
   (write-cept #x1B #x23 #x21 (+ #x40 i)))
+
+(defun reset (&optional (state #x41))
+  (write-cept #x1f #x2f state))
+
+(defun reset-palette ()
+  (write-cept #x1F #x26 #x21))
 
 (defun constant-input ()
   (write-cept 1 #x49))
