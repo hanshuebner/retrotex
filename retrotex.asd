@@ -14,4 +14,4 @@
                "usocket")
   :components ((:file "cept")
                (:file "retrotex")
-               (:file "drc")))
+               (:file "drcs")))

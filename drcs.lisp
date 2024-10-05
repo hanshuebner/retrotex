@@ -1,15 +1,15 @@
 ;; -*- Lisp -*-
 
-(defpackage :drc
+(defpackage :drcs
   (:use :cl :alexandria)
   (:export
    #:upload-image-as-drcs
    #:draw-drcs-image
    #:drcs-demo))
 
-(in-package :drc)
+(in-package :drcs)
 
-(defconstant +drc-count+ (- #x7e #x21))
+(defconstant +drcs-count+ (- #x7e #x21))
 
 (defun analyze-image (pathname)
   (cl-gd:with-image-from-file* (pathname)
@@ -22,7 +22,7 @@
             :width (cl-gd:image-width)
             :height (cl-gd:image-height)))))
 
-(defun drc-16-count (&key width height &allow-other-keys)
+(defun drcs-16-count (&key width height &allow-other-keys)
   (* (ceiling width 12)
      (ceiling height 10)))
 
@@ -136,7 +136,7 @@
   (destructuring-bind (&key rows cols start-char-code) (upload-image-as-drcs pathname)
       (loop for row below 24 by rows
             do (loop for col below 40 by cols
-                     do (drc:draw-drcs-image row col :rows rows :cols cols :start-char-code start-char-code))))
+                     do (draw-drcs-image row col :rows rows :cols cols :start-char-code start-char-code))))
   (finish-output cept:*cept-stream*))
 
 (defun scale-down (input-pathname output-pathname)
