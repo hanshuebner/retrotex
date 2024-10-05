@@ -112,7 +112,9 @@
 
 (defun upload-image-as-drcs (pathname &key (start-char-code #x21))
   (make-cept-colors (getf (map-colors pathname) :indexed-colors))
+  (cept:goto 0 0)
   (make-drcs pathname)
+  (cept:goto 0 0)
   (destructuring-bind (&key width height &allow-other-keys) (analyze-image pathname)
     (list :rows (ceiling height 10)
           :cols (ceiling width 6)
@@ -151,3 +153,12 @@ scaled-down image to output-pathname, overwriting it if it exists."
                                          :color (cl-gd:get-pixel (* x 2) (* y 2) :image input)
                                          :image output)))
       (cl-gd:write-image-to-file output-pathname :image output :if-exists :supersede))))
+
+(defun show-colors ()
+  (cept:clear-page)
+  (cept:screen-color 0)
+  (loop for palette from 2 below 4
+        do (cept:select-palette palette)
+           (dotimes (color 8)
+             (cept:row-color color)
+             (cept:write-cept "hello hello" #\return #\linefeed))))

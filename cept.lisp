@@ -31,7 +31,8 @@
            #:home
            #:reset-palette
            #:screen-color
-           #:row-color-extended))
+           #:row-color-extended
+           #:select-palette))
 
 (in-package :cept)
 
@@ -130,6 +131,9 @@
 
 (defun reset-palette ()
   (write-cept #x1F #x26 #x21))
+
+(defun select-palette (i)
+  (write-cept #x9B (+ #x30 i) #x40))
 
 (defun constant-input ()
   (write-cept 1 #x49))
