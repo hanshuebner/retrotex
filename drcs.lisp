@@ -132,11 +132,11 @@
 
 (defun drcs-demo (pathname)
   (cept:clear-page)
-  (cept:background-color 7)
+  (cept:screen-color 7)
   (destructuring-bind (&key rows cols start-char-code) (upload-image-as-drcs pathname)
-      (loop for row below 24 by rows
-            do (loop for col below 40 by cols
-                     do (draw-drcs-image row col :rows rows :cols cols :start-char-code start-char-code))))
+    (loop for row below 24 by rows
+          do (loop for col below 40 by cols
+                   do (draw-drcs-image row col :rows rows :cols cols :start-char-code start-char-code))))
   (finish-output cept:*cept-stream*))
 
 (defun scale-down (input-pathname output-pathname)

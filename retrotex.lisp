@@ -304,4 +304,4 @@
 
 (defun start-serial-server (handler &rest handler-arguments &key (port *default-port*) &allow-other-keys)
   (with-open-stream (stream (open-port port))
-    (handle-client handler stream handler-arguments)))
+    (handle-client handler stream (remove-from-plist handler-arguments :port))))
