@@ -1,7 +1,11 @@
 ;; -*- Lisp -*-
 
 (defpackage :drc
-  (:use :cl :alexandria))
+  (:use :cl :alexandria)
+  (:export
+   #:upload-image-as-drcs
+   #:draw-drcs-image
+   #:drcs-demo))
 
 (in-package :drc)
 
@@ -87,12 +91,12 @@
       (when (> needed available)
         (error "Image too large, ~D cells available ~D cells needed" available needed)))))
 
-(defun make-drcs (pathname &optional (char-code #x21))
+(defun make-drcs (pathname &optional (start-char-code #x21))
   (ensure-image-fits pathname)
   (let ((color-mapping (getf (map-colors pathname) :mapping)))
     (cept:write-cept #x1F #x23 #x20 #x4B #x44)
     (cl-gd:with-image-from-file* (pathname)
-      (cept:write-cept #x1F #x23 char-code)
+      (cept:write-cept #x1F #x23 start-char-code)
       (dotimes (row (ceiling (cl-gd:image-height) 10))
         (dotimes (col (ceiling (cl-gd:image-width) 6))
           (dotimes (bit 4)
@@ -103,32 +107,36 @@
                   (let* ((x (+ (* col 6) pixel-x))
                          (y (+ (* row 10) pixel-y))
                          (color (gethash (get-pixel-at x y) color-mapping)))
-                    (setf (ldb (byte 1 (- 5 pixel-x)) data) (ldb (byte 1 (- 3 bit)) color))))
+                   (setf (ldb (byte 1 (- 5 pixel-x)) data) (ldb (byte 1 (- 3 bit)) color))))
                 (cept:write-cept data)))))))))
 
-(defun drcs-demo (pathname)
-  (cept:reset)
-  (cept:reset-palette)
-  (cept:home)
-  (cept:clear-page)
-  (cept:normal-size)
-  (cept:screen-color 7)
-  (cept:write-cept #x80 "DRCS demo" #\return #\linefeed)
+(defun upload-image-as-drcs (pathname &key (start-char-code #x21))
   (make-cept-colors (getf (map-colors pathname) :indexed-colors))
   (make-drcs pathname)
-  (cept:reset)
-  (cept:screen-color 7)
-  (cept:write-cept #x80 "Definitions uploaded" #\return #\linefeed)
-  (cept:write-cept #x1B #x2B #x20 #x40 #x1b #x6f)
   (destructuring-bind (&key width height &allow-other-keys) (analyze-image pathname)
-    (let ((current-char-code #x21))
-      (dotimes (row (ceiling height 10))
-        (dotimes (col (ceiling width 6))
-          (cept:write-cept current-char-code)
-          (incf current-char-code 2))
-        (cept:write-cept #\return #\linefeed))
-      (format t "; wrote DRCS #x21-#x~2,'0X (~A)~%" current-char-code (- current-char-code #x21))))
-  (cept:write-cept #\return #\linefeed #x0f "done" #\return #\linefeed)
+    (list :rows (ceiling height 10)
+          :cols (ceiling width 6)
+          :start-char-code start-char-code)))
+
+(defun draw-drcs-image (start-row start-col &key rows cols start-char-code)
+  (let ((current-char-code start-char-code))
+    ;; g3 -> drcs, g3 -> left
+    (cept:write-cept #x1B #x2B #x20 #x40 #x1b #x6f)
+    (dotimes (row rows)
+      (cept:goto (+ start-row row) start-col)
+      (dotimes (col cols)
+        (cept:write-cept current-char-code)
+        (incf current-char-code 2)))
+    ;; g0 -> left
+    (cept:write-cept #x0f)))
+
+(defun drcs-demo (pathname)
+  (cept:clear-page)
+  (cept:background-color 7)
+  (destructuring-bind (&key rows cols start-char-code) (upload-image-as-drcs pathname)
+      (loop for row below 24 by rows
+            do (loop for col below 40 by cols
+                     do (drc:draw-drcs-image row col :rows rows :cols cols :start-char-code start-char-code))))
   (finish-output cept:*cept-stream*))
 
 (defun scale-down (input-pathname output-pathname)

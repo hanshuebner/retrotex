@@ -26,11 +26,12 @@
            #:double-width
            #:quad-size
            #:constant-input
-           #:screen-color
            #:row-color
            #:normal-size
            #:home
-           #:reset-palette))
+           #:reset-palette
+           #:screen-color
+           #:row-color-extended))
 
 (in-package :cept)
 
@@ -121,7 +122,10 @@
 (defun row-color (i)
   (write-cept #x1B #x23 #x21 (+ #x40 i)))
 
-(defun reset (&optional (state #x41))
+(defun row-color-extended (i)
+  (write-cept #x1B #x23 #x21 (+ #x50 i)))
+
+(defun reset-basic-state (&optional (state #x41))
   (write-cept #x1f #x2f state))
 
 (defun reset-palette ()
