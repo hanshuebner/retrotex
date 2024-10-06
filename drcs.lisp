@@ -162,5 +162,9 @@ scaled-down image to output-pathname, overwriting it if it exists."
   (loop for palette from 2 below 4
         do (cept:select-palette palette)
            (dotimes (color 8)
-             (cept:row-color color)
-             (cept:write-cept "hello hello" #\return #\linefeed))))
+             (cept:row-background-color color)
+             (cept:foreground-color 0)
+             (cept:write-cept (format nil "Palette ~D Farbe ~D " (1+ palette) (1+ color)))
+             (cept:foreground-color 7)
+             (cept:write-cept (format nil "Palette ~D Farbe ~D " (1+ palette) (1+ color)))
+             (cept:write-cept #\return #\linefeed))))

@@ -26,13 +26,16 @@
            #:double-width
            #:quad-size
            #:constant-input
-           #:row-color
            #:normal-size
            #:home
            #:reset-palette
            #:screen-color
-           #:row-color-extended
-           #:select-palette))
+           #:select-palette
+           #:row-foreground-color
+           #:row-background-color
+           #:color-polarity
+           #:foreground-color
+           #:background-color))
 
 (in-package :cept)
 
@@ -120,11 +123,22 @@
 (defun screen-color (i)
   (write-cept #x1B #x23 #x20 (+ #x50 i)))
 
-(defun row-color (i)
+(defun row-foreground-color (i)
   (write-cept #x1B #x23 #x21 (+ #x40 i)))
 
-(defun row-color-extended (i)
+(defun row-background-color (i)
   (write-cept #x1B #x23 #x21 (+ #x50 i)))
+
+(defun color-polarity (swap)
+  (write-cept #x1b #x23 #x21 (if swap #x5d #x5c)))
+
+(defun foreground-color (color)
+  (assert (<= 0 color 7))
+  (write-cept (+ #x80 color)))
+
+(defun background-color (color)
+  (assert (<= 0 color 7))
+  (write-cept (+ #x90 color)))
 
 (defun reset-basic-state (&optional (state #x41))
   (write-cept #x1f #x2f state))
