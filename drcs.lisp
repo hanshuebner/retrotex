@@ -9,7 +9,9 @@
 
 (in-package :drcs)
 
-(defconstant +drcs-count+ (- #x7e #x21))
+(defconstant +first-drcs+ #x21)
+(defconstant +last-drcs+ #x7e)
+(defconstant +drcs-count+ (- +last-drcs+ +first-drcs+))
 
 (defun analyze-image (pathname)
   (cl-gd:with-image-from-file* (pathname)
@@ -87,11 +89,11 @@
     (let* ((x-cells (ceiling (cl-gd:image-width) 6))
            (y-cells (ceiling (cl-gd:image-height) 10))
            (needed (* x-cells y-cells))
-           (available (floor (- #x7f #x21) 2)))
+           (available (floor +drcs-count+ 2)))
       (when (> needed available)
         (error "Image too large, ~D cells available ~D cells needed" available needed)))))
 
-(defun make-drcs (pathname &optional (start-char-code #x21))
+(defun make-drcs (pathname &optional (start-char-code +first-drcs+))
   (ensure-image-fits pathname)
   (let ((color-mapping (getf (map-colors pathname) :mapping)))
     (cept:write-cept #x1F #x23 #x20 #x4B #x44)
@@ -110,7 +112,7 @@
                    (setf (ldb (byte 1 (- 5 pixel-x)) data) (ldb (byte 1 bit) color))))
                 (cept:write-cept data)))))))))
 
-(defun upload-image-as-drcs (pathname &key (start-char-code #x21))
+(defun upload-image-as-drcs (pathname &key (start-char-code +first-drcs+))
   (make-cept-colors (getf (map-colors pathname) :indexed-colors))
   (cept:goto 0 0)
   (make-drcs pathname)
