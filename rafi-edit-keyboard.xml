@@ -6,56 +6,56 @@
     <key type="page-number">3</key>
     <key type="page-number">4</key>
     <key type="busy-led"/>
-    <key type="led" color="dark-grey">alpha</key>
-    <key type="led" color="dark-grey">graf1</key>
-    <key type="led" color="dark-grey">graf2</key>
-    <key type="led" color="dark-grey">graf3</key>
-    <key type="led" color="dark-grey">drcs</key>
-    <key type="led"><label>ser</label><label>par</label></key>
-    <key color="mid-grey"><label>inv</label><label>blink</label><label>norm</label></key>
-    <key color="mid-grey"><label>dec</label><label>blink</label><label>inc</label></key>
-    <key color="mid-grey"><label></label><label>blink</label><label>ftab</label></key>
-    <key color="mid-grey"><label>ph2</label><label>blink</label><label>ph1</label></key>
-    <key type="mid-grey"><label>ph3</label><label>blink</label><label>aus</label></key>
-    <key>reihe</key>
-    <key>schirm</key>
-    <key><label>eb</label><label>sb</label></key>
-    <key>trsp</key>
-    <key><label>rg</label><label>hg</label></key>
+    <key type="led" color="dark-grey">ALPHA</key>
+    <key type="led" color="dark-grey">GRAF1</key>
+    <key type="led" color="dark-grey">GRAF2</key>
+    <key type="led" color="dark-grey">GRAF3</key>
+    <key type="led" color="dark-grey">DRCS</key>
+    <key type="led"><label>SER</label><label>PAR</label></key>
+    <key color="mid-grey"><label>INV</label><label>BLINK</label><label>NORM</label></key>
+    <key color="mid-grey"><label>DEC</label><label>BLINK</label><label>INC</label></key>
+    <key color="mid-grey"><label></label><label>BLINK</label><label>FTAB</label></key>
+    <key color="mid-grey"><label>PH2</label><label>BLINK</label><label>PH1</label></key>
+    <key color="mid-grey"><label>PH3</label><label>BLINK</label><label>AUS</label></key>
+    <key>REIHE</key>
+    <key>SCHIRM</key>
+    <key><label>EB</label><label>SB</label></key>
+    <key>TRSP</key>
+    <key><label>RG</label><label>HG</label></key>
     <key type="led" logo="go-online"/>
     <key logo="go-offline"/>
   </row>
   <row>
-    <key type="big-font" color="system-red">c</key>
-    <key type="big-font" color="system-red">r</key>
-    <key type="led">pal 1</key>
-    <key type="led">pal 2</key>
-    <key type="led">pal 3</key>
-    <key type="led">pal 4</key>
-    <key type="black">1</key>
-    <key type="red">2</key>
-    <key type="green">3</key>
-    <key type="yellow">4</key>
-    <key type="blue">5</key>
-    <key type="magenta">6</key>
-    <key type="cyan">7</key>
-    <key type="white">8</key>
-    <key>zeile</key>
-    <key>nb</key>
-    <key>bb</key>
-    <key><label>cg</label><label>sg</label></key>
-    <key>inv</key>
-    <key>norm</key>
-    <key color="mid-grey">nh</key>
-    <key color="mid-grey">dh</key>
-    <key color="mid-grey">db</key>
-    <key color="mid-grey">dg</key>
+    <key color="system-red"><label>C</label></key>
+    <key color="system-red"><label>R</label></key>
+    <key type="led">PAL 1</key>
+    <key type="led">PAL 2</key>
+    <key type="led">PAL 3</key>
+    <key type="led">PAL 4</key>
+    <key color="black">1</key>
+    <key color="red">2</key>
+    <key color="green">3</key>
+    <key color="yellow">4</key>
+    <key color="blue">5</key>
+    <key color="magenta">6</key>
+    <key color="cyan">7</key>
+    <key color="white">8</key>
+    <key>ZEILE</key>
+    <key>NB</key>
+    <key>BB</key>
+    <key><label>CG</label><label>SG</label></key>
+    <key>INV</key>
+    <key>NORM</key>
+    <key color="mid-grey">NH</key>
+    <key color="mid-grey">DH</key>
+    <key color="mid-grey">DB</key>
+    <key color="mid-grey">DG</key>
   </row>
   <row>
-    <key><label>aus</label><label>protec</label><label>ein</label></key>
-    <key><label>aus</label><label>marked</label><label>ein</label></key>
+    <key><label>AUS</label><label>PROTEC</label><label>EIN</label></key>
+    <key><label>AUS</label><label>MARKED</label><label>EIN</label></key>
     <space width="0.25"/>
-    <key><label>μ</label><label>°</label><label>⌐</label><label>&#x0311;</label></key>
+    <key width="1.25"><label>μ</label><label>°</label><label>⌐</label><label>&#x0311;</label></key>
     <key><label>1</label><label>!</label><label>ˡ</label><label>¡</label></key>
     <key><label>2</label><label>"</label><label>½</label><label>¥</label></key>
     <key><label>3</label><label>§</label><label>¾</label><label>£</label></key>
@@ -68,11 +68,11 @@
     <key><label>0</label><label>=</label><label>≪</label><label>|</label></key>
     <key><label>ß</label><label>?</label><label>≫</label><label>¿</label></key>
     <key><label>&#x0301;</label><label>&#x0300;</label><label>&#x2e0c;</label><label>&#x30c;</label></key>
-    <key type="big-font" width="1.75">⌫</key>
+    <key width="1.75"><label>⌫</label></key>
     <space width="0.25"/>
-    <key><label>24</label><label>format</label><label>20</label></key>
-    <key><label>aus</label><label>verd</label><label>ein</label></key>
-    <key><label>aus</label><label>&#x22a6;scrl</label><label>ein</label></key>
+    <key><label>24</label><label>FORMAT</label><label>20</label></key>
+    <key><label>AUS</label><label>VERD</label><label>EIN</label></key>
+    <key><label>AUS</label><label>&#x22a6;SCRL</label><label>EIN</label></key>
     <space width="0.5"/>
     <key logo="show-attributes"/>
     <key logo="print"/>
@@ -82,46 +82,46 @@
     <key type="led" logo="prestel-graphic-1"/>
     <key type="led" logo="prestel-graphic-2"/>
     <space width="0.25"/>
-    <key type="big-font" color="dark-grey" width="1.5">f</key>
-    <key><label>q</label><label></label><label></label></key>
-    <key><label>w</label><label></label><label></label></key>
-    <key><label>e</label><label></label><label></label></key>
-    <key><label>r</label><label></label><label></label></key>
-    <key><label>t</label><label></label><label></label></key>
-    <key><label>z</label><label></label><label></label></key>
-    <key><label>u</label><label></label><label></label></key>
-    <key><label>i</label><label></label><label></label></key>
-    <key><label>o</label><label></label><label></label></key>
-    <key><label>p</label><label></label><label></label></key>
-    <key><label>ü</label><label></label><label></label></key>
+    <key color="dark-grey" width="1.5">F</key>
+    <key><label>Q</label><label></label><label></label></key>
+    <key><label>W</label><label></label><label></label></key>
+    <key><label>E</label><label></label><label></label></key>
+    <key><label>R</label><label></label><label></label></key>
+    <key><label>T</label><label></label><label></label></key>
+    <key><label>Z</label><label></label><label></label></key>
+    <key><label>U</label><label></label><label></label></key>
+    <key><label>I</label><label></label><label></label></key>
+    <key><label>O</label><label></label><label></label></key>
+    <key><label>P</label><label></label><label></label></key>
+    <key><label>Ü</label><label></label><label></label></key>
     <key><label>+</label><label>*</label><label></label><label></label></key>
-    <key type="enter" width="1.25"/>
+    <key type="enter" width="1.50"/>
     <space width="0.25"/>
     <key>⇖</key>
     <key color="mid-grey">↑</key>
     <key>⇈</key>
     <space width="0.5"/>
-    <key type="big-font">7</key>
-    <key type="big-font">8</key>
-    <key type="big-font">9</key>
+    <key><label>7</label></key>
+    <key><label>8</label></key>
+    <key><label>9</label></key>
   </row>
   <row>
     <key type="led" logo="prestel-graphic-3"/>
     <key type="led" logo="prestel-graphic-4"/>
     <space width="0.25"/>
-    <key>ctrl</key>
-    <key type="led"><label>caps</label><label>lock</label></key>
-    <key><label>a</label><label></label><label></label></key>
-    <key><label>s</label><label></label><label></label></key>
-    <key><label>d</label><label></label><label></label></key>
-    <key><label>f</label><label></label><label></label></key>
-    <key><label>g</label><label></label><label></label></key>
-    <key><label>h</label><label></label><label></label></key>
-    <key><label>j</label><label></label><label></label></key>
-    <key><label>k</label><label></label><label></label></key>
-    <key><label>l</label><label></label><label></label></key>
-    <key><label>ö</label><label></label><label></label></key>
-    <key><label>ä</label><label></label><label></label></key>
+    <key>CTRL</key>
+    <key type="led"><label>CAPS</label><label>LOCK</label></key>
+    <key><label>A</label><label></label><label></label></key>
+    <key><label>S</label><label></label><label></label></key>
+    <key><label>D</label><label></label><label></label></key>
+    <key><label>F</label><label></label><label></label></key>
+    <key><label>G</label><label></label><label></label></key>
+    <key><label>H</label><label></label><label></label></key>
+    <key><label>J</label><label></label><label></label></key>
+    <key><label>K</label><label></label><label></label></key>
+    <key><label>L</label><label></label><label></label></key>
+    <key><label>Ö</label><label></label><label></label></key>
+    <key><label>Ä</label><label></label><label></label></key>
     <key><label>#</label><label>'</label><label>^</label><label></label></key>
     <space width="1"/> <!-- part of the enter key -->
     <space width="0.25"/>
@@ -129,56 +129,56 @@
     <key color="mid-grey">↖</key>
     <key color="mid-grey">→</key>
     <space width="0.5"/>
-    <key type="big-font">4</key>
-    <key type="big-font">5</key>
-    <key type="big-font">6</key>
+    <key><label>4</label></key>
+    <key><label>5</label></key>
+    <key><label>6</label></key>
   </row>
   <row>
     <key type="led" logo="prestel-graphic-5"/>
     <key type="led" logo="prestel-graphic-6"/>
     <space width="0.25"/>
-    <key width="1.5">shift</key>
+    <key width="1.5">SHIFT</key>
     <key><label>&lt;</label><label>&gt;</label><label>³</label><label>²</label></key>
-    <key><label>y</label><label></label><label></label></key>
-    <key><label>x</label><label></label><label></label></key>
-    <key><label>c</label><label></label><label></label></key>
-    <key><label>v</label><label></label><label></label></key>
-    <key><label>b</label><label></label><label></label></key>
-    <key><label>n</label><label></label><label></label></key>
-    <key><label>m</label><label></label><label></label></key>
+    <key><label>Y</label><label></label><label></label></key>
+    <key><label>X</label><label></label><label></label></key>
+    <key><label>C</label><label></label><label></label></key>
+    <key><label>V</label><label></label><label></label></key>
+    <key><label>B</label><label></label><label></label></key>
+    <key><label>N</label><label></label><label></label></key>
+    <key><label>M</label><label></label><label></label></key>
     <key><label>,</label><label>;</label><label></label><label></label></key>
     <key><label>.</label><label>:</label><label></label><label></label></key>
     <key><label>-</label><label>_</label><label></label><label></label></key>
-    <key width="1.5">shift</key>
-    <key type="big-font">↵</key>
+    <key width="1.5">SHIFT</key>
+    <key type="big-font"><label>↵</label></key>
     <space width="0.25"/>
     <key>⇙</key>
     <key color="mid-grey">↓</key>
     <key>⇊</key>
     <space width="0.5"/>
-    <key type="big-font">1</key>
-    <key type="big-font">2</key>
-    <key type="big-font">3</key>
+    <key><label>1</label></key>
+    <key><label>2</label></key>
+    <key><label>3</label></key>
   </row>
   <row>
     <space width="0.5"/>
     <key type="led" logo="prestel-graphic-7"/>
-    <space width="1.25"/>
-    <key><label>farb</label><label>edit</label></key>
-    <key><label>drcs</label><label>edit</label></key>
-    <key><label>scrol</label><label>edit</label></key>
+    <space width="0.75"/>
+    <key><label>FARB</label><label>EDIT</label></key>
+    <key><label>DRCS</label><label>EDIT</label></key>
+    <key><label>SCROL</label><label>EDIT</label></key>
     <key width="8"/>
     <space width="1"/>
-    <key type="big-font">-</key>
-    <key type="big-font">+</key>
-    <key><label>aus</label><label>untstr</label><label>ein</label></key>
+    <key type="big-font"><label>-</label></key>
+    <key type="big-font"><label>+</label></key>
+    <key><label>AUS</label><label>UNTSTR</label><label>EIN</label></key>
     <space width="0.25"/>
-    <key><label>aus</label><label>cursor</label><label>ein</label></key>
+    <key><label>AUS</label><label>CURSOR</label><label>EIN</label></key>
     <space width="1.0"/>
     <key color="dark-grey" log="sys-cursor"/>
     <space width="0.5"/>
     <key color="dark-grey" log="star"/>
-    <key type="big-font">0</key>
+    <key><label>0</label></key>
     <key color="dark-grey" log="hash"/>
   </row>
 </keyboard>

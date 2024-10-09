@@ -45,33 +45,25 @@
   <g id="standard-key" class="medium-key" transform="translate(100, 0)">
     <!-- Rounded square -->
     <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
-    <!-- Almost complete circle with a flat top -->
     <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
     
-    <!-- Symbols and letters -->
     <text x="50" y="45" font-size="18">INV</text>
     <text x="50" y="60" font-size="18">BLINK</text>
     <text x="50" y="75" font-size="18">NORM</text>
   </g>
 
   <g id="standard-key" class="medium-key" transform="translate(200, 0)">
-    <!-- Rounded square -->
     <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
-    <!-- Almost complete circle with a flat top -->
     <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
     
-    <!-- Symbols and letters -->
     <text x="50" y="45" font-size="18">DEC</text>
     <text x="50" y="60" font-size="18">BLINK</text>
     <text x="50" y="75" font-size="18">INC</text>
   </g>
 
   <g id="led-key" class="standard-key" transform="translate(300,0)">
-    <!-- Rounded square -->
     <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
-    <!-- Complete circle -->
     <circle cx="50" cy="50" r="35"/>
-    <!-- Flat line at the top -->
     <line x1="25" y1="25" x2="75" y2="25"/>
     <path d="M35,45 L50,30 70,50 50,75 35,60" class="thick-line"/>
     <text x="50" y="62" font-size="28">2</text>
