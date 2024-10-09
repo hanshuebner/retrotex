@@ -1,46 +1,93 @@
 <!-- D-DIN font https://github.com/amcchord/datto-d-din -->
-<svg width="400" height="100" xmlns="http://www.w3.org/2000/svg">
+<svg width="1000" height="100" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <style type="text/css">
       /* Default styles for all elements */
       rect, path, circle, line {
-        fill: #c7c1c9;
         stroke: black;
-        stroke-width: 1;
       }
       text {
         fill: black;
+        text-anchor: middle;
         font-family: D-DIN;
+      }
+      .thick-line {
+        stroke-width: 2;
+      }
+      .standard-key text {
+        fill: #242326;
+      }
+      .standard-key * {
+        fill: #c7c1c9;
+      }
+      .medium-key text {
+        fill: #e4e3e6;
+      }
+      .medium-key * {
+        fill: #a09a9a;
       }
     </style>
   </defs>
 
-  <!-- Group for the first key -->
-  <g id="flattened-circle">
+  <g id="standard-key" class="standard-key" transform="translate(0, 0)">
     <!-- Rounded square -->
     <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
     <!-- Almost complete circle with a flat top -->
     <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
     
     <!-- Symbols and letters -->
-    <text x="35" y="50" font-size="28">?</text>
-    <text x="35" y="75" font-size="28">ß</text>
-    <text x="55" y="45" font-size="22">≫</text>
-    <text x="55" y="70" font-size="22">¿</text>
+    <text x="40" y="50" font-size="28">?</text>
+    <text x="40" y="75" font-size="28">ß</text>
+    <text x="60" y="45" font-size="22">≫</text>
+    <text x="60" y="70" font-size="22">¿</text>
   </g>
 
-  <!-- Group for the second key -->
-  <g id="closed-circle-with-flat-line" transform="translate(100,0)">
+  <g id="standard-key" class="medium-key" transform="translate(100, 0)">
+    <!-- Rounded square -->
+    <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
+    <!-- Almost complete circle with a flat top -->
+    <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
+    
+    <!-- Symbols and letters -->
+    <text x="50" y="45" font-size="18">INV</text>
+    <text x="50" y="60" font-size="18">BLINK</text>
+    <text x="50" y="75" font-size="18">NORM</text>
+  </g>
+
+  <g id="standard-key" class="medium-key" transform="translate(200, 0)">
+    <!-- Rounded square -->
+    <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
+    <!-- Almost complete circle with a flat top -->
+    <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
+    
+    <!-- Symbols and letters -->
+    <text x="50" y="45" font-size="18">DEC</text>
+    <text x="50" y="60" font-size="18">BLINK</text>
+    <text x="50" y="75" font-size="18">INC</text>
+  </g>
+
+  <g id="led-key" class="standard-key" transform="translate(300,0)">
     <!-- Rounded square -->
     <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
     <!-- Complete circle -->
     <circle cx="50" cy="50" r="35"/>
     <!-- Flat line at the top -->
     <line x1="25" y1="25" x2="75" y2="25"/>
+    <path d="M35,45 L50,30 70,50 50,75 35,60" class="thick-line"/>
+    <text x="50" y="62" font-size="28">2</text>
   </g>
 
-  <!-- Group for the third key -->
-  <g id="extended-flattened-circle" transform="translate(200,0)">
+  <g id="led-key" class="standard-key" transform="translate(400,0)">
+    <!-- Rounded square -->
+    <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
+    <!-- Complete circle -->
+    <circle cx="50" cy="50" r="35"/>
+    <!-- Flat line at the top -->
+    <line x1="25" y1="25" x2="75" y2="25"/>
+    <text x="50" y="60" font-size="24">PAL 2</text>
+  </g>
+
+  <g id="wide-key" class="standard-key" transform="translate(500,0)">
     <!-- Rounded square -->
     <rect x="5" y="5" width="190" height="90" rx="10" ry="10"/>
     <!-- Almost complete circle with a flat top -->
