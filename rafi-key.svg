@@ -1,0 +1,49 @@
+<!-- D-DIN font https://github.com/amcchord/datto-d-din -->
+<svg width="400" height="100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style type="text/css">
+      /* Default styles for all elements */
+      rect, path, circle, line {
+        fill: #c7c1c9;
+        stroke: black;
+        stroke-width: 1;
+      }
+      text {
+        fill: black;
+        font-family: D-DIN;
+      }
+    </style>
+  </defs>
+
+  <!-- Group for the first key -->
+  <g id="flattened-circle">
+    <!-- Rounded square -->
+    <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
+    <!-- Almost complete circle with a flat top -->
+    <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
+    
+    <!-- Symbols and letters -->
+    <text x="35" y="50" font-size="28">?</text>
+    <text x="35" y="75" font-size="28">ß</text>
+    <text x="55" y="45" font-size="22">≫</text>
+    <text x="55" y="70" font-size="22">¿</text>
+  </g>
+
+  <!-- Group for the second key -->
+  <g id="closed-circle-with-flat-line" transform="translate(100,0)">
+    <!-- Rounded square -->
+    <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
+    <!-- Complete circle -->
+    <circle cx="50" cy="50" r="35"/>
+    <!-- Flat line at the top -->
+    <line x1="25" y1="25" x2="75" y2="25"/>
+  </g>
+
+  <!-- Group for the third key -->
+  <g id="extended-flattened-circle" transform="translate(200,0)">
+    <!-- Rounded square -->
+    <rect x="5" y="5" width="190" height="90" rx="10" ry="10"/>
+    <!-- Almost complete circle with a flat top -->
+    <path d="M25,25 A35,35 0 0,0 50,80 L150,80 A35,35 0 0,0 175,25 Z"/>
+  </g>
+</svg>
