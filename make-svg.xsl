@@ -9,6 +9,8 @@
   <xsl:accumulator name="totalWidth" as="xs:double" initial-value="0">
     <xsl:accumulator-rule match="key" 
                           select="$value + (if (@width) then xs:double(@width) else 1)" />
+    <xsl:accumulator-rule match="space" 
+                          select="$value + xs:double(@width)" />
     <xsl:accumulator-rule match="row" select="0"/>
   </xsl:accumulator>
 
