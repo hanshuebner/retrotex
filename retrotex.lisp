@@ -179,9 +179,8 @@
              (finish-output cept:*cept-stream*)))
   (cept:hide-cursor))
 
-(defun slideshow (&key (dir "pages") sleep)
-  (let* ((cept-files (directory (merge-pathnames (format nil "~A/*.cept" dir))))
-         (cept-files (sort cept-files 'string-lessp :key 'pathname-name)))
+(defun slideshow (&key sleep (cept-files (directory "pages/*.cept")))
+  (let* ((cept-files (sort cept-files 'string-lessp :key 'pathname-name)))
     (assert cept-files)
     (loop
       (loop with i = 0
