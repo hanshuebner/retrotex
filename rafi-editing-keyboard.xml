@@ -5,7 +5,7 @@
     <key type="page-number">2</key>
     <key type="page-number">3</key>
     <key type="page-number">4</key>
-    <space width="1"/>
+    <space width="1" has-busy-led="1"/>
     <key type="led" color="dark-grey">ALPHA</key>
     <key type="led" color="dark-grey">GRAF1</key>
     <key type="led" color="dark-grey">GRAF2</key>
@@ -82,7 +82,7 @@
     <key type="led" logo="prestel-0-0"/>
     <key type="led" logo="prestel-0-1"/>
     <space width="0.25"/>
-    <key color="f-key" width="1.5"><label>F</label></key>
+    <key color="f-key" width="1.75"><label>F</label></key>
     <key><label>Q</label><label></label><label></label></key>
     <key><label>W</label><label></label><label></label></key>
     <key><label>E</label><label></label><label></label></key>
@@ -95,11 +95,11 @@
     <key><label>P</label><label></label><label></label></key>
     <key><label>Ü</label><label></label><label></label></key>
     <key><label>+</label><label>*</label><label></label><label></label></key>
-    <key type="enter" width="1.50"/>
+    <key type="enter" width="1.25"/>
     <space width="0.25"/>
-    <key>⇖</key>
-    <key color="mid-grey">↑</key>
-    <key>⇈</key>
+    <key><label>⇖</label></key>
+    <key color="mid-grey"><label>↑</label></key>
+    <key><label>⇈</label></key>
     <space width="0.5"/>
     <key><label>7</label></key>
     <key><label>8</label></key>
@@ -125,9 +125,9 @@
     <key><label>#</label><label>'</label><label>^</label><label></label></key>
     <space width="1"/> <!-- part of the enter key -->
     <space width="0.25"/>
-    <key color="mid-grey">←</key>
-    <key color="mid-grey">↖</key>
-    <key color="mid-grey">→</key>
+    <key color="mid-grey"><label>←</label></key>
+    <key color="mid-grey"><label>↖</label></key>
+    <key color="mid-grey"><label>→</label></key>
     <space width="0.5"/>
     <key><label>4</label></key>
     <key><label>5</label></key>
@@ -152,9 +152,9 @@
     <key width="1.5">SHIFT</key>
     <key><label>↵</label></key>
     <space width="0.25"/>
-    <key>⇙</key>
-    <key color="mid-grey">↓</key>
-    <key>⇊</key>
+    <key><label>⇙</label></key>
+    <key color="mid-grey"><label>↓</label></key>
+    <key><label>⇊</label></key>
     <space width="0.5"/>
     <key><label>1</label></key>
     <key><label>2</label></key>

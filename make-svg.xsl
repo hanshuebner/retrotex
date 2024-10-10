@@ -81,8 +81,16 @@
     </xsl:choose>
   </xsl:function>
 
+  <xsl:template match="space[@has-busy-led]">
+    <g class="busy-indicator"
+       transform="translate({accumulator-before('x-position')},{accumulator-before('y-position')})">
+      <circle class="busy-led" cx="50" cy="20" r="7"/>
+      <text x="50" y="50" font-size="14">BUSY</text>
+    </g>
+  </xsl:template>
+
   <xsl:template match="key[@type='page-number']" priority="10">
-    <g class="standard-key {@color}"
+    <g class="key standard-key {@color}"
        id="key-{accumulator-before('key-number')}"
        transform="translate({accumulator-before('x-position')},{accumulator-before('y-position')})">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
@@ -94,12 +102,13 @@
   </xsl:template>
 
   <xsl:template match="key[@type='led']" priority="10">
-    <g class="standard-key {@color}"
+    <g class="key standard-key {@color}"
        id="key-{accumulator-before('key-number')}"
        transform="translate({accumulator-before('x-position')},{accumulator-before('y-position')})">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <circle cx="50" cy="50" r="35"/>
-      <line x1="25" y1="25" x2="75" y2="25"/>
+      <!-- LED -->
+      <path class="led" d="M 25,25 A 35,35 0 0 1 75,25 Z"/>
       <xsl:copy-of select="local:logo(@logo)"/>
       <xsl:choose>
         <xsl:when test="label">
@@ -113,9 +122,38 @@
     </g>
   </xsl:template>
 
+  <xsl:template match="key[@type='enter']" priority="11">
+    <g class="key standard-key {@color}"
+       id="key-{accumulator-before('key-number')}"
+       transform="translate({accumulator-before('x-position')},{accumulator-before('y-position')})">
+      <path d="M 15 5
+               H 110
+               A 10 10 0 0 1 120 15
+               V 185
+               A 10 10 0 0 1 110 195
+               H 40
+               A 10 10 0 0 1 30 185
+               V 105
+               A 10 10 0 0 0 20 95
+               H 15
+               A 10 10 0 0 1 5 85
+               V 15
+               A 10 10 0 0 1 15 5
+               Z"/>
+      <path d="M25,25
+               A 35,35 0 0 0 50,80
+               V 155
+               A 19,19 0 0 0 110,155
+               V 45
+               A 19,19 0 0 0 100,25
+               Z"/>
+      <text x="80" y="120" font-size="40">←</text>
+    </g>
+  </xsl:template>
+
   <xsl:template match="key[@width]" priority="10">
     <xsl:variable name="stretch" select="(@width - 1) * 100"/>
-    <g class="standard-key {@color}"
+    <g class="key standard-key {@color}"
        id="key-{accumulator-before('key-number')}"
        transform="translate({accumulator-before('x-position')},{accumulator-before('y-position')})">
       <rect x="5" y="5" width="{90 + $stretch}" height="90" rx="10" ry="10"/>
@@ -139,7 +177,7 @@
   </xsl:template>
 
   <xsl:template match="key[not(@width) and not(@type)]" priority="1">
-    <g class="standard-key {@color}"
+    <g class="key standard-key {@color}"
        id="key-{accumulator-before('key-number')}"
        transform="translate({accumulator-before('x-position')},{accumulator-before('y-position')})">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>

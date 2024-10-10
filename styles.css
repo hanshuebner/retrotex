@@ -76,3 +76,9 @@ path.logo-sys-cursor-lines {
 .standard-key > .logo-filled {
     fill: #242326;
 }
+.led { fill: #800000; }
+.led.active { fill: #f00000; }
+
+.busy-led { fill: #a0a000; }
+.busy-led.active { fill: #f0f000; }
+

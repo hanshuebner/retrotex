@@ -1,0 +1,90 @@
+<svg width="1000" height="200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style type="text/css">
+      /* Default styles for all elements */
+      rect, path, circle, line {
+      stroke: black;
+      }
+      text {
+      fill: black;
+      text-anchor: middle;
+      font-family: D-DIN;
+      }
+      .thick-line {
+      stroke-width: 2;
+      }
+      .standard-key text {
+      fill: #242326;
+      }
+      .standard-key * {
+      fill: #c7c1c9;
+      }
+      .medium-key text {
+      fill: #e4e3e6;
+      }
+      .medium-key * {
+      fill: #a09a9a;
+      }
+      .f-key text {
+      fill: #e4e3e6;
+      }
+      .f-key * {
+      fill: #785f5f
+      }
+      path.logo-filled { fill: red }
+    </style>
+  </defs>
+
+  <g class="standard-key " id="key-84" transform="translate(75,0)">
+    <path d="M 15 5
+             H 110
+             A 10 10 0 0 1 120 15
+             V 185
+             A 10 10 0 0 1 110 195
+             H 40
+             A 10 10 0 0 1 30 185
+             V 105
+             A 10 10 0 0 0 20 95
+             H 15
+             A 10 10 0 0 1 5 85
+             V 15
+             A 10 10 0 0 1 15 5
+             Z"/>
+    <path d="M25,25
+             A 35,35 0 0 0 50,80
+             V 155
+             A 19,19 0 0 0 110,155
+             V 45
+             A 19,19 0 0 0 100,25
+             Z"/>
+    <text x="80" y="120" font-size="40">←</text>
+  </g>
+
+   <g class="standard-key " id="key-83" transform="translate(200,0)">
+      <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
+      <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
+      <text x="40" y="75" font-size="28">+</text>
+      <text x="40" y="50" font-size="28">*</text>
+      <text x="60" y="45" font-size="22"/>
+      <text x="60" y="70" font-size="22"/>
+   </g>
+
+   <g class="standard-key " id="key-83" transform="translate(0,100)">
+      <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
+      <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
+      <text x="40" y="75" font-size="28">+</text>
+      <text x="40" y="50" font-size="28">*</text>
+      <text x="60" y="45" font-size="22"/>
+      <text x="60" y="70" font-size="22"/>
+   </g>
+
+   <g class="standard-key " id="key-83" transform="translate(200,100)">
+      <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
+      <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
+      <text x="40" y="75" font-size="28">+</text>
+      <text x="40" y="50" font-size="28">*</text>
+      <text x="60" y="45" font-size="22"/>
+      <text x="60" y="70" font-size="22"/>
+   </g>
+
+</svg>
