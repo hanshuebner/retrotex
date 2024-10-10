@@ -39,6 +39,16 @@
     <xsl:if test="starts-with($name, 'tv')">
       <path class="logo" stroke-width="2" d="M28,40 A60,60 0 0,1 72,40 A70,70 0 0,1 72,67 A60,60 0 0,1 28,67 A70,70 0 0,1 28,40"/>
     </xsl:if>
+    <xsl:if test="starts-with($name, 'prestel')">
+      <path stroke-width="1.5" d="M35,30 L65,30 65,70 35,70 Z M50,30 L50,70 M35,43.3 L65,43.3 M35,56.6 L65,56.6"/>
+      <xsl:analyze-string select="$name" regex="prestel-(\d+)-(\d+)">
+        <xsl:matching-substring>
+          <path class="logo-filled"
+                transform="translate({xs:integer(regex-group(2)) * 15}, {xs:integer(regex-group(1)) * 13.3})"
+                d="M35,30 L50,30 50,43.3 35,43.3Z"/>
+        </xsl:matching-substring>
+      </xsl:analyze-string>
+    </xsl:if>
     <xsl:choose>
       <xsl:when test="$name = 'tv-star'">
         <text x="50" y="92" font-size="70">*</text>
@@ -61,93 +71,15 @@
       <xsl:when test="$name = 'tv-sys-cursor'">
         <path class="logo-sys-cursor-lines" d="M30,44 L60,44 M30,50 L50,50 M30,56 L40,56 M30,62 L60,62 M63,60 A1,1 0 1,0 70,60 A1,1 0 1,0 63,60"/>
       </xsl:when>
+      <xsl:when test="$name = 'tv-reveal'">
+        <path stroke-width="1.5" d="M30,44 L42,44 M30,47 L39,47 M30,51 L36,51 M50,35.5 L50,59 27.5,59 Z"/>
+      </xsl:when>
+      <xsl:when test="$name = 'print'">
+        <path class="logo-filled" stroke-width="1.5" d="M29,40 L35,45 29,50 Z"/>
+        <path stroke-width="1.5" d="M40,40 L65,40 65,70 A10,10 0 0,1 52.5,65 A10,10 0,0,0 40,60 Z"/>
+      </xsl:when>
     </xsl:choose>
   </xsl:function>
-
-  <xsl:template match="/">
-    <svg width="2400" height="700">
-      <defs>
-        <style type="text/css">
-          /* Default styles for all elements */
-          rect, path, circle, line {
-            stroke: black;
-          }
-          text {
-            fill: black;
-            text-anchor: middle;
-            font-family: D-DIN;
-          }
-          .thick-line {
-            stroke-width: 2;
-          }
-          .standard-key text {
-            fill: #242326;
-          }
-          .standard-key > * {
-            fill: #c7c1c9;
-          }
-          .medium-key text {
-            fill: #e4e3e6;
-          }
-          .medium-key * {
-            fill: #a09a9a;
-          }
-
-          .black text, .red text, .green text, .yellow text, .blue text, .magenta text, .cyan text  {
-            fill: white;
-          }
-          .black * {
-            fill: black;
-            stroke: white;
-          }
-          .red * { fill: #e00000; }
-          .green * { fill: #00e000; }
-          .yellow * { fill: #e0e000; }
-          .blue * { fill: #0000e0; }
-          .magenta * { fill: #e000e0; }
-          .cyan * { fill: #00e0e0; }
-          .white * { fill: white; }
-
-          .mid-grey text, .red-key text, .f-key text, .sys-key text {
-            fill: #e4e3e6;
-            stroke: #e4e3e6;
-          }
-          .mid-grey * {
-            fill: #a09a9a;
-          }
-          .f-key * {
-            fill: #785f5f;
-          }
-          .sys-key * {
-            fill: #473b43;
-          }
-          .sys-key .logo {
-            stroke: #e4e3e6;
-          }
-          path.logo-sys-cursor-lines {
-            stroke: #e4e3e6;
-            fill: #e4e3e6;
-            stroke-width: 3;
-          }
-          .standard-key path.logo-black {
-            fill: black;
-          }
-          .standard-key path.logo-black-lines {
-            fill: black;
-            stroke-width: 3;
-          }
-          .standard-key path.logo-black-phone {
-            fill: black;
-            stroke-width: 0;
-          }
-          .red-key * {
-            fill: #c32920;
-          }
-        </style>
-      </defs>
-      <xsl:apply-templates/>
-    </svg>
-  </xsl:template>
 
   <xsl:template match="key[@type='page-number']" priority="10">
     <g class="standard-key {@color}"
@@ -243,6 +175,18 @@
         </xsl:when>
       </xsl:choose>
     </g>
+  </xsl:template>
+
+  <xsl:template match="/">
+    <xsl:message>converting keyboard layout</xsl:message>
+    <svg width="2400" height="700">
+      <defs>
+        <style type="text/css">
+          @import url('styles.css');
+        </style>
+      </defs>
+      <xsl:apply-templates/>
+    </svg>
   </xsl:template>
 
 </xsl:stylesheet>

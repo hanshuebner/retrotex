@@ -32,20 +32,29 @@
       .f-key * {
         fill: #785f5f
       }
+      path.logo-filled { fill: red }
     </style>
   </defs>
 
   <g id="standard-key" class="standard-key" transform="translate(0, 0)">
     <!-- Rounded square -->
-    <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
+<path d="
+    M 15,5
+    H 85
+    A 10,10 0 0 1 95,15
+    V 85
+    A 10,10 0 0 1 85,95
+    H 15
+    A 10,10 0 0 1 5,85
+    V 15
+    A 10,10 0 0 1 15,5
+    Z
+"/>
     <!-- Almost complete circle with a flat top -->
     <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
-    
-    <!-- TV screen outline -->
-    <path stroke-width="1.5" d="M28,35 A60,60 0 0,1 72,35 A70,70 0 0,1 72,67 A60,60 0 0,1 28,67 A70,70 0 0,1 28,35"/>
-    <!-- phone -->
-    <path class="logo-black-lines" d="M40,44 L70,44 M40,50 L60,50 M40,56 L50,56 M40,62 L70,62"/>
-    <path class="logo-black-phone" transform="scale(0.85) translate(-137,-59)" d="m 173.9052,104.20538 -1.78908,6.85456 -0.43268,7.61816 0.78687,8.14524 2.26274,7.33476 3.78108,2.41991 4.22141,0.30306 -0.82784,-10.6196 h -3.86327 l -1.71931,-7.47705 0.61551,-7.49931 3.86327,-1.08919 2.27203,-7.42933 -4.20366,-2.10108 z"/>
+    <!-- Print icon -->
+    <path class="logo-filled" stroke-width="1.5" d="M29,40 L35,45 29,50 Z"/>
+    <path stroke-width="1.5" d="M40,40 L65,40 65,70 A10,10 0 0,1 52.5,65 A10,10 0,0,0 40,60 Z"/>
   </g>
 
   <g id="standard-key" class="medium-key" transform="translate(100, 0)">

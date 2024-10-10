@@ -79,8 +79,8 @@
     <key logo="tv-reveal"/>
   </row>
   <row>
-    <key type="led" logo="prestel-graphic-1"/>
-    <key type="led" logo="prestel-graphic-2"/>
+    <key type="led" logo="prestel-0-0"/>
+    <key type="led" logo="prestel-0-1"/>
     <space width="0.25"/>
     <key color="f-key" width="1.5"><label>F</label></key>
     <key><label>Q</label><label></label><label></label></key>
@@ -106,8 +106,8 @@
     <key><label>9</label></key>
   </row>
   <row>
-    <key type="led" logo="prestel-graphic-3"/>
-    <key type="led" logo="prestel-graphic-4"/>
+    <key type="led" logo="prestel-1-0"/>
+    <key type="led" logo="prestel-1-1"/>
     <space width="0.25"/>
     <key>CTRL</key>
     <key type="led"><label>CAPS</label><label>LOCK</label></key>
@@ -134,8 +134,8 @@
     <key><label>6</label></key>
   </row>
   <row>
-    <key type="led" logo="prestel-graphic-5"/>
-    <key type="led" logo="prestel-graphic-6"/>
+    <key type="led" logo="prestel-2-0"/>
+    <key type="led" logo="prestel-2-1"/>
     <space width="0.25"/>
     <key width="1.5">SHIFT</key>
     <key><label>&lt;</label><label>&gt;</label><label>³</label><label>²</label></key>
@@ -162,7 +162,7 @@
   </row>
   <row>
     <space width="0.5"/>
-    <key type="led" logo="prestel-graphic-7"/>
+    <key type="led" logo="prestel"/>
     <space width="0.75"/>
     <key><label>FARB</label><label>EDIT</label></key>
     <key><label>DRCS</label><label>EDIT</label></key>
