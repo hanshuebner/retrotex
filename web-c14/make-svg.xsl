@@ -82,9 +82,9 @@
   </xsl:function>
 
   <xsl:template match="space[@has-busy-led]">
-    <g class="busy-indicator"
+    <g class="busy-indicator" id="busy-indicator"
        transform="translate({accumulator-before('x-position')},{accumulator-before('y-position')})">
-      <circle class="busy-led" cx="50" cy="20" r="7"/>
+      <circle class="led" cx="50" cy="20" r="7"/>
       <text x="50" y="50" font-size="14">BUSY</text>
     </g>
   </xsl:template>
@@ -217,10 +217,10 @@
 
   <xsl:template match="/">
     <xsl:message>converting keyboard layout</xsl:message>
-    <svg width="2400" height="700">
+    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 2400 700" preserveAspectRatio="xMinYMin meet">
       <defs>
         <style type="text/css">
-          @import url('styles.css');
+          @import url('svg-styles.css');
         </style>
       </defs>
       <xsl:apply-templates/>

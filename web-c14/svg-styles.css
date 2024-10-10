@@ -38,14 +38,14 @@ text {
 .cyan * { fill: #00e0e0; }
 .white * { fill: white; }
 
-.mid-grey text, .red-key text, .f-key text, .sys-key text {
+.mid-grey text, .red-key text, .dark-grey text, .sys-key text {
     fill: #e4e3e6;
     stroke: #e4e3e6;
 }
 .mid-grey * {
     fill: #a09a9a;
 }
-.f-key * {
+.dark-grey * {
     fill: #785f5f;
 }
 .sys-key * {
@@ -79,6 +79,6 @@ path.logo-sys-cursor-lines {
 .led { fill: #800000; }
 .led.active { fill: #f00000; }
 
-.busy-led { fill: #a0a000; }
-.busy-led.active { fill: #f0f000; }
+.busy-indicator .led { fill: #a0a000; }
+.busy-indicator .led.active { fill: #f0f000; }
 

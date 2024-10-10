@@ -1,0 +1,14 @@
+/* Make the SVG scale to fit the full width of the page */
+#svg-object {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Ensure the body takes up the full viewport height */
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}

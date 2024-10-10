@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="700">
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="100%"
+     height="100%"
+     viewBox="0 0 2400 700"
+     preserveAspectRatio="xMinYMin meet">
    <defs>
       <style type="text/css">
-          @import url('styles.css');
+          @import url('svg-styles.css');
         </style>
    </defs>
    <g class="key standard-key " id="key-1" transform="translate(100,0)">
@@ -33,8 +37,10 @@
       <path d="M35,45 L50,30 70,50 50,75 35,60" class="thick-line"/>
       <text x="50" y="62" font-size="28">4</text>
    </g>
-   <g class="busy-indicator" transform="translate(500,0)">
-      <circle class="busy-led" cx="50" cy="20" r="7"/>
+   <g class="busy-indicator"
+      id="busy-indicator"
+      transform="translate(500,0)">
+      <circle class="led" cx="50" cy="20" r="7"/>
       <text x="50" y="50" font-size="14">BUSY</text>
    </g>
    <g class="key standard-key dark-grey"
@@ -594,7 +600,7 @@
             d="M35,30 L50,30 50,43.3 35,43.3Z"/>
       <text x="50" y="62" font-size="18"/>
    </g>
-   <g class="key standard-key f-key"
+   <g class="key standard-key dark-grey"
       id="key-71"
       transform="translate(225,300)">
       <rect x="5" y="5" width="165" height="90" rx="10" ry="10"/>

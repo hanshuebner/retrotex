@@ -82,7 +82,7 @@
     <key type="led" logo="prestel-0-0"/>
     <key type="led" logo="prestel-0-1"/>
     <space width="0.25"/>
-    <key color="f-key" width="1.75"><label>F</label></key>
+    <key color="dark-grey" width="1.75"><label>F</label></key>
     <key><label>Q</label><label></label><label></label></key>
     <key><label>W</label><label></label><label></label></key>
     <key><label>E</label><label></label><label></label></key>
