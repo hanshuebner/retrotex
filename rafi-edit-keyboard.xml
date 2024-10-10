@@ -5,7 +5,7 @@
     <key type="page-number">2</key>
     <key type="page-number">3</key>
     <key type="page-number">4</key>
-    <key type="busy-led"/>
+    <space width="1"/>
     <key type="led" color="dark-grey">ALPHA</key>
     <key type="led" color="dark-grey">GRAF1</key>
     <key type="led" color="dark-grey">GRAF2</key>
@@ -22,12 +22,12 @@
     <key><label>EB</label><label>SB</label></key>
     <key>TRSP</key>
     <key><label>RG</label><label>HG</label></key>
-    <key type="led" logo="go-online"/>
-    <key logo="go-offline"/>
+    <key type="led" logo="tv-go-online"/>
+    <key logo="tv-go-offline"/>
   </row>
   <row>
-    <key color="system-red"><label>C</label></key>
-    <key color="system-red"><label>R</label></key>
+    <key color="red-key"><label>C</label></key>
+    <key color="red-key"><label>R</label></key>
     <key type="led">PAL 1</key>
     <key type="led">PAL 2</key>
     <key type="led">PAL 3</key>
@@ -74,15 +74,15 @@
     <key><label>AUS</label><label>VERD</label><label>EIN</label></key>
     <key><label>AUS</label><label>&#x22a6;SCRL</label><label>EIN</label></key>
     <space width="0.5"/>
-    <key logo="show-attributes"/>
+    <key logo="tv-show-attributes"/>
     <key logo="print"/>
-    <key logo="reveal"/>
+    <key logo="tv-reveal"/>
   </row>
   <row>
     <key type="led" logo="prestel-graphic-1"/>
     <key type="led" logo="prestel-graphic-2"/>
     <space width="0.25"/>
-    <key color="dark-grey" width="1.5">F</key>
+    <key color="f-key" width="1.5"><label>F</label></key>
     <key><label>Q</label><label></label><label></label></key>
     <key><label>W</label><label></label><label></label></key>
     <key><label>E</label><label></label><label></label></key>
@@ -150,7 +150,7 @@
     <key><label>.</label><label>:</label><label></label><label></label></key>
     <key><label>-</label><label>_</label><label></label><label></label></key>
     <key width="1.5">SHIFT</key>
-    <key type="big-font"><label>↵</label></key>
+    <key><label>↵</label></key>
     <space width="0.25"/>
     <key>⇙</key>
     <key color="mid-grey">↓</key>
@@ -169,16 +169,16 @@
     <key><label>SCROL</label><label>EDIT</label></key>
     <key width="8"/>
     <space width="1"/>
-    <key type="big-font"><label>-</label></key>
-    <key type="big-font"><label>+</label></key>
+    <key><label>-</label></key>
+    <key><label>+</label></key>
     <key><label>AUS</label><label>UNTSTR</label><label>EIN</label></key>
     <space width="0.25"/>
     <key><label>AUS</label><label>CURSOR</label><label>EIN</label></key>
     <space width="1.0"/>
-    <key color="dark-grey" log="sys-cursor"/>
+    <key color="sys-key" logo="tv-sys-cursor"/>
     <space width="0.5"/>
-    <key color="dark-grey" log="star"/>
+    <key color="sys-key" logo="tv-star"/>
     <key><label>0</label></key>
-    <key color="dark-grey" log="hash"/>
+    <key color="sys-key" logo="tv-hash"/>
   </row>
 </keyboard>

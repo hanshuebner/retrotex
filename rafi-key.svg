@@ -26,6 +26,12 @@
       .medium-key * {
         fill: #a09a9a;
       }
+      .f-key text {
+        fill: #e4e3e6;
+      }
+      .f-key * {
+        fill: #785f5f
+      }
     </style>
   </defs>
 
@@ -35,11 +41,11 @@
     <!-- Almost complete circle with a flat top -->
     <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
     
-    <!-- Symbols and letters -->
-    <text x="40" y="50" font-size="28">?</text>
-    <text x="40" y="75" font-size="28">ß</text>
-    <text x="60" y="45" font-size="22">≫</text>
-    <text x="60" y="70" font-size="22">¿</text>
+    <!-- TV screen outline -->
+    <path stroke-width="1.5" d="M28,35 A60,60 0 0,1 72,35 A70,70 0 0,1 72,67 A60,60 0 0,1 28,67 A70,70 0 0,1 28,35"/>
+    <!-- phone -->
+    <path class="logo-black-lines" d="M40,44 L70,44 M40,50 L60,50 M40,56 L50,56 M40,62 L70,62"/>
+    <path class="logo-black-phone" transform="scale(0.85) translate(-137,-59)" d="m 173.9052,104.20538 -1.78908,6.85456 -0.43268,7.61816 0.78687,8.14524 2.26274,7.33476 3.78108,2.41991 4.22141,0.30306 -0.82784,-10.6196 h -3.86327 l -1.71931,-7.47705 0.61551,-7.49931 3.86327,-1.08919 2.27203,-7.42933 -4.20366,-2.10108 z"/>
   </g>
 
   <g id="standard-key" class="medium-key" transform="translate(100, 0)">
