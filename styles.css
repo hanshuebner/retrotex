@@ -1,0 +1,78 @@
+/* Default styles for all elements */
+rect, path, circle, line {
+    stroke: black;
+}
+text {
+    fill: black;
+    text-anchor: middle;
+    font-family: D-DIN;
+}
+.thick-line {
+    stroke-width: 2;
+}
+.standard-key text {
+    fill: #242326;
+}
+.standard-key > * {
+    fill: #c7c1c9;
+}
+.medium-key text {
+    fill: #e4e3e6;
+}
+.medium-key * {
+    fill: #a09a9a;
+}
+
+.black text, .red text, .green text, .yellow text, .blue text, .magenta text, .cyan text  {
+    fill: white;
+}
+.black * {
+    fill: black;
+    stroke: white;
+}
+.red * { fill: #e00000; }
+.green * { fill: #00e000; }
+.yellow * { fill: #e0e000; }
+.blue * { fill: #0000e0; }
+.magenta * { fill: #e000e0; }
+.cyan * { fill: #00e0e0; }
+.white * { fill: white; }
+
+.mid-grey text, .red-key text, .f-key text, .sys-key text {
+    fill: #e4e3e6;
+    stroke: #e4e3e6;
+}
+.mid-grey * {
+    fill: #a09a9a;
+}
+.f-key * {
+    fill: #785f5f;
+}
+.sys-key * {
+    fill: #473b43;
+}
+.sys-key .logo {
+    stroke: #e4e3e6;
+}
+path.logo-sys-cursor-lines {
+    stroke: #e4e3e6;
+    fill: #e4e3e6;
+    stroke-width: 3;
+}
+.standard-key path.logo-black {
+    fill: black;
+}
+.standard-key path.logo-black-lines {
+    fill: black;
+    stroke-width: 3;
+}
+.standard-key path.logo-black-phone {
+    fill: black;
+    stroke-width: 0;
+}
+.red-key * {
+    fill: #c32920;
+}
+.standard-key > .logo-filled {
+    fill: #242326;
+}
