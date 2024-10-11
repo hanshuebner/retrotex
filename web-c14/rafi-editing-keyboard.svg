@@ -9,33 +9,49 @@
           @import url('svg-styles.css');
         </style>
    </defs>
-   <g class="key standard-key " id="key-1" transform="translate(100,0)">
+   <g class="key led-key standard-key "
+      data-group="page"
+      id="key-1"
+      transform="translate(100,0)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <circle cx="50" cy="50" r="35"/>
-      <line x1="25" y1="25" x2="75" y2="25"/>
+      <path class="led" d="M 25,25 A 35,35 0 0 1 75,25 Z"/>
       <path d="M35,45 L50,30 70,50 50,75 35,60" class="thick-line"/>
-      <text x="50" y="62" font-size="28">1</text>
+      <text x="50" y="55" font-size="18">1</text>
+      <text x="50" y="70" font-size="18"/>
    </g>
-   <g class="key standard-key " id="key-2" transform="translate(200,0)">
+   <g class="key led-key standard-key "
+      data-group="page"
+      id="key-2"
+      transform="translate(200,0)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <circle cx="50" cy="50" r="35"/>
-      <line x1="25" y1="25" x2="75" y2="25"/>
+      <path class="led" d="M 25,25 A 35,35 0 0 1 75,25 Z"/>
       <path d="M35,45 L50,30 70,50 50,75 35,60" class="thick-line"/>
-      <text x="50" y="62" font-size="28">2</text>
+      <text x="50" y="55" font-size="18">2</text>
+      <text x="50" y="70" font-size="18"/>
    </g>
-   <g class="key standard-key " id="key-3" transform="translate(300,0)">
+   <g class="key led-key standard-key "
+      data-group="page"
+      id="key-3"
+      transform="translate(300,0)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <circle cx="50" cy="50" r="35"/>
-      <line x1="25" y1="25" x2="75" y2="25"/>
+      <path class="led" d="M 25,25 A 35,35 0 0 1 75,25 Z"/>
       <path d="M35,45 L50,30 70,50 50,75 35,60" class="thick-line"/>
-      <text x="50" y="62" font-size="28">3</text>
+      <text x="50" y="55" font-size="18">3</text>
+      <text x="50" y="70" font-size="18"/>
    </g>
-   <g class="key standard-key " id="key-4" transform="translate(400,0)">
+   <g class="key led-key standard-key "
+      data-group="page"
+      id="key-4"
+      transform="translate(400,0)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <circle cx="50" cy="50" r="35"/>
-      <line x1="25" y1="25" x2="75" y2="25"/>
+      <path class="led" d="M 25,25 A 35,35 0 0 1 75,25 Z"/>
       <path d="M35,45 L50,30 70,50 50,75 35,60" class="thick-line"/>
-      <text x="50" y="62" font-size="28">4</text>
+      <text x="50" y="55" font-size="18">4</text>
+      <text x="50" y="70" font-size="18"/>
    </g>
    <g class="busy-indicator"
       id="busy-indicator"
@@ -43,7 +59,8 @@
       <circle class="led" cx="50" cy="20" r="7"/>
       <text x="50" y="50" font-size="14">BUSY</text>
    </g>
-   <g class="key standard-key dark-grey"
+   <g class="key led-key standard-key dark-grey"
+      data-group="charset"
       id="key-5"
       transform="translate(600,0)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
@@ -51,7 +68,8 @@
       <path class="led" d="M 25,25 A 35,35 0 0 1 75,25 Z"/>
       <text x="50" y="62" font-size="18">ALPHA</text>
    </g>
-   <g class="key standard-key dark-grey"
+   <g class="key led-key standard-key dark-grey"
+      data-group="charset"
       id="key-6"
       transform="translate(700,0)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
@@ -59,7 +77,8 @@
       <path class="led" d="M 25,25 A 35,35 0 0 1 75,25 Z"/>
       <text x="50" y="62" font-size="18">GRAF1</text>
    </g>
-   <g class="key standard-key dark-grey"
+   <g class="key led-key standard-key dark-grey"
+      data-group="charset"
       id="key-7"
       transform="translate(800,0)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
@@ -67,7 +86,8 @@
       <path class="led" d="M 25,25 A 35,35 0 0 1 75,25 Z"/>
       <text x="50" y="62" font-size="18">GRAF2</text>
    </g>
-   <g class="key standard-key dark-grey"
+   <g class="key led-key standard-key dark-grey"
+      data-group="charset"
       id="key-8"
       transform="translate(900,0)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
@@ -75,7 +95,8 @@
       <path class="led" d="M 25,25 A 35,35 0 0 1 75,25 Z"/>
       <text x="50" y="62" font-size="18">GRAF3</text>
    </g>
-   <g class="key standard-key dark-grey"
+   <g class="key led-key standard-key dark-grey"
+      data-group="charset"
       id="key-9"
       transform="translate(1000,0)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
@@ -83,7 +104,10 @@
       <path class="led" d="M 25,25 A 35,35 0 0 1 75,25 Z"/>
       <text x="50" y="62" font-size="18">DRCS</text>
    </g>
-   <g class="key standard-key " id="key-10" transform="translate(1100,0)">
+   <g class="key led-key standard-key "
+      data-group=""
+      id="key-10"
+      transform="translate(1100,0)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <circle cx="50" cy="50" r="35"/>
       <path class="led" d="M 25,25 A 35,35 0 0 1 75,25 Z"/>
@@ -162,7 +186,10 @@
       <text x="50" y="55" font-size="18">RG</text>
       <text x="50" y="70" font-size="18">HG</text>
    </g>
-   <g class="key standard-key " id="key-21" transform="translate(2200,0)">
+   <g class="key led-key standard-key "
+      data-group=""
+      id="key-21"
+      transform="translate(2200,0)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <circle cx="50" cy="50" r="35"/>
       <path class="led" d="M 25,25 A 35,35 0 0 1 75,25 Z"/>
@@ -204,7 +231,8 @@
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="65" font-size="40">R</text>
    </g>
-   <g class="key standard-key "
+   <g class="key led-key standard-key "
+      data-group=""
       id="key-25"
       transform="translate(200,100)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
@@ -212,7 +240,8 @@
       <path class="led" d="M 25,25 A 35,35 0 0 1 75,25 Z"/>
       <text x="50" y="62" font-size="18">PAL 1</text>
    </g>
-   <g class="key standard-key "
+   <g class="key led-key standard-key "
+      data-group=""
       id="key-26"
       transform="translate(300,100)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
@@ -220,7 +249,8 @@
       <path class="led" d="M 25,25 A 35,35 0 0 1 75,25 Z"/>
       <text x="50" y="62" font-size="18">PAL 2</text>
    </g>
-   <g class="key standard-key "
+   <g class="key led-key standard-key "
+      data-group=""
       id="key-27"
       transform="translate(400,100)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
@@ -228,7 +258,8 @@
       <path class="led" d="M 25,25 A 35,35 0 0 1 75,25 Z"/>
       <text x="50" y="62" font-size="18">PAL 3</text>
    </g>
-   <g class="key standard-key "
+   <g class="key led-key standard-key "
+      data-group=""
       id="key-28"
       transform="translate(500,100)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
@@ -576,7 +607,10 @@
             d="M30,44 L42,44 M30,47 L39,47 M30,51 L36,51 M50,35.5 L50,59 27.5,59 Z"/>
       <text x="50" y="62" font-size="18"/>
    </g>
-   <g class="key standard-key " id="key-69" transform="translate(0,300)">
+   <g class="key led-key standard-key "
+      data-group="prestel"
+      id="key-69"
+      transform="translate(0,300)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <circle cx="50" cy="50" r="35"/>
       <path class="led" d="M 25,25 A 35,35 0 0 1 75,25 Z"/>
@@ -587,7 +621,8 @@
             d="M35,30 L50,30 50,43.3 35,43.3Z"/>
       <text x="50" y="62" font-size="18"/>
    </g>
-   <g class="key standard-key "
+   <g class="key led-key standard-key "
+      data-group="prestel"
       id="key-70"
       transform="translate(100,300)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
@@ -765,7 +800,10 @@
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="65" font-size="40">9</text>
    </g>
-   <g class="key standard-key " id="key-91" transform="translate(0,400)">
+   <g class="key led-key standard-key "
+      data-group="prestel"
+      id="key-91"
+      transform="translate(0,400)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <circle cx="50" cy="50" r="35"/>
       <path class="led" d="M 25,25 A 35,35 0 0 1 75,25 Z"/>
@@ -776,7 +814,8 @@
             d="M35,30 L50,30 50,43.3 35,43.3Z"/>
       <text x="50" y="62" font-size="18"/>
    </g>
-   <g class="key standard-key "
+   <g class="key led-key standard-key "
+      data-group="prestel"
       id="key-92"
       transform="translate(100,400)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
@@ -796,7 +835,8 @@
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="62" font-size="18">CTRL</text>
    </g>
-   <g class="key standard-key "
+   <g class="key led-key standard-key "
+      data-group=""
       id="key-94"
       transform="translate(325,400)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
@@ -956,7 +996,10 @@
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="65" font-size="40">6</text>
    </g>
-   <g class="key standard-key " id="key-113" transform="translate(0,500)">
+   <g class="key led-key standard-key "
+      data-group="prestel"
+      id="key-113"
+      transform="translate(0,500)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <circle cx="50" cy="50" r="35"/>
       <path class="led" d="M 25,25 A 35,35 0 0 1 75,25 Z"/>
@@ -967,7 +1010,8 @@
             d="M35,30 L50,30 50,43.3 35,43.3Z"/>
       <text x="50" y="62" font-size="18"/>
    </g>
-   <g class="key standard-key "
+   <g class="key led-key standard-key "
+      data-group="prestel"
       id="key-114"
       transform="translate(100,500)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
@@ -1146,7 +1190,8 @@
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="65" font-size="40">3</text>
    </g>
-   <g class="key standard-key "
+   <g class="key led-key standard-key "
+      data-group="prestel"
       id="key-135"
       transform="translate(50,600)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>

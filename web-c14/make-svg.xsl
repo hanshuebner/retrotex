@@ -78,6 +78,9 @@
         <path class="logo-filled" stroke-width="1.5" d="M29,40 L35,45 29,50 Z"/>
         <path stroke-width="1.5" d="M40,40 L65,40 65,70 A10,10 0 0,1 52.5,65 A10,10 0,0,0 40,60 Z"/>
       </xsl:when>
+      <xsl:when test="$name = 'page-number'">
+        <path d="M35,45 L50,30 70,50 50,75 35,60" class="thick-line"/>
+      </xsl:when>
     </xsl:choose>
   </xsl:function>
 
@@ -89,20 +92,9 @@
     </g>
   </xsl:template>
 
-  <xsl:template match="key[@type='page-number']" priority="10">
-    <g class="key standard-key {@color}"
-       id="key-{accumulator-before('key-number')}"
-       transform="translate({accumulator-before('x-position')},{accumulator-before('y-position')})">
-      <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
-      <circle cx="50" cy="50" r="35"/>
-      <line x1="25" y1="25" x2="75" y2="25"/>
-      <path d="M35,45 L50,30 70,50 50,75 35,60" class="thick-line"/>
-      <text x="50" y="62" font-size="28"><xsl:value-of select="text()"/></text>
-    </g>
-  </xsl:template>
-
   <xsl:template match="key[@type='led']" priority="10">
-    <g class="key standard-key {@color}"
+    <g class="key led-key standard-key {@color}"
+       data-group="{@group}"
        id="key-{accumulator-before('key-number')}"
        transform="translate({accumulator-before('x-position')},{accumulator-before('y-position')})">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>

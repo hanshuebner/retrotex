@@ -1,8 +1,18 @@
 // Function to handle clicks on SVG elements
 const handleSvgClick = event => {
     const target = event.target.closest('[id]')
-    if (target) {
-        console.log(target.id)
+    if (target && target.classList.contains('led-key')) {
+        const svgDoc = target.ownerDocument
+        const dataGroup = target.getAttribute('data-group')
+
+        if (!target.classList.contains('active')) {
+            // Remove 'active' class from all elements with the same data-group attribute
+            const groupElements = svgDoc.querySelectorAll(`.led-key[data-group="${dataGroup}"]`)
+            groupElements.forEach(element => element.classList.remove('active'))
+
+            // Add 'active' class to the clicked element
+            target.classList.add('active')
+        }
     }
 }
 

@@ -1,16 +1,16 @@
 <keyboard>
   <row>
     <key type="lock"/>
-    <key type="page-number">1</key>
-    <key type="page-number">2</key>
-    <key type="page-number">3</key>
-    <key type="page-number">4</key>
+    <key type="led" group="page" logo="page-number"><label>1</label></key>
+    <key type="led" group="page" logo="page-number"><label>2</label></key>
+    <key type="led" group="page" logo="page-number"><label>3</label></key>
+    <key type="led" group="page" logo="page-number"><label>4</label></key>
     <space width="1" has-busy-led="1"/>
-    <key type="led" color="dark-grey">ALPHA</key>
-    <key type="led" color="dark-grey">GRAF1</key>
-    <key type="led" color="dark-grey">GRAF2</key>
-    <key type="led" color="dark-grey">GRAF3</key>
-    <key type="led" color="dark-grey">DRCS</key>
+    <key type="led" group="charset" color="dark-grey">ALPHA</key>
+    <key type="led" group="charset" color="dark-grey">GRAF1</key>
+    <key type="led" group="charset" color="dark-grey">GRAF2</key>
+    <key type="led" group="charset" color="dark-grey">GRAF3</key>
+    <key type="led" group="charset" color="dark-grey">DRCS</key>
     <key type="led"><label>SER</label><label>PAR</label></key>
     <key color="mid-grey"><label>INV</label><label>BLINK</label><label>NORM</label></key>
     <key color="mid-grey"><label>DEC</label><label>BLINK</label><label>INC</label></key>
@@ -79,8 +79,8 @@
     <key logo="tv-reveal"/>
   </row>
   <row>
-    <key type="led" logo="prestel-0-0"/>
-    <key type="led" logo="prestel-0-1"/>
+    <key type="led" group="prestel" logo="prestel-0-0"/>
+    <key type="led" group="prestel" logo="prestel-0-1"/>
     <space width="0.25"/>
     <key color="dark-grey" width="1.75"><label>F</label></key>
     <key><label>Q</label><label></label><label></label></key>
@@ -106,8 +106,8 @@
     <key><label>9</label></key>
   </row>
   <row>
-    <key type="led" logo="prestel-1-0"/>
-    <key type="led" logo="prestel-1-1"/>
+    <key type="led" group="prestel" logo="prestel-1-0"/>
+    <key type="led" group="prestel" logo="prestel-1-1"/>
     <space width="0.25"/>
     <key>CTRL</key>
     <key type="led"><label>CAPS</label><label>LOCK</label></key>
@@ -134,8 +134,8 @@
     <key><label>6</label></key>
   </row>
   <row>
-    <key type="led" logo="prestel-2-0"/>
-    <key type="led" logo="prestel-2-1"/>
+    <key type="led" group="prestel" logo="prestel-2-0"/>
+    <key type="led" group="prestel" logo="prestel-2-1"/>
     <space width="0.25"/>
     <key width="1.5">SHIFT</key>
     <key><label>&lt;</label><label>&gt;</label><label>³</label><label>²</label></key>
@@ -162,7 +162,7 @@
   </row>
   <row>
     <space width="0.5"/>
-    <key type="led" logo="prestel"/>
+    <key type="led" group="prestel" logo="prestel"/>
     <space width="0.75"/>
     <key><label>FARB</label><label>EDIT</label></key>
     <key><label>DRCS</label><label>EDIT</label></key>
