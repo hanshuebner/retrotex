@@ -1,11 +1,13 @@
 const canvas = document.getElementById("emulator");
 const ctx = canvas.getContext("2d");
 
-// Framebuffer: 320x200 resolution, with 12-bit color per pixel
-const framebuffer = new Uint16Array(320 * 200);
+const screen_width = 40 * 12
+const screen_height = 25 * 10
+
+const framebuffer = new Uint16Array(screen_width * screen_height);
 
 // Create an ImageData object for rendering
-const imageData = ctx.createImageData(320, 200);
+const imageData = ctx.createImageData(screen_width, screen_height);
 const data = imageData.data;
 
 // Convert a 12-bit color to a 24-bit RGB color
@@ -36,22 +38,37 @@ function render() {
 
 // Resize the canvas to fit the window while maintaining aspect ratio
 function resizeCanvas() {
-    const aspectRatio = 320 / 200;
+    const originalWidth = screen_width;
+    const originalHeight = screen_height;
+
+    // Desired pixel aspect ratio (2:1 for twice as wide as tall)
+    const pixelAspectRatio = 0.7; // Horizontal stretch factor
+
+    // Calculate new canvas dimensions based on window size
     let width = window.innerWidth;
     let height = window.innerHeight;
 
-    if (width / height > aspectRatio) {
-        // Window is wider than the aspect ratio, so fit height
-        width = height * aspectRatio;
+    // Adjust dimensions to maintain the original display aspect ratio with pixel scaling
+    if ((width / height) > (originalWidth * pixelAspectRatio / originalHeight)) {
+        // Window is wider than the desired display aspect ratio
+        height = window.innerHeight;
+        width = height * (originalWidth * pixelAspectRatio / originalHeight);
     } else {
-        // Window is taller than the aspect ratio, so fit width
-        height = width / aspectRatio;
+        // Window is taller than the desired display aspect ratio
+        width = window.innerWidth;
+        height = width / (originalWidth * pixelAspectRatio / originalHeight);
     }
 
-    // Set the canvas size
+    // Apply the new size to the canvas
     canvas.style.width = `${width}px`;
     canvas.style.height = `${height}px`;
 }
+
+// Handle window resizing
+window.addEventListener('resize', resizeCanvas);
+
+// Initialize the canvas size
+resizeCanvas();
 
 // Handle window resizing
 window.addEventListener('resize', resizeCanvas);
