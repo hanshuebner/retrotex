@@ -5,13 +5,16 @@ const handleSvgClick = event => {
         const svgDoc = target.ownerDocument
         const dataGroup = target.getAttribute('data-group')
 
-        if (!target.classList.contains('active')) {
-            // Remove 'active' class from all elements with the same data-group attribute
-            const groupElements = svgDoc.querySelectorAll(`.led-key[data-group="${dataGroup}"]`)
-            groupElements.forEach(element => element.classList.remove('active'))
-
-            // Add 'active' class to the clicked element
-            target.classList.add('active')
+        if (dataGroup) {
+            if (!target.querySelector('.led').classList.contains('active')) {
+                const groupElements = svgDoc.querySelectorAll(`.led-key[data-group="${dataGroup}"]`)
+                groupElements.forEach(element => {
+                    element.querySelector('.led').classList.remove('active')
+                })
+                target.querySelector('.led').classList.toggle('active', true)
+            }
+        } else {
+            target.querySelector('.led').classList.toggle('active')
         }
     }
 }

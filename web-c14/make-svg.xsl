@@ -100,7 +100,7 @@
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <circle cx="50" cy="50" r="35"/>
       <!-- LED -->
-      <path class="led" d="M 25,25 A 35,35 0 0 1 75,25 Z"/>
+      <path class="led{if (@on = 'true') then ' active' else ''}" d="M 25,25 A 35,35 0 0 1 75,25 Z"/>
       <xsl:copy-of select="local:logo(@logo)"/>
       <xsl:choose>
         <xsl:when test="label">
