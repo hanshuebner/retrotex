@@ -16,8 +16,8 @@ if image is None:
     exit(1)
 
 # Parameters for grid dimensions (initialize with defaults)
-base_cell_width = 96
-base_cell_height = 142
+base_cell_width = 95
+base_cell_height = 138
 
 cell_width = base_cell_width
 cell_height = base_cell_height
@@ -35,14 +35,15 @@ initialized = False
 # Function to draw the grid on the image
 def draw_grid(img, cell_w, cell_h, orig_x, orig_y):
     img_with_grid = img.copy()
+
     h, w = img.shape
 
     # Draw vertical lines
-    for x in np.arange(orig_x, w, cell_w):
+    for x in np.arange(orig_x, orig_x + cell_w * 21, cell_w):
         cv2.line(img_with_grid, (round(x), 0), (round(x), h), (255, 0, 0), 1)
 
     # Draw horizontal lines
-    for y in np.arange(orig_y, h, cell_h):
+    for y in np.arange(orig_y, orig_y + cell_h * 6, cell_h):
         cv2.line(img_with_grid, (0, round(y)), (w, round(y)), (255, 0, 0), 1)
 
     return img_with_grid
@@ -69,7 +70,9 @@ cv2.namedWindow('Grid Editor')
 
 # Create trackbars for grid parameters with reasonable ranges
 cv2.createTrackbar('Cell Width', 'Grid Editor', cell_width, max_width, update_grid)
+cv2.setTrackbarPos('Cell Width', 'Grid Editor', 9)
 cv2.createTrackbar('Cell Height', 'Grid Editor', cell_height, max_height, update_grid)
+cv2.setTrackbarPos('Cell Height', 'Grid Editor', 42)
 cv2.createTrackbar('Origin X', 'Grid Editor', origin_x, max_origin_x, update_grid)
 cv2.createTrackbar('Origin Y', 'Grid Editor', origin_y, max_origin_y, update_grid)
 
@@ -87,11 +90,10 @@ cv2.destroyAllWindows()
 
 # Function to slice the image into individual characters
 def slice_image(img, cell_w, cell_h, orig_x, orig_y):
-    h, w = img.shape
     characters = []
 
-    for y in np.arange(orig_y, h, cell_h):
-        for x in np.arange(orig_x, w, cell_w):
+    for y in np.arange(orig_y, orig_y + cell_h * 5, cell_h):
+        for x in np.arange(orig_x, orig_x + cell_w * 20, cell_w):
             char_img = img[y:y+cell_h, x:x+cell_w]
             characters.append(char_img)
 
