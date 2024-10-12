@@ -4,10 +4,10 @@ const decodeCept = async (interpreter, next, error) => {
       case 0x22:
         switch (await next()) {
           case 0x40:
-            // serial mode
+            interpreter.serialMode()
             break
           case 0x41:
-            // parallel mode
+            interpreter.parallelMode()
             break
           default:
             error()
@@ -16,16 +16,16 @@ const decodeCept = async (interpreter, next, error) => {
       case 0x28:
         switch (await next()) {
           case 0x40:
-            // load G0 into G0
+            interpreter.loadG0IntoG0()
             break
           case 0x62:
-            // load G2 into G0
+            interpreter.loadG2IntoG0()
             break
           case 0x63:
-            // load G1 into G0
+            interpreter.loadG1IntoG0()
             break
           case 0x64:
-            // load G3 into G0
+            interpreter.loadG3IntoG0()
             break
           default:
             error()
@@ -34,20 +34,20 @@ const decodeCept = async (interpreter, next, error) => {
       case 0x29:
         switch (await next()) {
           case 0x40:
-            // load G0 into G1
+            interpreter.loadG0IntoG1()
             break
           case 0x62:
-            // load G2 into G1
+            interpreter.loadG2IntoG1()
             break
           case 0x63:
-            // load G1 into G1
+            interpreter.loadG1IntoG1()
             break
           case 0x64:
-            // load G3 into G1
+            interpreter.loadG3IntoG1()
             break
           case 0x20:
             if ((await next()) === 0x40) {
-              // load DRCs into G1
+              interpreter.loadDRCsIntoG1()
             } else {
               error()
             }
@@ -59,20 +59,20 @@ const decodeCept = async (interpreter, next, error) => {
       case 0x2a:
         switch (await this.next()) {
           case 0x40:
-            // load G0 into G2
+            interpreter.loadG0IntoG2()
             break
           case 0x62:
-            // load G2 into G2
+            interpreter.loadG2IntoG2()
             break
           case 0x63:
-            // load G1 into G2
+            interpreter.loadG1IntoG2()
             break
           case 0x64:
-            // load G3 into G2
+            interpreter.loadG3IntoG2()
             break
           case 0x20:
             if ((await this.next()) === 0x40) {
-              // load DRCs into G2
+              interpreter.loadDRCsIntoG2()
             } else {
               error()
             }
@@ -84,20 +84,20 @@ const decodeCept = async (interpreter, next, error) => {
       case 0x2b:
         switch (await next()) {
           case 0x40:
-            // load G0 into G3
+            interpreter.loadG0IntoG3()
             break
           case 0x62:
-            // load G2 into G3
+            interpreter.loadG2IntoG3()
             break
           case 0x63:
-            // load G1 into G3
+            interpreter.loadG1IntoG3()
             break
           case 0x64:
-            // load G3 into G3
+            interpreter.loadG3IntoG3()
             break
           case 0x20:
             if ((await next()) === 0x40) {
-              // load DRCs into G3
+              interpreter.loadDRCsIntoG3()
             } else {
               error()
             }
@@ -112,10 +112,10 @@ const decodeCept = async (interpreter, next, error) => {
             const color = await next()
             switch (color & 0xf0) {
               case 0x40:
-                // set fg color of screen to color & 0x0f
+                interpreter.setFgColorOfScreen(color & 0x0f)
                 break
               case 0x50:
-                // set bg color of screen to color & 0x0f
+                interpreter.setBgColorOfScreen(color & 0x0f)
                 break
               default:
                 error()
@@ -126,10 +126,10 @@ const decodeCept = async (interpreter, next, error) => {
             const color = await next()
             switch (color & 0xf0) {
               case 0x40:
-                // set fg color of line to color & 0x0f
+                interpreter.setFgColorOfLine(color & 0x0f)
                 break
               case 0x50:
-                // set bg color of line to color & 0x0f
+                interpreter.setBgColorOfLine(color & 0x0f)
                 break
               default:
                 error()
@@ -141,19 +141,19 @@ const decodeCept = async (interpreter, next, error) => {
         }
         break
       case 0x6e:
-        // G2 into left charset
+        interpreter.g2IntoLeftCharset()
         break
       case 0x6f:
-        // G3 into left charset
+        interpreter.g3IntoLeftCharset()
         break
       case 0x7c:
-        // G3 into right charset
+        interpreter.g3IntoRightCharset()
         break
       case 0x7d:
-        // G2 into right charset
+        interpreter.g2IntoRightCharset()
         break
       case 0x7e:
-      // G1 into right charset
+        interpreter.g1IntoRightCharset()
       default:
         error()
     }
@@ -168,27 +168,27 @@ const decodeCept = async (interpreter, next, error) => {
         await handleColors()
         break
       case 0x2d:
-        // set resolution to 40x24
+        interpreter.setResolutionTo40x24()
         break
       case 0x2f:
         switch (await next()) {
           case 0x40:
-            // service break to row ${p[idx + 3] - 0x40}
+            interpreter.serviceBreakToRow((await next()) - 0x40)
             break
           case 0x4f:
-            // service break back
+            interpreter.serviceBreakBack()
             break
           case 0x41:
-            // serial mode
+            interpreter.serialMode()
             break
           case 0x42:
-            // parallel mode
+            interpreter.parallelMode()
             break
           case 0x43:
-            // serial limited mode
+            interpreter.serialLimitedMode()
             break
           case 0x44:
-            // parallel limited mode
+            interpreter.parallelLimitedMode()
             break
           default:
             error()
@@ -207,35 +207,35 @@ const decodeCept = async (interpreter, next, error) => {
     const second = await next()
 
     if (first === 0x30 && second === 0x40) {
-      // select palette #0
+      interpreter.selectPalette(0)
     } else if (first === 0x30 && second === 0x41) {
-      // invert blinking
+      interpreter.invertBlinking()
     } else if (first === 0x31 && second === 0x40) {
-      // select palette #1
+      interpreter.selectPalette(1)
     } else if (first === 0x31 && second === 0x41) {
-      // blink palettes 0/1 or 2/3
+      interpreter.blinkPalettes()
     } else if (first === 0x31 && second === 0x51) {
-      // unprotect line
+      interpreter.unprotectLine()
     } else if (first === 0x31 && second === 0x50) {
-      // protect line
+      interpreter.protectLine()
     } else if (first === 0x32 && second === 0x40) {
-      // select palette #2
+      interpreter.selectPalette(2)
     } else if (first === 0x32 && second === 0x41) {
-      // fast blinking (on, off, off)
+      interpreter.fastBlinking(true, false, false)
     } else if (first === 0x32 && second === 0x53) {
-      // start selection
+      interpreter.startSelection()
     } else if (first === 0x32 && second === 0x54) {
-      // end selection
+      interpreter.endSelection()
     } else if (first === 0x33 && second === 0x40) {
-      // select palette #3
+      interpreter.selectPalette(3)
     } else if (first === 0x33 && second === 0x41) {
-      // fast blinking (off, on, off)
+      interpreter.fastBlinking(false, true, false)
     } else if (first === 0x34 && second === 0x41) {
-      // fast blinking (off, off, on)
+      interpreter.fastBlinking(false, false, true)
     } else if (first === 0x35 && second === 0x41) {
-      // blinking shift right
+      interpreter.blinkingShiftRight()
     } else if (first === 0x36 && second === 0x41) {
-      // blinking shift left
+      interpreter.blinkingShiftLeft()
     } else {
       error()
     }
@@ -244,111 +244,111 @@ const decodeCept = async (interpreter, next, error) => {
   const c = await next()
   switch (c) {
     case 0x08:
-      // cursor left
+      interpreter.cursorLeft()
       break
     case 0x09:
-      // cursor right
+      interpreter.cursorRight()
       break
     case 0x0a:
-      // cursor down
+      interpreter.cursorDown()
       break
     case 0x0b:
-      // cursor up
+      interpreter.cursorUp()
       break
     case 0x0c:
-      // clear screen
+      interpreter.clearScreen()
       break
     case 0x0d:
-      // cursor to beginning of line
+      interpreter.cursorToBeginningOfLine()
       break
     case 0x0e:
-      // G1 into left charset
+      interpreter.g1IntoLeftCharset()
       break
     case 0x0f:
-      // G0 into left charset
+      interpreter.g0IntoLeftCharset()
       break
     case 0x11:
-      // show cursor
+      interpreter.showCursor()
       break
     case 0x12:
-      // repeat last printed character p[idx+1]-0x40 times
+      interpreter.repeatLastPrintedCharacter((await next()) - 0x40)
       break
     case 0x14:
-      // hide cursor
+      interpreter.hideCursor()
       break
     case 0x18:
-      // clear line
+      interpreter.clearLine()
       break
     case 0x19:
-      // switch to G2 for one character
+      interpreter.switchToG2ForOneCharacter()
       break
     case 0x1a:
-      // end of page
+      interpreter.endOfPage()
       break
     case 0x1d:
-      // switch to G3 for one character
+      interpreter.switchToG3ForOneCharacter()
       break
     case 0x1e:
-      // cursor home
+      interpreter.cursorHome()
       break
     case 0x1b:
-      // esc
+      interpreter.esc()
       await esc()
       break
     case 0x1f:
-      // esc
+      interpreter.esc()
       await us()
       break
     case 0x9b:
-      // csi
+      interpreter.csi()
       await csi()
       break
     case 0x88:
-      // blink on
+      interpreter.blinkOn()
       break
     case 0x89:
-      // blink off
+      interpreter.blinkOff()
       break
     case 0x8a:
-      // transparency on
+      interpreter.transparencyOn()
       break
     case 0x8b:
-      // transparency off
+      interpreter.transparencyOff()
       break
     case 0x8c:
-      // normal size
+      interpreter.normalSize()
       break
     case 0x8d:
-      // double height
+      interpreter.doubleHeight()
       break
     case 0x8e:
-      // double width
+      interpreter.doubleWidth()
       break
     case 0x8f:
-      // double width and height
+      interpreter.doubleWidthAndHeight()
       break
     case 0x98:
-      // hide
+      interpreter.hide()
       break
     case 0x99:
-      // underline off
+      interpreter.underlineOff()
       break
     case 0x9a:
-    // underline on
+      interpreter.underlineOn()
     case 0x9c:
-      // normal polarity
+      interpreter.normalPolarity()
       break
     case 0x9d:
-      // inverse polarity
+      interpreter.inversePolarity()
       break
     case 0x9e:
-      // mosaic or transparent
+      interpreter.mosaicOrTransparent()
       break
     default:
       if (0x80 <= c && c <= 0x87) {
-        // set fg color to #${c - 0x80}
+        interpreter.setFgColor(c - 0x80)
       } else if (0x90 <= c && c <= 0x97) {
-        // set bg color to #${c - 0x90}
+        interpreter.setBgColor(c - 0x90)
       } else {
         error()
       }
