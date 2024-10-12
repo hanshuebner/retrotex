@@ -64,14 +64,21 @@ def enlarge_image(image, factor=8):
 def process_images(image_paths, output_dir, pixel_width=8, pixel_height=14, enlargement_factor=8):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
-    
-    for image_path in image_paths:
+
+    font_image = Image.new('1', (12*16, 10*6), 0)
+    glyph_no = 0
+
+    for image_path in sorted(image_paths, key=lambda x: int(os.path.splitext(os.path.basename(x))[0].split('_')[1])):
         # Open the original image
         original_img = Image.open(image_path)
         
         # Convert to bitmap
         bitmap_img = convert_to_bitmap(image_path)
-        
+
+        # Paste bitmap into font_image
+        font_image.paste(bitmap_img, (glyph_no % 16 * 12, glyph_no // 16 * 10))
+        glyph_no += 1
+
         # Create the composite image
         composite_img = create_composite_image(original_img, bitmap_img, pixel_width=pixel_width, pixel_height=pixel_height)
         
@@ -85,6 +92,8 @@ def process_images(image_paths, output_dir, pixel_width=8, pixel_height=14, enla
         # Save the result
         enlarged_composite_img.save(output_path)
         print(f"Processed {image_path} -> {output_path}")
+
+    font_image.save('bitmap.png')
 
 def main():
     # Set up argument parser

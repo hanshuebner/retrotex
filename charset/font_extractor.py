@@ -1,3 +1,5 @@
+import os
+
 import cv2
 import numpy as np
 import argparse
@@ -50,6 +52,7 @@ def draw_grid(img, cell_w, cell_h, orig_x, orig_y):
 
 # Callback function for the trackbars
 def update_grid(val):
+    global initialized
     if not initialized:
         return
     
@@ -76,8 +79,6 @@ cv2.setTrackbarPos('Cell Height', 'Grid Editor', 42)
 cv2.createTrackbar('Origin X', 'Grid Editor', origin_x, max_origin_x, update_grid)
 cv2.createTrackbar('Origin Y', 'Grid Editor', origin_y, max_origin_y, update_grid)
 
-initialized = True
-
 # Manually call update_grid once to initialize the display
 update_grid(0)
 
@@ -102,6 +103,10 @@ def slice_image(img, cell_w, cell_h, orig_x, orig_y):
 # Slice the image based on the final grid settings
 characters = slice_image(image, round(cell_width), round(cell_height), origin_x, origin_y)
 
+output_dir = 'input'
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
+
 # Save the individual characters as separate images
 for idx, char_img in enumerate(characters):
-    cv2.imwrite(f'input/character_{idx}.png', char_img)
+    cv2.imwrite(f'{output_dir}/character_{idx}.png', char_img)
