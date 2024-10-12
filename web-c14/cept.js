@@ -1,9 +1,378 @@
-const fs = require('fs')
+class CeptInterpreter {
+  constructor() {
+    this.setState(this.normal)
+  }
 
-const MIN = (a, b) => (a < b ? a : b)
-const MAX = (a, b) => (a > b ? a : b)
+  setState(handler) {
+    this.state = handler.bind(this)
+  }
 
-const HEX_PER_LINE = 16
+  async next() {
+    return 0
+  }
+
+  error() {
+    console.log('error in data stream')
+  }
+
+  async normal() {
+    const c = await this.next()
+    switch (c) {
+      case 0x08:
+        // cursor left
+        break
+      case 0x09:
+        // cursor right
+        break
+      case 0x0a:
+        // cursor down
+        break
+      case 0x0b:
+        // cursor up
+        break
+      case 0x0c:
+        // clear screen
+        break
+      case 0x0d:
+        // cursor to beginning of line
+        break
+      case 0x0e:
+        // G1 into left charset
+        break
+      case 0x0f:
+        // G0 into left charset
+        break
+      case 0x11:
+        // show cursor
+        break
+      case 0x12:
+        // repeat last printed character p[idx+1]-0x40 times
+        break
+      case 0x14:
+        // hide cursor
+        break
+      case 0x18:
+        // clear line
+        break
+      case 0x19:
+        // switch to G2 for one character
+        break
+      case 0x1a:
+        // end of page
+        break
+      case 0x1d:
+        // switch to G3 for one character
+        break
+      case 0x1e:
+        // cursor home
+        break
+      case 0x1b:
+        // esc
+        this.setState(this.esc)
+        break
+      case 0x1f:
+        // esc
+        this.setState(this.us)
+        break
+      case 0x9b:
+        // csi
+        this.setState(this.csi)
+        break
+      case 0x88:
+        // blink on
+        break
+      case 0x89:
+        // blink off
+        break
+      case 0x8a:
+        // transparency on
+        break
+      case 0x8b:
+        // transparency off
+        break
+      case 0x8c:
+        // normal size
+        break
+      case 0x8d:
+        // double height
+        break
+      case 0x8e:
+        // double width
+        break
+      case 0x8f:
+        // double width and height
+        break
+      case 0x98:
+        // hide
+        break
+      case 0x99:
+        // underline off
+        break
+      case 0x9a:
+      // underline on
+      case 0x9c:
+        // Hintergrundfarbe schwarz bzw. normale Polarität
+        break
+      case 0x9d:
+        // Hintergrundfarbe setzen bzw. inverse Polarität
+        break
+      case 0x9e:
+        // Mosaikzeichenwiederholung bzw. Hintergrund transparent
+        break
+      default:
+        if (0x80 <= c && c <= 0x87) {
+          // set fg color to #${c - 0x80}
+        } else if (0x90 <= c && c <= 0x97) {
+          // set bg color to #${c - 0x90}
+        }
+    }
+  }
+
+  async esc() {
+    switch (await this.next()) {
+      case 0x22:
+        switch (await this.next()) {
+          case 0x40:
+            // serial mode
+            break
+          case 0x41:
+            // parallel mode
+            break
+          default:
+            this.error()
+        }
+        break
+      case 0x28:
+        switch (await this.next()) {
+          case 0x40:
+            // load G0 into G0
+            break
+          case 0x62:
+            // load G2 into G0
+            break
+          case 0x63:
+            // load G1 into G0
+            break
+          case 0x64:
+            // load G3 into G0
+            break
+          default:
+            this.error()
+        }
+        break
+      case 0x29:
+        switch (await this.next()) {
+          case 0x40:
+            // load G0 into G1
+            break
+          case 0x62:
+            // load G2 into G1
+            break
+          case 0x63:
+            // load G1 into G1
+            break
+          case 0x64:
+            // load G3 into G1
+            break
+          case 0x20:
+            if ((await this.next()) === 0x40) {
+              // load DRCs into G1
+            } else {
+              this.error()
+            }
+            break
+          default:
+            this.error()
+        }
+        break
+      case 0x2a:
+        switch (await this.next()) {
+          case 0x40:
+            // load G0 into G2
+            break
+          case 0x62:
+            // load G2 into G2
+            break
+          case 0x63:
+            // load G1 into G2
+            break
+          case 0x64:
+            // load G3 into G2
+            break
+          case 0x20:
+            if ((await this.next()) === 0x40) {
+              // load DRCs into G2
+            } else {
+              this.error()
+            }
+            break
+          default:
+            this.error()
+        }
+        break
+      case 0x2b:
+        switch (await this.next()) {
+          case 0x40:
+            // load G0 into G3
+            break
+          case 0x62:
+            // load G2 into G3
+            break
+          case 0x63:
+            // load G1 into G3
+            break
+          case 0x64:
+            // load G3 into G3
+            break
+          case 0x20:
+            if ((await this.next()) === 0x40) {
+              // load DRCs into G3
+            } else {
+              this.error()
+            }
+            break
+          default:
+            this.error()
+        }
+        break
+      case 0x23:
+        switch (await this.next()) {
+          case 0x20: {
+            const color = await this.next()
+            switch (color & 0xf0) {
+              case 0x40:
+                // set fg color of screen to color & 0x0f
+                break
+              case 0x50:
+                // set bg color of screen to color & 0x0f
+                break
+              default:
+                this.error()
+            }
+            break
+          }
+          case 0x21: {
+            const color = await this.next()
+            switch (color & 0xf0) {
+              case 0x40:
+                // set fg color of line to color & 0x0f
+                break
+              case 0x50:
+                // set bg color of line to color & 0x0f
+                break
+              default:
+                this.error()
+            }
+            break
+          }
+          default:
+            this.error()
+        }
+        break
+      case 0x6e:
+        // G2 into left charset
+        break
+      case 0x6f:
+        // G3 into left charset
+        break
+      case 0x7c:
+        // G3 into right charset
+        break
+      case 0x7d:
+        // G2 into right charset
+        break
+      case 0x7e:
+      // G1 into right charset
+      default:
+        this.error()
+    }
+    this.setState(this.normal)
+  }
+
+  async us() {
+    switch (await this.next()) {
+      case 0x23:
+        await this.handleCharacterSet()
+        break
+      case 0x26:
+        await this.handleColors()
+        break
+      case 0x2d:
+        // set resolution to 40x24
+        break
+      case 0x2f:
+        switch (await this.next()) {
+          case 0x40:
+            // service break to row ${p[idx + 3] - 0x40}
+            break
+          case 0x4f:
+            // service break back
+            break
+          case 0x41:
+            // serial mode
+            break
+          case 0x42:
+            // parallel mode
+            break
+          case 0x43:
+            // serial limited mode
+            break
+          case 0x44:
+            // parallel limited mode
+            break
+          default:
+            this.error()
+        }
+        break
+      case 0x3d:
+        await this.handleShortcuts()
+        break
+      default:
+        await this.handleSetCursor()
+    }
+    this.setState(this.normal)
+  }
+
+  async csi() {
+    const first = await this.next()
+    const second = await this.next()
+
+    if (first === 0x30 && second === 0x40) {
+      // select palette #0
+    } else if (first === 0x30 && second === 0x41) {
+      // invert blinking
+    } else if (first === 0x31 && second === 0x40) {
+      // select palette #1
+    } else if (first === 0x31 && second === 0x41) {
+      // blink palettes 0/1 or 2/3
+    } else if (first === 0x31 && second === 0x51) {
+      // unprotect line
+    } else if (first === 0x31 && second === 0x50) {
+      // protect line
+    } else if (first === 0x32 && second === 0x40) {
+      // select palette #2
+    } else if (first === 0x32 && second === 0x41) {
+      // fast blinking (on, off, off)
+    } else if (first === 0x32 && second === 0x53) {
+      // start selection
+    } else if (first === 0x32 && second === 0x54) {
+      // end selection
+    } else if (first === 0x33 && second === 0x40) {
+      // select palette #3
+    } else if (first === 0x33 && second === 0x41) {
+      // fast blinking (off, on, off)
+    } else if (first === 0x34 && second === 0x41) {
+      // fast blinking (off, off, on)
+    } else if (first === 0x35 && second === 0x41) {
+      // blinking shift right
+    } else if (first === 0x36 && second === 0x41) {
+      // blinking shift left
+    } else {
+      this.error()
+    }
+    this.setState(this.normal)
+  }
+}
 
 const isPrintable = c => (0x20 <= c && c <= 0x7f) || c >= 0xa0
 
@@ -63,368 +432,4 @@ const printPalette = (s, p, c) => {
     s.push(`"#${r.toString(16)}${g.toString(16)}${b.toString(16)}"`)
     q += 2
   }
-}
-
-const main = () => {
-  const buffer = fs.readFileSync(process.argv[2])
-  const p = Buffer.from(buffer)
-  const totalLength = p.length
-  let idx = 0
-
-  while (idx < totalLength) {
-    let l = 1
-    let d = ''
-    const tmpstr = []
-    if (isPrintable(p[idx]) && p[idx + 1] === 0x12 && p[idx + 2] >= 0x41) {
-      d = 'repeat {p[idx]} for {p[idx+2]-0x40} times'
-    } else if (p[idx] === 0x08) {
-      d = 'cursor left'
-    } else if (p[idx] === 0x09) {
-      d = 'cursor right'
-    } else if (p[idx] === 0x0a) {
-      d = 'cursor down'
-    } else if (p[idx] === 0x0b) {
-      d = 'cursor up'
-    } else if (p[idx] === 0x0c) {
-      d = 'clear screen'
-    } else if (p[idx] === 0x0d) {
-      d = 'cursor to beginning of line'
-    } else if (p[idx] === 0x0e) {
-      d = 'G1 into left charset'
-    } else if (p[idx] === 0x0f) {
-      d = 'G0 into left charset'
-    } else if (p[idx] === 0x11) {
-      d = 'show cursor'
-    } else if (p[idx] === 0x14) {
-      d = 'hide cursor'
-    } else if (p[idx] === 0x18) {
-      d = 'clear line'
-    } else if (p[idx] === 0x19) {
-      d = 'switch to G2 for one character'
-    } else if (p[idx] === 0x1a) {
-      d = 'end of page'
-    } else if (p[idx] === 0x1d) {
-      d = 'switch to G3 for one character'
-    } else if (p[idx] === 0x1e) {
-      d = 'cursor home'
-    } else if (p[idx] === 0x1b && p[idx + 1] === 0x22 && p[idx + 2] === 0x40) {
-      l = 3
-      d = 'serial mode'
-    } else if (p[idx] === 0x1b && p[idx + 1] === 0x22 && p[idx + 2] === 0x41) {
-      l = 3
-      d = 'parallel mode'
-    } else if (p[idx] === 0x1b && p[idx + 1] === 0x23 && p[idx + 2] === 0x20 && (p[idx + 3] & 0xf0) === 0x40) {
-      l = 4
-      tmpstr.push(`set fg color of screen to ${p[idx + 3] - 0x40}`)
-      d = tmpstr.join('')
-    } else if (p[idx] === 0x1b && p[idx + 1] === 0x23 && p[idx + 2] === 0x20 && (p[idx + 3] & 0xf0) === 0x50) {
-      l = 4
-      tmpstr.push(`set bg color of screen to ${p[idx + 3] - 0x50}`)
-      d = tmpstr.join('')
-    } else if (p[idx] === 0x1b && p[idx + 1] === 0x23 && p[idx + 2] === 0x21 && (p[idx + 3] & 0xf0) === 0x40) {
-      l = 4
-      tmpstr.push(`set fg color of line to ${p[idx + 3] - 0x40}`)
-      d = tmpstr.join('')
-    } else if (p[idx] === 0x1b && p[idx + 1] === 0x23 && p[idx + 2] === 0x21 && (p[idx + 3] & 0xf0) === 0x50) {
-      l = 4
-      tmpstr.push(`set bg color of line to ${p[idx + 3] - 0x50}`)
-      d = tmpstr.join('')
-    } else if (p[idx] === 0x1b && p[idx + 1] === 0x28 && p[idx + 2] === 0x20 && p[idx + 3] === 0x40) {
-      l = 4
-      d = 'load DRCs into G0'
-    } else if (p[idx] === 0x1b && p[idx + 1] === 0x28 && p[idx + 2] === 0x40) {
-      l = 3
-      d = 'load G0 into G0'
-    } else if (p[idx] === 0x1b && p[idx + 1] === 0x28 && p[idx + 2] === 0x62) {
-      l = 3
-      d = 'load G2 into G0'
-    } else if (p[idx] === 0x1b && p[idx + 1] === 0x28 && p[idx + 2] === 0x63) {
-      l = 3
-      d = 'load G1 into G0'
-    } else if (p[idx] === 0x1b && p[idx + 1] === 0x28 && p[idx + 2] === 0x64) {
-      l = 3
-      d = 'load G3 into G0'
-    } else if (p[idx] === 0x1b && p[idx + 1] === 0x29 && p[idx + 2] === 0x20 && p[idx + 3] === 0x40) {
-      l = 4
-      d = 'load DRCs into G1'
-    } else if (p[idx] === 0x1b && p[idx + 1] === 0x29 && p[idx + 2] === 0x40) {
-      l = 3
-      d = 'load G0 into G1'
-    } else if (p[idx] === 0x1b && p[idx + 1] === 0x29 && p[idx + 2] === 0x62) {
-      l = 3
-      d = 'load G2 into G1'
-    } else if (p[idx] === 0x1b && p[idx + 1] === 0x29 && p[idx + 2] === 0x63) {
-      l = 3
-      d = 'load G1 into G1'
-    } else if (p[idx] === 0x1b && p[idx + 1] === 0x29 && p[idx + 2] === 0x64) {
-      l = 3
-      d = 'load G3 into G1'
-    } else if (p[idx] === 0x1b && p[idx + 1] === 0x2a && p[idx + 2] === 0x20 && p[idx + 3] === 0x40) {
-      l = 4
-      d = 'load DRCs into G2'
-    } else if (p[idx] === 0x1b && p[idx + 1] === 0x2a && p[idx + 2] === 0x40) {
-      l = 3
-      d = 'load G0 into G2'
-    } else if (p[idx] === 0x1b && p[idx + 1] === 0x2a && p[idx + 2] === 0x62) {
-      l = 3
-      d = 'load G2 into G2'
-    } else if (p[idx] === 0x1b && p[idx + 1] === 0x2a && p[idx + 2] === 0x63) {
-      l = 3
-      d = 'load G1 into G2'
-    } else if (p[idx] === 0x1b && p[idx + 1] === 0x2a && p[idx + 2] === 0x64) {
-      l = 3
-      d = 'load G3 into G2'
-    } else if (p[idx] === 0x1b && p[idx + 1] === 0x2b && p[idx + 2] === 0x20 && p[idx + 3] === 0x40) {
-      l = 4
-      d = 'load DRCs into G3'
-    } else if (p[idx] === 0x1b && p[idx + 1] === 0x2b && p[idx + 2] === 0x40) {
-      l = 3
-      d = 'load G0 into G3'
-    } else if (p[idx] === 0x1b && p[idx + 1] === 0x2b && p[idx + 2] === 0x62) {
-      l = 3
-      d = 'load G2 into G3'
-    } else if (p[idx] === 0x1b && p[idx + 1] === 0x2b && p[idx + 2] === 0x63) {
-      l = 3
-      d = 'load G1 into G3'
-    } else if (p[idx] === 0x1b && p[idx + 1] === 0x2b && p[idx + 2] === 0x64) {
-      l = 3
-      d = 'load G3 into G3'
-    } else if (p[idx] === 0x1b && p[idx + 1] === 0x6e) {
-      l = 2
-      d = 'G2 into left charset'
-    } else if (p[idx] === 0x1b && p[idx + 1] === 0x6f) {
-      l = 2
-      d = 'G3 into left charset'
-    } else if (p[idx] === 0x1b && p[idx + 1] === 0x7c) {
-      l = 2
-      d = 'G3 into right charset'
-    } else if (p[idx] === 0x1b && p[idx + 1] === 0x7d) {
-      l = 2
-      d = 'G2 into right charset'
-    } else if (p[idx] === 0x1b && p[idx + 1] === 0x7e) {
-      l = 2
-      d = 'G1 into right charset'
-    } else if (
-      p[idx] === 0x1f &&
-      p[idx + 1] === 0x23 &&
-      p[idx + 2] === 0x20 &&
-      (p[idx + 3] & 0xf0) === 0x40 &&
-      (p[idx + 4] & 0xf0) === 0x40
-    ) {
-      l = 5
-      tmpstr.push(`define characters ${decodeRes(p[idx + 3])}, ${decodeCol(p[idx + 4])} colors`)
-      d = tmpstr.join('')
-    } else if (
-      p[idx] === 0x1f &&
-      p[idx + 1] === 0x23 &&
-      p[idx + 2] === 0x20 &&
-      p[idx + 3] === 0x28 &&
-      p[idx + 4] === 0x20 &&
-      p[idx + 5] === 0x40 &&
-      (p[idx + 6] & 0xf0) === 0x40 &&
-      (p[idx + 7] & 0xf0) === 0x40
-    ) {
-      l = 8
-      tmpstr.push(`clear character set ${decodeRes(p[idx + 6])}, ${decodeCol(p[idx + 7])} colors`)
-      d = tmpstr.join('')
-    } else if (p[idx] === 0x1f && p[idx + 1] === 0x23 && p[idx + 3] === 0x30) {
-      l = 4
-      tmpstr.push(`define characters 0x${p[idx + 2].toString(16)}+`)
-      d = tmpstr.join('')
-      let q = idx + 4
-      // this assumes that the DRC definition is followed by another command starting with 1F, which may well not be the case
-      while (q < p.length && p[q] !== 0x1f) {
-        // Handle specific case
-      }
-    } else if (
-      p[idx] === 0x1f &&
-      p[idx + 1] === 0x26 &&
-      p[idx + 2] === 0x20 &&
-      p[idx + 3] === 0x22 &&
-      p[idx + 4] === 0x20 &&
-      p[idx + 5] === 0x35 &&
-      p[idx + 6] === 0x40
-    ) {
-      l = 7
-      d = 'start defining colors for DRCs'
-    } else if (p[idx] === 0x1f && p[idx + 1] === 0x26 && p[idx + 2] === 0x20) {
-      l = 3
-      d = 'start defining colors'
-    } else if (p[idx] === 0x1f && p[idx + 1] === 0x26 && p[idx + 2] === 0x21) {
-      l = 3
-      d = 'reset palette'
-    } else if (p[idx] === 0x1f && p[idx + 1] === 0x26 && (p[idx + 2] & 0xf0) === 0x30 && (p[idx + 3] & 0xf0) === 0x30) {
-      l = 4
-      d = tmpstr.join('')
-      let q = idx + 4
-      const q_old = q
-      while (p[q] !== 0x1f) {
-        // Handle specific case
-      }
-      tmpstr.push(`define colors ${String.fromCharCode(p[idx + 2])}${String.fromCharCode(p[idx + 3])}+: `)
-      const s = tmpstr.join('')
-      printPalette(s, q_old, q - q_old)
-    } else if (p[idx] === 0x1f && p[idx + 1] === 0x26 && (p[idx + 2] & 0xf0) === 0x30) {
-      l = 3
-      tmpstr.push(`define DRC color ${p[idx + 2] - 0x30}`)
-      d = tmpstr.join('')
-      let q = idx + 3
-      while (p[q] !== 0x1f) {
-        // Handle specific case
-      }
-    } else if (p[idx] === 0x1f && p[idx + 1] === 0x2d) {
-      l = 2
-      d = 'set resolution to 40x24'
-    } else if (p[idx] === 0x1f && p[idx + 1] === 0x2f && p[idx + 2] === 0x40) {
-      l = 4
-      tmpstr.push(`service break to row ${p[idx + 3] - 0x40}`)
-      d = tmpstr.join('')
-    } else if (p[idx] === 0x1f && p[idx + 1] === 0x2f && p[idx + 2] === 0x4f) {
-      l = 3
-      d = 'service break back'
-    } else if (p[idx] === 0x1f && p[idx + 1] === 0x2f && p[idx + 2] === 0x41) {
-      l = 3
-      d = 'serial mode'
-    } else if (p[idx] === 0x1f && p[idx + 1] === 0x2f && p[idx + 2] === 0x42) {
-      l = 3
-      d = 'parallel mode'
-    } else if (p[idx] === 0x1f && p[idx + 1] === 0x2f && p[idx + 2] === 0x43) {
-      l = 3
-      d = 'serial limited mode'
-    } else if (p[idx] === 0x1f && p[idx + 1] === 0x2f && p[idx + 2] === 0x44) {
-      l = 3
-      d = 'parallel limited mode'
-    } else if (p[idx] === 0x1f && p[idx + 1] === 0x3d && (p[idx + 2] & 0xf0) >= 0x30) {
-      if (p[idx + 3] === 0x1f) {
-        l = 3
-        tmpstr.push(`define shortcut #${p[idx + 2] - 0x30}`)
-        d = tmpstr.join('')
-      } else {
-        l = 5
-        tmpstr.push(
-          `define shortcut #${p[idx + 2] - 0x30} "${String.fromCharCode(p[idx + 3])}${String.fromCharCode(p[idx + 4])}"`
-        )
-        d = tmpstr.join('')
-      }
-    } else if (p[idx] === 0x1f && p[idx + 1] >= 0x41 && p[idx + 2] >= 0x41) {
-      l = 3
-      tmpstr.push(`set cursor to line ${p[idx + 1] - 0x40}, column ${p[idx + 2] - 0x40}`)
-      d = tmpstr.join('')
-    } else if (isPrintable(p[idx]) && p[idx + 1] !== 0x12) {
-      let q = idx
-      l = 0
-      tmpstr.push('"')
-      while (l < HEX_PER_LINE && isPrintable(q[0]) && q[1] !== 0x12) {
-        tmpstr.push(String.fromCharCode(q[0]))
-        l += 1
-        q += 1
-      }
-      tmpstr.push('"')
-      d = tmpstr.join('')
-    } else if (0x80 <= p[idx] && p[idx] <= 0x87) {
-      tmpstr.push(`set fg color to #${p[idx] - 0x80}`)
-      d = tmpstr.join('')
-    } else if (p[idx] === 0x88) {
-      d = 'blink on'
-    } else if (p[idx] === 0x89) {
-      d = 'blink off'
-    } else if (p[idx] === 0x8a) {
-      d = 'transparency on'
-    } else if (p[idx] === 0x8b) {
-      d = 'transparency off'
-    } else if (p[idx] === 0x8c) {
-      d = 'normal size'
-    } else if (p[idx] === 0x8d) {
-      d = 'double height'
-    } else if (p[idx] === 0x8e) {
-      d = 'double width'
-    } else if (p[idx] === 0x8f) {
-      d = 'double width and height'
-    } else if (0x90 <= p[idx] && p[idx] <= 0x97) {
-      tmpstr.push(`set bg color to #${p[idx] - 0x90}`)
-      d = tmpstr.join('')
-    } else if (p[idx] === 0x98) {
-      d = 'hide'
-    } else if (p[idx] === 0x99) {
-      d = 'underline off'
-    } else if (p[idx] === 0x9a) {
-      d = 'underline on'
-    } else if (p[idx] === 0x9b && p[idx + 1] === 0x30 && p[idx + 2] === 0x40) {
-      l = 3
-      d = 'select palette #0'
-    } else if (p[idx] === 0x9b && p[idx + 1] === 0x30 && p[idx + 2] === 0x41) {
-      l = 3
-      d = 'invert blinking'
-    } else if (p[idx] === 0x9b && p[idx + 1] === 0x31 && p[idx + 2] === 0x40) {
-      l = 3
-      d = 'select palette #1'
-    } else if (p[idx] === 0x9b && p[idx + 1] === 0x31 && p[idx + 2] === 0x41) {
-      l = 3
-      d = 'blink palettes 0/1 or 2/3'
-    } else if (p[idx] === 0x9b && p[idx + 1] === 0x31 && p[idx + 2] === 0x51) {
-      l = 3
-      d = 'unprotect line'
-    } else if (p[idx] === 0x9b && p[idx + 1] === 0x31 && p[idx + 2] === 0x50) {
-      l = 3
-      d = 'protect line'
-    } else if (p[idx] === 0x9b && p[idx + 1] === 0x32 && p[idx + 2] === 0x40) {
-      l = 3
-      d = 'select palette #2'
-    } else if (p[idx] === 0x9b && p[idx + 1] === 0x32 && p[idx + 2] === 0x41) {
-      l = 3
-      d = 'fast blinking (on, off, off)'
-    } else if (p[idx] === 0x9b && p[idx + 1] === 0x32 && p[idx + 2] === 0x53) {
-      l = 3
-      d = 'start selection'
-    } else if (p[idx] === 0x9b && p[idx + 1] === 0x32 && p[idx + 2] === 0x54) {
-      l = 3
-      d = 'end selection'
-    } else if (p[idx] === 0x9b && p[idx + 1] === 0x33 && p[idx + 2] === 0x40) {
-      l = 3
-      d = 'select palette #3'
-    } else if (p[idx] === 0x9b && p[idx + 1] === 0x33 && p[idx + 2] === 0x41) {
-      l = 3
-      d = 'fast blinking (off, on, off)'
-    } else if (p[idx] === 0x9b && p[idx + 1] === 0x34 && p[idx + 2] === 0x41) {
-      l = 3
-      d = 'fast blinking (off, off, on)'
-    } else if (p[idx] === 0x9b && p[idx + 1] === 0x35 && p[idx + 2] === 0x41) {
-      l = 3
-      d = 'blinking shift right'
-    } else if (p[idx] === 0x9b && p[idx + 1] === 0x36 && p[idx + 2] === 0x41) {
-      l = 3
-      d = 'blinking shift left'
-    } else if (p[idx] === 0x9c) {
-      d = 'Hintergrundfarbe schwarz bzw. normale Polarität'
-    } else if (p[idx] === 0x9d) {
-      d = 'Hintergrundfarbe setzen bzw. inverse Polarität'
-    } else if (p[idx] === 0x9e) {
-      d = 'Mosaikzeichenwiederholung bzw. Hintergrund transparent'
-    } else {
-      d = 'unknown'
-    }
-
-    while (l > 0) {
-      const ll = MIN(l, HEX_PER_LINE)
-
-      for (let i = 0; i < ll; i++) {
-        process.stdout.write(`${p[idx].toString(16).padStart(2, '0')} `)
-        idx += 1
-      }
-      for (let i = 0; i < 3 * (HEX_PER_LINE - ll); i++) {
-        process.stdout.write(' ')
-      }
-      if (d) {
-        console.log(`# ${d}`)
-      } else {
-        console.log()
-      }
-      d = ''
-      l -= ll
-    }
-  }
-}
-
-if (require.main === module) {
-  main()
 }
