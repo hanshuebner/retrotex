@@ -1,10 +1,84 @@
 const canvas = document.getElementById("emulator");
 const ctx = canvas.getContext("2d");
 
-const screen_width = 40 * 12
-const screen_height = 25 * 10
+const screen_width = 40 * 12;
+const screen_height = 25 * 10;
 
 const framebuffer = new Uint16Array(screen_width * screen_height);
+
+// Text rendering
+
+const drawString = (str, x, y, fontData, fgColor, bgColor, doubleWidth = false, doubleHeight = false) => {
+    const glyphWidth = 12;
+    const glyphHeight = 10;
+    const glyphsPerRow = 16; // 96 glyphs in a 16x6 grid
+
+    for (let i = 0; i < str.length; i++) {
+        const charCode = str.charCodeAt(i);
+        if (charCode < 0x20 || charCode > 0x7F) continue; // Skip non-ASCII characters
+
+        const glyphIndex = charCode - 0x20;
+        const glyphX = (glyphIndex % glyphsPerRow) * glyphWidth;
+        const glyphY = Math.floor(glyphIndex / glyphsPerRow) * glyphHeight;
+
+        for (let row = 0; row < glyphHeight; row++) {
+            for (let col = 0; col < glyphWidth; col++) {
+                const pixelIndex = (glyphY + row) * (glyphsPerRow * glyphWidth) + (glyphX + col);
+                const pixel = fontData[pixelIndex];
+
+                const screenX = x + (i * glyphWidth + col) * (doubleWidth ? 2 : 1);
+                const screenY = y + row * (doubleHeight ? 2 : 1);
+
+                if (pixel) {
+                    setPixel(screenX, screenY, fgColor, doubleWidth, doubleHeight);
+                } else {
+                    setPixel(screenX, screenY, bgColor, doubleWidth, doubleHeight);
+                }
+            }
+        }
+    }
+};
+
+const setPixel = (x, y, color, doubleWidth, doubleHeight) => {
+    if (x < 0 || x >= screen_width || y < 0 || y >= screen_height) return;
+
+    const [r, g, b] = color12to24(color);
+    const index = y * screen_width + x;
+    framebuffer[index] = color;
+
+    if (doubleWidth) {
+        setPixel(x + 1, y, color, false, doubleHeight);
+    }
+    if (doubleHeight) {
+        setPixel(x, y + 1, color, doubleWidth, false);
+    }
+};
+
+const loadFontData = async (url) => {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    const img = await createImageBitmap(blob);
+
+    const canvas = document.createElement('canvas');
+    canvas.width = img.width;
+    canvas.height = img.height;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0);
+
+    const imageData = ctx.getImageData(0, 0, img.width, img.height);
+    const bitmap = new Uint8Array((img.width * img.height));
+
+    for (let y = 0; y < img.height; y++) {
+        for (let x = 0; x < img.width; x++) {
+            const index = (y * img.width + x) * 4;
+            const bitIndex = y * img.width + x;
+
+            bitmap[bitIndex] = imageData.data[index] > 128
+        }
+    }
+
+    return bitmap;
+};
 
 // Create an ImageData object for rendering
 const imageData = ctx.createImageData(screen_width, screen_height);
@@ -19,7 +93,7 @@ function color12to24(color) {
 }
 
 // Render the framebuffer to the canvas
-function render() {
+const render = () => {
     for (let i = 0; i < framebuffer.length; i++) {
         const color = framebuffer[i];
         const [r, g, b] = color12to24(color);
@@ -34,10 +108,10 @@ function render() {
 
     // Draw the ImageData onto the canvas
     ctx.putImageData(imageData, 0, 0);
-}
+};
 
 // Resize the canvas to fit the window while maintaining aspect ratio
-function resizeCanvas() {
+const resizeCanvas = () => {
     const originalWidth = screen_width;
     const originalHeight = screen_height;
 
@@ -62,7 +136,7 @@ function resizeCanvas() {
     // Apply the new size to the canvas
     canvas.style.width = `${width}px`;
     canvas.style.height = `${height}px`;
-}
+};
 
 // Handle window resizing
 window.addEventListener('resize', resizeCanvas);
@@ -70,19 +144,14 @@ window.addEventListener('resize', resizeCanvas);
 // Initialize the canvas size
 resizeCanvas();
 
-// Handle window resizing
-window.addEventListener('resize', resizeCanvas);
-
-// Initialize the canvas size
-resizeCanvas();
-
-// Example: Fill the framebuffer with random colors
-function fillFramebufferWithRandomColors() {
+const fillFramebufferWithRandomColors = () => {
     for (let i = 0; i < framebuffer.length; i++) {
         framebuffer[i] = Math.floor(Math.random() * 4096);
     }
-    render();
-}
+};
 
-// Start emulation
-fillFramebufferWithRandomColors();
+loadFontData('font-g0.png').then(fontData => {
+    drawString('Hello world!', 0, 0, fontData, 0, 0x00f, true, true);
+});
+
+setInterval(render, 100);
