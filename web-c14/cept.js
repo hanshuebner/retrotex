@@ -1,137 +1,8 @@
-class CeptInterpreter {
-  constructor() {
-    this.setState(this.normal)
-  }
-
-  setState(handler) {
-    this.state = handler.bind(this)
-  }
-
-  async next() {
-    return 0
-  }
-
-  error() {
-    console.log('error in data stream')
-  }
-
-  async normal() {
-    const c = await this.next()
-    switch (c) {
-      case 0x08:
-        // cursor left
-        break
-      case 0x09:
-        // cursor right
-        break
-      case 0x0a:
-        // cursor down
-        break
-      case 0x0b:
-        // cursor up
-        break
-      case 0x0c:
-        // clear screen
-        break
-      case 0x0d:
-        // cursor to beginning of line
-        break
-      case 0x0e:
-        // G1 into left charset
-        break
-      case 0x0f:
-        // G0 into left charset
-        break
-      case 0x11:
-        // show cursor
-        break
-      case 0x12:
-        // repeat last printed character p[idx+1]-0x40 times
-        break
-      case 0x14:
-        // hide cursor
-        break
-      case 0x18:
-        // clear line
-        break
-      case 0x19:
-        // switch to G2 for one character
-        break
-      case 0x1a:
-        // end of page
-        break
-      case 0x1d:
-        // switch to G3 for one character
-        break
-      case 0x1e:
-        // cursor home
-        break
-      case 0x1b:
-        // esc
-        this.setState(this.esc)
-        break
-      case 0x1f:
-        // esc
-        this.setState(this.us)
-        break
-      case 0x9b:
-        // csi
-        this.setState(this.csi)
-        break
-      case 0x88:
-        // blink on
-        break
-      case 0x89:
-        // blink off
-        break
-      case 0x8a:
-        // transparency on
-        break
-      case 0x8b:
-        // transparency off
-        break
-      case 0x8c:
-        // normal size
-        break
-      case 0x8d:
-        // double height
-        break
-      case 0x8e:
-        // double width
-        break
-      case 0x8f:
-        // double width and height
-        break
-      case 0x98:
-        // hide
-        break
-      case 0x99:
-        // underline off
-        break
-      case 0x9a:
-      // underline on
-      case 0x9c:
-        // Hintergrundfarbe schwarz bzw. normale Polarität
-        break
-      case 0x9d:
-        // Hintergrundfarbe setzen bzw. inverse Polarität
-        break
-      case 0x9e:
-        // Mosaikzeichenwiederholung bzw. Hintergrund transparent
-        break
-      default:
-        if (0x80 <= c && c <= 0x87) {
-          // set fg color to #${c - 0x80}
-        } else if (0x90 <= c && c <= 0x97) {
-          // set bg color to #${c - 0x90}
-        }
-    }
-  }
-
-  async esc() {
-    switch (await this.next()) {
+const decodeCept = async (interpreter, next, error) => {
+  const esc = async () => {
+    switch (await next()) {
       case 0x22:
-        switch (await this.next()) {
+        switch (await next()) {
           case 0x40:
             // serial mode
             break
@@ -139,11 +10,11 @@ class CeptInterpreter {
             // parallel mode
             break
           default:
-            this.error()
+            error()
         }
         break
       case 0x28:
-        switch (await this.next()) {
+        switch (await next()) {
           case 0x40:
             // load G0 into G0
             break
@@ -157,11 +28,11 @@ class CeptInterpreter {
             // load G3 into G0
             break
           default:
-            this.error()
+            error()
         }
         break
       case 0x29:
-        switch (await this.next()) {
+        switch (await next()) {
           case 0x40:
             // load G0 into G1
             break
@@ -175,14 +46,14 @@ class CeptInterpreter {
             // load G3 into G1
             break
           case 0x20:
-            if ((await this.next()) === 0x40) {
+            if ((await next()) === 0x40) {
               // load DRCs into G1
             } else {
-              this.error()
+              error()
             }
             break
           default:
-            this.error()
+            error()
         }
         break
       case 0x2a:
@@ -203,15 +74,15 @@ class CeptInterpreter {
             if ((await this.next()) === 0x40) {
               // load DRCs into G2
             } else {
-              this.error()
+              error()
             }
             break
           default:
-            this.error()
+            error()
         }
         break
       case 0x2b:
-        switch (await this.next()) {
+        switch (await next()) {
           case 0x40:
             // load G0 into G3
             break
@@ -225,20 +96,20 @@ class CeptInterpreter {
             // load G3 into G3
             break
           case 0x20:
-            if ((await this.next()) === 0x40) {
+            if ((await next()) === 0x40) {
               // load DRCs into G3
             } else {
-              this.error()
+              error()
             }
             break
           default:
-            this.error()
+            error()
         }
         break
       case 0x23:
-        switch (await this.next()) {
+        switch (await next()) {
           case 0x20: {
-            const color = await this.next()
+            const color = await next()
             switch (color & 0xf0) {
               case 0x40:
                 // set fg color of screen to color & 0x0f
@@ -247,12 +118,12 @@ class CeptInterpreter {
                 // set bg color of screen to color & 0x0f
                 break
               default:
-                this.error()
+                error()
             }
             break
           }
           case 0x21: {
-            const color = await this.next()
+            const color = await next()
             switch (color & 0xf0) {
               case 0x40:
                 // set fg color of line to color & 0x0f
@@ -261,12 +132,12 @@ class CeptInterpreter {
                 // set bg color of line to color & 0x0f
                 break
               default:
-                this.error()
+                error()
             }
             break
           }
           default:
-            this.error()
+            error()
         }
         break
       case 0x6e:
@@ -284,24 +155,23 @@ class CeptInterpreter {
       case 0x7e:
       // G1 into right charset
       default:
-        this.error()
+        error()
     }
-    this.setState(this.normal)
   }
 
-  async us() {
-    switch (await this.next()) {
+  const us = async () => {
+    switch (await next()) {
       case 0x23:
-        await this.handleCharacterSet()
+        await handleCharacterSet()
         break
       case 0x26:
-        await this.handleColors()
+        await handleColors()
         break
       case 0x2d:
         // set resolution to 40x24
         break
       case 0x2f:
-        switch (await this.next()) {
+        switch (await next()) {
           case 0x40:
             // service break to row ${p[idx + 3] - 0x40}
             break
@@ -321,21 +191,20 @@ class CeptInterpreter {
             // parallel limited mode
             break
           default:
-            this.error()
+            error()
         }
         break
       case 0x3d:
-        await this.handleShortcuts()
+        await handleShortcuts()
         break
       default:
-        await this.handleSetCursor()
+        await handleSetCursor()
     }
-    this.setState(this.normal)
   }
 
-  async csi() {
-    const first = await this.next()
-    const second = await this.next()
+  const csi = async () => {
+    const first = await next()
+    const second = await next()
 
     if (first === 0x30 && second === 0x40) {
       // select palette #0
@@ -368,9 +237,121 @@ class CeptInterpreter {
     } else if (first === 0x36 && second === 0x41) {
       // blinking shift left
     } else {
-      this.error()
+      error()
     }
-    this.setState(this.normal)
+  }
+
+  const c = await next()
+  switch (c) {
+    case 0x08:
+      // cursor left
+      break
+    case 0x09:
+      // cursor right
+      break
+    case 0x0a:
+      // cursor down
+      break
+    case 0x0b:
+      // cursor up
+      break
+    case 0x0c:
+      // clear screen
+      break
+    case 0x0d:
+      // cursor to beginning of line
+      break
+    case 0x0e:
+      // G1 into left charset
+      break
+    case 0x0f:
+      // G0 into left charset
+      break
+    case 0x11:
+      // show cursor
+      break
+    case 0x12:
+      // repeat last printed character p[idx+1]-0x40 times
+      break
+    case 0x14:
+      // hide cursor
+      break
+    case 0x18:
+      // clear line
+      break
+    case 0x19:
+      // switch to G2 for one character
+      break
+    case 0x1a:
+      // end of page
+      break
+    case 0x1d:
+      // switch to G3 for one character
+      break
+    case 0x1e:
+      // cursor home
+      break
+    case 0x1b:
+      // esc
+      await esc()
+      break
+    case 0x1f:
+      // esc
+      await us()
+      break
+    case 0x9b:
+      // csi
+      await csi()
+      break
+    case 0x88:
+      // blink on
+      break
+    case 0x89:
+      // blink off
+      break
+    case 0x8a:
+      // transparency on
+      break
+    case 0x8b:
+      // transparency off
+      break
+    case 0x8c:
+      // normal size
+      break
+    case 0x8d:
+      // double height
+      break
+    case 0x8e:
+      // double width
+      break
+    case 0x8f:
+      // double width and height
+      break
+    case 0x98:
+      // hide
+      break
+    case 0x99:
+      // underline off
+      break
+    case 0x9a:
+    // underline on
+    case 0x9c:
+      // normal polarity
+      break
+    case 0x9d:
+      // inverse polarity
+      break
+    case 0x9e:
+      // mosaic or transparent
+      break
+    default:
+      if (0x80 <= c && c <= 0x87) {
+        // set fg color to #${c - 0x80}
+      } else if (0x90 <= c && c <= 0x97) {
+        // set bg color to #${c - 0x90}
+      } else {
+        error()
+      }
   }
 }
 
