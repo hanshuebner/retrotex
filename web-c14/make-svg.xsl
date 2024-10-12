@@ -96,6 +96,7 @@
     <g class="key led-key standard-key {@color}"
        data-group="{@group}"
        id="key-{accumulator-before('key-number')}"
+       data-keycode="{accumulator-before('key-number')}"
        transform="translate({accumulator-before('x-position')},{accumulator-before('y-position')})">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <circle cx="50" cy="50" r="35"/>
@@ -117,6 +118,7 @@
   <xsl:template match="key[@type='enter']" priority="11">
     <g class="key standard-key {@color}"
        id="key-{accumulator-before('key-number')}"
+       data-keycode="{accumulator-before('key-number')}"
        transform="translate({accumulator-before('x-position')},{accumulator-before('y-position')})">
       <path d="M 15 5
                H 110
@@ -147,6 +149,7 @@
     <xsl:variable name="stretch" select="(@width - 1) * 100"/>
     <g class="key standard-key {@color}"
        id="key-{accumulator-before('key-number')}"
+       data-keycode="{accumulator-before('key-number')}"
        transform="translate({accumulator-before('x-position')},{accumulator-before('y-position')})">
       <rect x="5" y="5" width="{90 + $stretch}" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 0,0 50,80 L{50 + $stretch},80 A35,35 0 0,0 {75 + $stretch},25 Z"/>
@@ -171,6 +174,7 @@
   <xsl:template match="key[not(@width) and not(@type)]" priority="1">
     <g class="key standard-key {@color}"
        id="key-{accumulator-before('key-number')}"
+       data-keycode="{accumulator-before('key-number')}"
        transform="translate({accumulator-before('x-position')},{accumulator-before('y-position')})">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>

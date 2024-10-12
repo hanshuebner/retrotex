@@ -4,6 +4,7 @@ const handleSvgClick = event => {
     if (!target) {
         return
     }
+    console.log('keycode', target.getAttribute('data-keycode'))
     target.classList.toggle('black')
     setTimeout(() => target.classList.toggle('black'), 100)
     if (target.classList.contains('led-key')) {
