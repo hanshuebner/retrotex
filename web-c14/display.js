@@ -8,32 +8,28 @@ const framebuffer = new Uint16Array(screen_width * screen_height)
 
 // Text rendering
 
-const drawString = (str, x, y, fontData, fgColor, bgColor, doubleWidth = false, doubleHeight = false) => {
+const drawString = (str, row, col, fontData, fgColor, bgColor, doubleWidth = false, doubleHeight = false) => {
   const glyphWidth = 12
   const glyphHeight = 10
-  const glyphsPerRow = 16 // 96 glyphs in a 16x6 grid
+  const glyphsPerFontRow = 16 // 96 glyphs in a 16x6 grid
 
   for (let i = 0; i < str.length; i++) {
     const charCode = str.charCodeAt(i)
     if (charCode < 0x20 || charCode > 0x7f) continue // Skip non-ASCII characters
 
     const glyphIndex = charCode - 0x20
-    const glyphX = (glyphIndex % glyphsPerRow) * glyphWidth
-    const glyphY = Math.floor(glyphIndex / glyphsPerRow) * glyphHeight
+    const glyphX = (glyphIndex % glyphsPerFontRow) * glyphWidth
+    const glyphY = Math.floor(glyphIndex / glyphsPerFontRow) * glyphHeight
 
-    for (let row = 0; row < glyphHeight; row++) {
-      for (let col = 0; col < glyphWidth; col++) {
-        const pixelIndex = (glyphY + row) * (glyphsPerRow * glyphWidth) + (glyphX + col)
+    for (let y = 0; y < glyphHeight; y++) {
+      for (let x = 0; x < glyphWidth; x++) {
+        const pixelIndex = (glyphY + y) * (glyphsPerFontRow * glyphWidth) + (glyphX + x)
         const pixel = fontData[pixelIndex]
 
-        const screenX = x + (i * glyphWidth + col) * (doubleWidth ? 2 : 1)
-        const screenY = y + row * (doubleHeight ? 2 : 1)
+        const screenX = col * glyphWidth + (i * glyphWidth + x) * (doubleWidth ? 2 : 1)
+        const screenY = row * glyphHeight + y * (doubleHeight ? 2 : 1)
 
-        if (pixel) {
-          setPixel(screenX, screenY, fgColor, doubleWidth, doubleHeight)
-        } else {
-          setPixel(screenX, screenY, bgColor, doubleWidth, doubleHeight)
-        }
+        setPixel(screenX, screenY, pixel ? fgColor : bgColor, doubleWidth, doubleHeight)
       }
     }
   }
@@ -156,8 +152,8 @@ const fillFramebufferWithRandomColors = () => {
 
 loadFontData('font-g0.png').then(fontData => {
   drawString('Hello world!', 0, 0, fontData, 0, 0x00f, true, true)
-  drawString('0123456789012345678901234567890123456789', 0, 20, fontData, 0xf00, 0)
-  drawString('Dank an: Computermuseum Hamburg, RAFI,', 0, 80, fontData, 0xfff, 0x00f)
+  drawString('0123456789012345678901234567890123456789', 2, 0, fontData, 0xf00, 0)
+  drawString('Dank an: Computermuseum Hamburg, RAFI,', 8, 0, fontData, 0xfff, 0x00f)
 })
 
 setInterval(render, 100)
