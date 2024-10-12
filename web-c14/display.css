@@ -8,5 +8,5 @@ body {
     background-color: #222;
 }
 canvas {
-    image-rendering: pixelated; /* Keeps the pixels sharp when scaled */
+    image-rendering: pixelated;
 }

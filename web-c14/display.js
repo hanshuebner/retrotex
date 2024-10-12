@@ -115,7 +115,7 @@ const resizeCanvas = () => {
   const originalHeight = screen_height
 
   // Desired pixel aspect ratio
-  const pixelAspectRatio = 0.5
+  const pixelAspectRatio = 0.6
 
   // Calculate new canvas dimensions based on window size
   let width = window.innerWidth
@@ -157,6 +157,7 @@ const fillFramebufferWithRandomColors = () => {
 loadFontData('font-g0.png').then(fontData => {
   drawString('Hello world!', 0, 0, fontData, 0, 0x00f, true, true)
   drawString('0123456789012345678901234567890123456789', 0, 20, fontData, 0xf00, 0)
+  drawString('Dank an: Computermuseum Hamburg, RAFI,', 0, 80, fontData, 0xfff, 0x00f)
 })
 
 setInterval(render, 100)
