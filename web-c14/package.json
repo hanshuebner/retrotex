@@ -1,0 +1,11 @@
+{
+  "name": "cept-loader",
+  "version": "1.0.0",
+  "description": "A script to load and decode CEPT files",
+  "main": "loadCeptFile.js",
+  "scripts": {
+    "start": "node loadCeptFile.js"
+  },
+  "dependencies": {},
+  "type": "module"
+}
