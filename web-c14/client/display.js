@@ -107,31 +107,20 @@ const render = () => {
 }
 
 const resizeCanvas = () => {
-  const originalWidth = screen_width
-  const originalHeight = screen_height
+    const displayContainer = document.getElementById('display-container');
+    const aspectRatio = screen_width / screen_height;
+    const containerWidth = displayContainer.clientWidth;
+    const containerHeight = displayContainer.clientHeight;
 
-  // Desired pixel aspect ratio
-  const pixelAspectRatio = 0.6
+    if (containerWidth / containerHeight > aspectRatio) {
+        canvas.style.width = `${containerHeight * aspectRatio}px`;
+        canvas.style.height = `${containerHeight}px`;
+    } else {
+        canvas.style.width = `${containerWidth}px`;
+        canvas.style.height = `${containerWidth / aspectRatio}px`;
+    }
+};
 
-  // Calculate new canvas dimensions based on window size
-  let width = window.innerWidth
-  let height = window.innerHeight
-
-  // Adjust dimensions to maintain the original display aspect ratio with pixel scaling
-  if (width / height > (originalWidth * pixelAspectRatio) / originalHeight) {
-    // Window is wider than the desired display aspect ratio
-    height = window.innerHeight
-    width = height * ((originalWidth * pixelAspectRatio) / originalHeight)
-  } else {
-    // Window is taller than the desired display aspect ratio
-    width = window.innerWidth
-    height = width / ((originalWidth * pixelAspectRatio) / originalHeight)
-  }
-
-  // Apply the new size to the canvas
-  canvas.style.width = `${width}px`
-  canvas.style.height = `${height}px`
-}
 
 // Handle window resizing
 window.addEventListener('resize', resizeCanvas)

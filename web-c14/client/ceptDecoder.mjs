@@ -325,7 +325,7 @@ const decode = async (interpreter, next, putback, error) => {
     } else if ((first & 0xf0) === 0x20 && (second & 0xfe) === 0x72) {
       interpreter.sendShortcut(second & 0x0f, !(second & 1))
     } else if (first === 0x32 && second === 0x3b) {
-      // end of
+      // end of RAFI C14 data dump
     } else {
       error()
     }
