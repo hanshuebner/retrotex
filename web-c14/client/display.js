@@ -107,31 +107,38 @@ const render = () => {
 }
 
 const resizeCanvas = () => {
-    const displayContainer = document.getElementById('display-container');
-    const aspectRatio = screen_width / screen_height;
-    const containerWidth = displayContainer.clientWidth;
-    const containerHeight = displayContainer.clientHeight;
+  const originalWidth = screen_width;
+  const originalHeight = screen_height;
 
-    if (containerWidth / containerHeight > aspectRatio) {
-        canvas.style.width = `${containerHeight * aspectRatio}px`;
-        canvas.style.height = `${containerHeight}px`;
-    } else {
-        canvas.style.width = `${containerWidth}px`;
-        canvas.style.height = `${containerWidth / aspectRatio}px`;
-    }
+  // Desired pixel aspect ratio
+  const pixelAspectRatio = 0.6;
+
+  // Calculate the height for the display container (two-thirds of the window height)
+  const displayHeight = window.innerHeight * (2 / 3);
+  const displayWidth = window.innerWidth;
+
+  // Adjust dimensions to maintain the original display aspect ratio with pixel scaling
+  let width, height;
+  if (displayWidth / displayHeight > (originalWidth * pixelAspectRatio) / originalHeight) {
+    // Display container is wider than the desired display aspect ratio
+    height = displayHeight;
+    width = height * ((originalWidth * pixelAspectRatio) / originalHeight);
+  } else {
+    // Display container is taller than the desired display aspect ratio
+    width = displayWidth;
+    height = width / ((originalWidth * pixelAspectRatio) / originalHeight);
+  }
+
+  // Apply the new size to the canvas
+  canvas.style.width = `${width}px`;
+  canvas.style.height = `${height}px`;
 };
 
-
 // Handle window resizing
-window.addEventListener('resize', resizeCanvas)
+window.addEventListener('resize', resizeCanvas);
 
 // Initialize the canvas size
-resizeCanvas()
-// Handle window resizing
-window.addEventListener('resize', resizeCanvas)
-
-// Initialize the canvas size
-resizeCanvas()
+resizeCanvas();
 
 const fillFramebufferWithRandomColors = () => {
   for (let i = 0; i < framebuffer.length; i++) {
