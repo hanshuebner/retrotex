@@ -1,0 +1,23 @@
+{
+  "name": "web-c14",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "staet": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "koa": "^2.15.3",
+    "koa-body": "^6.0.1",
+    "koa-router": "^13.0.1",
+    "koa-static": "^5.0.0",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3"
+  }
+}
