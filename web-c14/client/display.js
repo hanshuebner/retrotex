@@ -139,7 +139,6 @@ window.addEventListener('resize', resizeCanvas);
 
 // Initialize the canvas size
 resizeCanvas();
-
 const fillFramebufferWithRandomColors = () => {
   for (let i = 0; i < framebuffer.length; i++) {
     framebuffer[i] = Math.floor(Math.random() * 4096)
