@@ -6,30 +6,32 @@ export default async (canvas) => {
 
     const framebuffer = new Uint16Array(screen_pixel_width * screen_pixel_height)
 
-    // Text rendering
     const drawString = (str, row, col, fontData, fgColor, bgColor, doubleWidth = false, doubleHeight = false) => {
+        console.assert(col + str.length < 40)
+        for (let i = 0; i < str.length; i++) {
+            drawGlyph(str.charCodeAt(i), row, col + i, fontData, fgColor, bgColor, doubleWidth, doubleHeight)
+        }
+    }
+
+    // Text rendering
+    const drawGlyph = (charCode, row, col, fontData, fgColor, bgColor, doubleWidth = false, doubleHeight = false) => {
         const glyphWidth = 12
         const glyphHeight = 10
         const glyphsPerFontRow = 16 // 96 glyphs in a 16x6 grid
 
-        for (let i = 0; i < str.length; i++) {
-            const charCode = str.charCodeAt(i)
-            if (charCode < 0x20 || charCode > 0x7f) continue // Skip non-ASCII characters
+        const glyphIndex = charCode - 0x20
+        const glyphX = (glyphIndex % glyphsPerFontRow) * glyphWidth
+        const glyphY = Math.floor(glyphIndex / glyphsPerFontRow) * glyphHeight
 
-            const glyphIndex = charCode - 0x20
-            const glyphX = (glyphIndex % glyphsPerFontRow) * glyphWidth
-            const glyphY = Math.floor(glyphIndex / glyphsPerFontRow) * glyphHeight
+        for (let y = 0; y < glyphHeight; y++) {
+            for (let x = 0; x < glyphWidth; x++) {
+                const pixelIndex = (glyphY + y) * (glyphsPerFontRow * glyphWidth) + (glyphX + x)
+                const pixel = fontData[pixelIndex]
 
-            for (let y = 0; y < glyphHeight; y++) {
-                for (let x = 0; x < glyphWidth; x++) {
-                    const pixelIndex = (glyphY + y) * (glyphsPerFontRow * glyphWidth) + (glyphX + x)
-                    const pixel = fontData[pixelIndex]
+                const screenX = col * glyphWidth + (glyphWidth + x) * (doubleWidth ? 2 : 1)
+                const screenY = row * glyphHeight + y * (doubleHeight ? 2 : 1)
 
-                    const screenX = col * glyphWidth + (i * glyphWidth + x) * (doubleWidth ? 2 : 1)
-                    const screenY = row * glyphHeight + y * (doubleHeight ? 2 : 1)
-
-                    setPixel(screenX, screenY, pixel ? fgColor : bgColor, doubleWidth, doubleHeight)
-                }
+                setPixel(screenX, screenY, pixel ? fgColor : bgColor, doubleWidth, doubleHeight)
             }
         }
     }
@@ -152,6 +154,7 @@ export default async (canvas) => {
     return {
         fontG0,
         fontG1,
-        drawString
+        drawString,
+        drawGlyph,
     }
 }

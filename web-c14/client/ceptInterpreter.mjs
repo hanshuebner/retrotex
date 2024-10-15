@@ -10,7 +10,7 @@ export default (log, display) => {
     const redraw = () => {
         for (let row = 0; row < rows; row++) {
             for (let column = 0; column < columns; column++) {
-                display.drawString(chars[row][column] || ' ', row, column, display.fontG0, 0xfff, 0x000)
+                display.drawGlyph(chars[row][column] || 32, row, column, display.fontG0, 0xfff, 0x000)
             }
         }
     }
