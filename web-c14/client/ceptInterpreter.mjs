@@ -13,6 +13,7 @@ export default (log, display) => {
                 display.drawGlyph(chars[row][column] || 32, row, column, display.fontG0, 0xfff, 0x000)
             }
         }
+        display.render()
     }
 
     setInterval(redraw, 250)
@@ -139,14 +140,16 @@ export default (log, display) => {
                 log(`putChar 0x${charCode.toString(16).padStart(2, '0')}`)
             }
             chars[currentRow][currentColumn] = charCode
-            if (currentColumn + 1 < columns) {
-                currentColumn += 1
-            } else if (wrapAround) {
-                currentColumn = 0
-                if (currentRow + 1 < rows) {
-                    currentRow += 1
-                } else {
-                    currentRow = 0
+            if (charCode < 0xc0 || charCode > 0xcf) { // diacritical marks
+                if (currentColumn + 1 < columns) {
+                    currentColumn += 1
+                } else if (wrapAround) {
+                    currentColumn = 0
+                    if (currentRow + 1 < rows) {
+                        currentRow += 1
+                    } else {
+                        currentRow = 0
+                    }
                 }
             }
         },
@@ -182,7 +185,7 @@ export default (log, display) => {
         },
         setCursor: (row, column) => {
             log('setCursor', {row, col: column})
-            if (row > 0 && row < rows && column > 0 && column < cols) {
+            if (row >= 0 && row < rows && column >= 0 && column < columns) {
                 currentRow = row
                 currentColumn = column
             } else {

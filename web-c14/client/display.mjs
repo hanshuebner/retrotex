@@ -149,12 +149,11 @@ export default async (canvas) => {
     const fontG0 = await loadFontData('font-g0.png')
     const fontG1 = await loadFontData('font-g1.png')
 
-    setInterval(render, 100)
-
     return {
         fontG0,
         fontG1,
         drawString,
         drawGlyph,
+        render,
     }
 }
