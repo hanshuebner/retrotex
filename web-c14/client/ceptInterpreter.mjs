@@ -1,22 +1,71 @@
 export default (log, display) => {
     let currentRow = 0
     let currentColumn = 0
-    const rows = 25
-    const columns = 40
-    const chars = new Array(rows).fill().map(() => new Uint8Array(columns));
-    const attrs = new Array(rows).fill().map(() => new Uint8Array(columns));
-    const wrapAround = true
+    let rows
+    let columns
+
+    let chars
+    let attrs
+
+    const setScreenSize = (rows_, columns_) => {
+        currentRow = 0
+        currentColumn = 0
+        rows = rows_
+        columns = columns_
+        chars = new Array(rows).fill().map(() => new Uint8Array(columns));
+        attrs = new Array(rows).fill().map(() => new Uint8Array(columns));
+    }
+
+    const colors = [
+        0x000, 0xf00, 0x0f0, 0xff0, 0x00f, 0xf0f, 0x0ff, 0xfff,
+        0x000, 0xf00, 0x0f0, 0xff0, 0x00f, 0xf0f, 0x0ff, 0xfff,
+        0x000, 0xf00, 0x0f0, 0xff0, 0x00f, 0xf0f, 0x0ff, 0xfff,
+        0x000, 0xf00, 0x0f0, 0xff0, 0x00f, 0xf0f, 0x0ff, 0xfff,
+    ]
+    let fgColor = 7
+    let bgColor = 0
+    let inverted = false
+
+    setScreenSize(24, 40)
+    let wrapAround = true
 
     const redraw = () => {
         for (let row = 0; row < rows; row++) {
             for (let column = 0; column < columns; column++) {
-                display.drawGlyph(chars[row][column] || 32, row, column, display.fontG0, 0xfff, 0x000)
+                display.drawGlyph(
+                    chars[row][column] || 32,
+                    row, column,
+                    display.fontG0,
+                    colors[inverted ? bgColor : fgColor], colors[inverted ? fgColor : bgColor])
             }
         }
         display.render()
     }
 
     setInterval(redraw, 250)
+
+    let lastCharCode = 0x20
+    const putChar = (charCode) => {
+        if (charCode < 0x80) {
+            log(`putChar '${String.fromCharCode(charCode)}'`)
+        } else {
+            log(`putChar 0x${charCode.toString(16).padStart(2, '0')}`)
+        }
+        chars[currentRow][currentColumn] = charCode
+        lastCharCode = charCode
+        if (charCode < 0xc0 || charCode > 0xcf) { // diacritical marks
+            if (currentColumn + 1 < columns) {
+                currentColumn += 1
+            } else if (wrapAround) {
+                currentColumn = 0
+                if (currentRow + 1 < rows) {
+                    currentRow += 1
+                } else {
+                    currentRow = 0
+                }
+            }
+        }
+    }
 
     return {
         blink: (enabled) => {
@@ -84,6 +133,7 @@ export default (log, display) => {
         },
         defineColor: (index, r, g, b) => {
             log('defineColor', {index, r, g, b})
+            colors[index] = (b << 8) | (g << 4) | r
         },
         doubleSize: (width, height) => {
             log('doubleSize', {width, height})
@@ -127,34 +177,19 @@ export default (log, display) => {
         parallelMode: () => {
             log('parallelMode')
         },
-        polarity: (inverted) => {
-            log('polarity', {inverted})
+        polarity: (inverted_) => {
+            log('polarity', {inverted: inverted_})
+            inverted = inverted_
         },
         protectLine: () => {
             log('protectLine')
         },
-        putChar: (charCode) => {
-            if (charCode < 0x80) {
-                log(`putChar '${String.fromCharCode(charCode)}'`)
-            } else {
-                log(`putChar 0x${charCode.toString(16).padStart(2, '0')}`)
-            }
-            chars[currentRow][currentColumn] = charCode
-            if (charCode < 0xc0 || charCode > 0xcf) { // diacritical marks
-                if (currentColumn + 1 < columns) {
-                    currentColumn += 1
-                } else if (wrapAround) {
-                    currentColumn = 0
-                    if (currentRow + 1 < rows) {
-                        currentRow += 1
-                    } else {
-                        currentRow = 0
-                    }
-                }
-            }
-        },
+        putChar,
         repeatLastPrintedCharacter: (count) => {
             log('repeatLastPrintedCharacter', {count})
+            for (let i = 0; i < count; i++) {
+                putChar(lastCharCode)
+            }
         },
         resetShortcuts: () => {
             log('resetShortcuts')
@@ -194,6 +229,7 @@ export default (log, display) => {
         },
         setFgColor: (color) => {
             log('setFgColor', {color})
+            fgColor = color
         },
         setFgColorOfRow: (color) => {
             log('setFgColorOfRow', {color})
@@ -201,8 +237,10 @@ export default (log, display) => {
         setFgColorOfScreen: (color) => {
             log('setFgColorOfScreen', {color})
         },
-        setResolutionTo40x24: () => {
-            log('setResolutionTo40x24')
+        setScreenFormat: (columns_, rows_, wrapAround_) => {
+            log('setScreenFormat', {columns: columns_, rows: rows_, wrapAround: wrapAround_})
+            setScreenSize(rows_, columns_)
+            wrapAround = wrapAround_
         },
         setShortcut: (c, buf) => {
             log('setShortcut', {c, buf})

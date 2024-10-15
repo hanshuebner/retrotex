@@ -235,6 +235,51 @@ const decode = async (interpreter, next, putback, error) => {
     }
   }
 
+  const readFormatVpde = async () => {
+    let rows
+    let columns
+    let accumulator = 0
+    let wraparound = true
+    let more = true
+    while (more) {
+      const c = await next()
+      switch (c & 0xf0) {
+        case 0x40:
+          switch (c) {
+            case 0x41: columns = 40; rows = 24; break
+            case 0x42: columns = 40; rows = 20; break
+            case 0x43: columns = 80; rows = 24; break
+            case 0x44: columns = 80; rows = 20; break
+            case 0x45: columns = 48; rows = 20; break
+            case 0x46: columns = 40; rows = 25; break
+            default:
+              error('unknown screen format code in vpde')
+              return
+          }
+          break
+        case 0x30:
+          if (c === 0x3B) {
+            if (rows === undefined) {
+              rows = accumulator
+            } else {
+              columns = accumulator
+            }
+            accumulator = undefined
+          } else {
+            accumulator = accumulator * 10 + (c & 0x0f)
+          }
+          break
+        case 0x70:
+          wraparound = c === 0x70
+          break
+        default:
+          putback(c)
+          more = false
+      }
+    }
+    interpreter.setScreenFormat(rows || 40, columns || 24, wraparound)
+  }
+
   const us = async () => {
     const c = await next()
     switch (c) {
@@ -245,7 +290,7 @@ const decode = async (interpreter, next, putback, error) => {
         await handleColors()
         break
       case 0x2d:
-        interpreter.setResolutionTo40x24()
+        await readFormatVpde()
         break
       case 0x2f:
         switch (await next()) {
