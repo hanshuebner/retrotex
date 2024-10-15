@@ -367,7 +367,7 @@ const decode = async (interpreter, next, putback, error) => {
       interpreter.hideCursor(true)
       break
     case 0x18:
-      interpreter.clearLine()
+      interpreter.clearToEndOfLine()
       break
     case 0x19:
       interpreter.switchCharsetForOneCharacter(2)

@@ -1,4 +1,22 @@
-export default (log) => {
+export default (log, display) => {
+    let currentRow = 0
+    let currentColumn = 0
+    const rows = 25
+    const columns = 40
+    const chars = new Array(rows).fill().map(() => new Uint8Array(columns));
+    const attrs = new Array(rows).fill().map(() => new Uint8Array(columns));
+    const wrapAround = true
+
+    const redraw = () => {
+        for (let row = 0; row < rows; row++) {
+            for (let column = 0; column < columns; column++) {
+                display.drawString(chars[row][column] || ' ', row, column, display.fontG0, 0xfff, 0x000)
+            }
+        }
+    }
+
+    setInterval(redraw, 250)
+
     return {
         blink: (enabled) => {
             log('blink', {enabled})
@@ -15,29 +33,53 @@ export default (log) => {
         clearDrcsSet: (startCharCode, resolutionCode, colorDepthCode) => {
             log('clearDrcsSet', {startCharCode, resolutionCode, colorDepthCode})
         },
-        clearLine: () => {
-            log('clearLine')
+        clearToEndOfLine: () => {
+            log('clearToEndOfLine')
+            for (let column = currentColumn; column < columns; column++) {
+                chars[currentRow][column] = 0x20;
+            }
         },
         clearScreen: () => {
             log('clearScreen')
+            for (let row = 0; row < rows; row++) {
+                for (let column = 0; column < columns; column++) {
+                    chars[row][column] = 0x20;
+                    attrs[row][column] = 0x00;
+                }
+            }
         },
         cursorDown: () => {
             log('cursorDown')
+            if (currentRow + 1 < rows) {
+                currentRow += 1
+            }
         },
         cursorHome: () => {
             log('cursorHome')
+            currentRow = 0
+            currentColumn = 0
         },
         cursorLeft: () => {
             log('cursorLeft')
+            if (currentColumn > 1) {
+                currentColumn -= 1
+            }
         },
         cursorRight: () => {
             log('cursorRight')
+            if (currentColumn + 1 < columns) {
+                currentColumn += 1
+            }
         },
         cursorToBeginningOfLine: () => {
             log('cursorToBeginningOfLine')
+            currentColumn = 0
         },
         cursorUp: () => {
             log('cursorUp')
+            if (currentRow > 1) {
+                currentRow -= 1
+            }
         },
         defineColor: (index, r, g, b) => {
             log('defineColor', {index, r, g, b})
@@ -96,6 +138,17 @@ export default (log) => {
             } else {
                 log(`putChar 0x${charCode.toString(16).padStart(2, '0')}`)
             }
+            chars[currentRow][currentColumn] = charCode
+            if (currentColumn + 1 < columns) {
+                currentColumn += 1
+            } else if (wrapAround) {
+                currentColumn = 0
+                if (currentRow + 1 < rows) {
+                    currentRow += 1
+                } else {
+                    currentRow = 0
+                }
+            }
         },
         repeatLastPrintedCharacter: (count) => {
             log('repeatLastPrintedCharacter', {count})
@@ -127,8 +180,14 @@ export default (log) => {
         setColorDefinitionHeader: (colorDefinitionHeader) => {
             log('setColorDefinitionHeader', colorDefinitionHeader)
         },
-        setCursor: (row, col) => {
-            log('setCursor', {row, col})
+        setCursor: (row, column) => {
+            log('setCursor', {row, col: column})
+            if (row > 0 && row < rows && column > 0 && column < cols) {
+                currentRow = row
+                currentColumn = column
+            } else {
+                log(`new cursor position ${row}/${column} out of range`)
+            }
         },
         setFgColor: (color) => {
             log('setFgColor', {color})
