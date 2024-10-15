@@ -13,7 +13,7 @@ export default (log, display) => {
         rows = rows_
         columns = columns_
         chars = new Array(rows).fill().map(() => new Uint8Array(columns));
-        attrs = new Array(rows).fill().map(() => new Uint8Array(columns));
+        attrs = new Array(rows).fill().map(() => new Array(columns).map);
     }
 
     const colors = [
@@ -28,6 +28,22 @@ export default (log, display) => {
 
     setScreenSize(24, 40)
     let wrapAround = true
+    let mode = 'serial'
+    const defaultAttributes = {
+        screenBackgroundColor: 0,
+        displayBackgroundColor: 8,
+        foregroundColor: 7,
+        doubleWidth: false,
+        doubleHeight: false,
+        boxed: false,
+        concealed: false,
+        blink: undefined,
+        lined: false,
+        inverted: false,
+        protected: false,
+        marked: false,
+    }
+    let parallelModeAttributes = {}
 
     const redraw = () => {
         for (let row = 0; row < rows; row++) {
@@ -67,6 +83,18 @@ export default (log, display) => {
         }
     }
 
+    const clearScreen = (clearAttributes) => {
+        log('clearScreen')
+        for (let row = 0; row < rows; row++) {
+            for (let column = 0; column < columns; column++) {
+                chars[row][column] = 0x20;
+                if (clearAttributes) {
+                    attrs[row][column] = 0x00;
+                }
+            }
+        }
+    }
+
     return {
         blink: (enabled) => {
             log('blink', {enabled})
@@ -89,15 +117,7 @@ export default (log, display) => {
                 chars[currentRow][column] = 0x20;
             }
         },
-        clearScreen: () => {
-            log('clearScreen')
-            for (let row = 0; row < rows; row++) {
-                for (let column = 0; column < columns; column++) {
-                    chars[row][column] = 0x20;
-                    attrs[row][column] = 0x00;
-                }
-            }
-        },
+        clearScreen,
         cursorDown: () => {
             log('cursorDown')
             if (currentRow + 1 < rows) {
@@ -109,16 +129,30 @@ export default (log, display) => {
             currentRow = 0
             currentColumn = 0
         },
-        cursorLeft: () => {
+        cursorBack: () => {
             log('cursorLeft')
             if (currentColumn > 1) {
                 currentColumn -= 1
+            } else {
+                currentColumn = columns - 1
+                if (currentRow > 0) {
+                    currentRow -= 1
+                } else {
+                    currentRow = rows - 1
+                }
             }
         },
-        cursorRight: () => {
+        cursorForward: () => {
             log('cursorRight')
             if (currentColumn + 1 < columns) {
                 currentColumn += 1
+            } else {
+                currentColumn = 0
+                if (currentRow + 1 < rows) {
+                    currentRow += 1
+                } else {
+                    currentRow = 0
+                }
             }
         },
         cursorToBeginningOfLine: () => {
@@ -171,11 +205,14 @@ export default (log, display) => {
         mosaicOrTransparent: () => {
             log('mosaicOrTransparent')
         },
-        resetMode: (parallel, limited) => {
-            log('resetMode', {parallel, limited})
+        reset: (parallel, limited) => {
+            log('reset', {parallel, limited})
+            mode = parallel ? 'parallel' : 'serial'
+            setScreenSize(24, 40)
         },
         parallelMode: () => {
             log('parallelMode')
+            mode = 'parallel'
         },
         polarity: (inverted_) => {
             log('polarity', {inverted: inverted_})
@@ -202,6 +239,7 @@ export default (log, display) => {
         },
         serialMode: () => {
             log('serialMode')
+            mode = 'serial'
         },
         serviceBreakBack: () => {
             log('serviceBreakBack')

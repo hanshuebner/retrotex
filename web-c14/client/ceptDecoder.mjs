@@ -301,16 +301,16 @@ const decode = async (interpreter, next, putback, error) => {
             interpreter.serviceBreakBack()
             break
           case 0x41:
-            interpreter.resetMode(false, false)
+            interpreter.reset(false, false)
             break
           case 0x42:
-            interpreter.resetMode(true, false)
+            interpreter.reset(true, false)
             break
           case 0x43:
-            interpreter.resetMode(false, true)
+            interpreter.reset(false, true)
             break
           case 0x44:
-            interpreter.resetMode(true, true)
+            interpreter.reset(true, true)
             break
           default:
             error()
@@ -379,10 +379,10 @@ const decode = async (interpreter, next, putback, error) => {
   const c = await next()
   switch (c) {
     case 0x08:
-      interpreter.cursorLeft()
+      interpreter.cursorBack()
       break
     case 0x09:
-      interpreter.cursorRight()
+      interpreter.cursorForward()
       break
     case 0x0a:
       interpreter.cursorDown()
