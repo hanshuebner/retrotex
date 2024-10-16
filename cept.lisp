@@ -35,7 +35,10 @@
            #:row-background-color
            #:color-polarity
            #:foreground-color
-           #:background-color))
+           #:background-color
+           #:left-charset
+           #:right-charset
+           #:select-charset))
 
 (in-package :cept)
 
@@ -148,6 +151,28 @@
 
 (defun select-palette (i)
   (write-cept #x9B (+ #x30 i) #x40))
+
+(defun left-charset (set)
+  (apply 'write-cept (ecase set
+                       (0 '(#x0f))
+                       (1 '(#x0e))
+                       (2 '(#x1b #x6e))
+                       (3 '(#x1b #x6f)))))
+
+(defun right-charset (set)
+  (apply 'write-cept (ecase set
+                       (1 '(#x1b #x7e))
+                       (2 '(#x1b #x7d))
+                       (3 '(#x1b #x7c)))))
+
+(defun select-charset (target-set what)
+  (write-cept #x1b (+ #x28 target-set)
+              (ecase what
+                (:g0 #x40)
+                (:g1 #x63)
+                (:g2 #x62)
+                (:g3 #x64)
+                (:drcs '(#x20 #x40)))))
 
 (defun constant-input ()
   (write-cept 1 #x49))
@@ -295,3 +320,14 @@
         when (not (gethash c conversion-table))
           do (setf (gethash c conversion-table) (list (char-code c)))
         append (gethash c conversion-table)))
+
+(defun dump-printable-chars (left right)
+  (left-charset left)
+  (right-charset right)
+  (goto 0 0)
+  (clear-page)
+  (write-cept "....5....0....5....0....5....0.." #\return #\linefeed)
+  (dolist (base '(#x20 #x40 #x60 #xa0 #xc0 #xe0))
+    (dotimes (i 32)
+      (write-cept (+ base i)))
+    (write-cept #\return #\linefeed)))

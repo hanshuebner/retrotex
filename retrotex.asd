@@ -6,6 +6,8 @@
   :serial t
   :depends-on ("alexandria"
                "bordeaux-threads"
+               "hunchensocket"
+               "hunchentoot"
                "cserial-port"
                "cl-gd"
                "cl-interpol"

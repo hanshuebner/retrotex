@@ -469,10 +469,10 @@ const decode = async (interpreter, next, putback, error) => {
       interpreter.underline(true)
       break
     case 0x9c:
-      interpreter.polarity(0)
+      interpreter.polarity(0) // todo: serial mode
       break
     case 0x9d:
-      interpreter.polarity(1)
+      interpreter.polarity(1) // todo: serial mode
       break
     case 0x9e:
       interpreter.mosaicOrTransparent()

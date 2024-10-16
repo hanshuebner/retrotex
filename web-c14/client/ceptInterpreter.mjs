@@ -4,6 +4,8 @@ export default (log, display) => {
     let rows
     let columns
 
+    let currentFont = display.fontG0
+
     let chars
     let attrs
 
@@ -22,9 +24,6 @@ export default (log, display) => {
         0x000, 0xf00, 0x0f0, 0xff0, 0x00f, 0xf0f, 0x0ff, 0xfff,
         0x000, 0xf00, 0x0f0, 0xff0, 0x00f, 0xf0f, 0x0ff, 0xfff,
     ]
-    let fgColor = 7
-    let bgColor = 0
-    let inverted = false
 
     setScreenSize(24, 40)
     let wrapAround = true
@@ -43,7 +42,8 @@ export default (log, display) => {
         protected: false,
         marked: false,
     }
-    let parallelModeAttributes = {}
+    let parallelModeAttributes = { ...defaultAttributes }
+    let serialModeAttributes = { ...defaultAttributes }
 
     const redraw = () => {
         for (let row = 0; row < rows; row++) {
@@ -51,7 +51,7 @@ export default (log, display) => {
                 display.drawGlyph(
                     chars[row][column] || 32,
                     row, column,
-                    display.fontG0,
+                    currentFont,
                     colors[inverted ? bgColor : fgColor], colors[inverted ? fgColor : bgColor])
             }
         }
@@ -216,7 +216,7 @@ export default (log, display) => {
         },
         polarity: (inverted_) => {
             log('polarity', {inverted: inverted_})
-            inverted = inverted_
+            ((mode === 'serial') ? serialModeAttributes : parallelModeAttributes).polarity = inverted_
         },
         protectLine: () => {
             log('protectLine')
@@ -267,7 +267,7 @@ export default (log, display) => {
         },
         setFgColor: (color) => {
             log('setFgColor', {color})
-            fgColor = color
+            ((mode === 'serial') ? serialModeAttributes : parallelModeAttributes).foregroundColor = color
         },
         setFgColorOfRow: (color) => {
             log('setFgColorOfRow', {color})
