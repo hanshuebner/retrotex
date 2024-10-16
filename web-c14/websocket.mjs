@@ -28,7 +28,9 @@ const makeWebsocket = () => {
     };
 
     const socketUrl = `ws://${window.location.host}/cept/ws`;
+    console.log(`opening websocket at ${socketUrl}`)
     const socket = new WebSocket(socketUrl);
+    console.log('websocket opened', socket)
 
     socket.onmessage = async (event) => {
         const reader = new FileReader();

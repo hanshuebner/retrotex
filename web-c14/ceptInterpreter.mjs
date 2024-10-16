@@ -52,7 +52,7 @@ export default (log, display) => {
                     chars[row][column] || 32,
                     row, column,
                     currentFont,
-                    colors[inverted ? bgColor : fgColor], colors[inverted ? fgColor : bgColor])
+                    0, 7)
             }
         }
         display.render()

@@ -13,7 +13,10 @@
                "cl-interpol"
                "cl-ppcre"
                "flexi-streams"
+               "trivial-gray-streams"
+               "queues.simple-cqueue"
                "usocket")
   :components ((:file "cept")
                (:file "retrotex")
-               (:file "drcs")))
+               (:file "drcs")
+               (:file "webserver")))
