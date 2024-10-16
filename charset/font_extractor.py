@@ -23,8 +23,8 @@ base_cell_height = 138
 
 cell_width = base_cell_width
 cell_height = base_cell_height
-origin_x = 342
-origin_y = 126
+origin_x = 438
+origin_y = 341
 
 # Define reasonable maximum values for the trackbars, ensuring they are at least 1
 max_width = 200
@@ -41,11 +41,11 @@ def draw_grid(img, cell_w, cell_h, orig_x, orig_y):
     h, w = img.shape
 
     # Draw vertical lines
-    for x in np.arange(orig_x, orig_x + cell_w * 21, cell_w):
+    for x in np.arange(orig_x, orig_x + cell_w * 17, cell_w):
         cv2.line(img_with_grid, (round(x), 0), (round(x), h), (255, 0, 0), 1)
 
     # Draw horizontal lines
-    for y in np.arange(orig_y, orig_y + cell_h * 6, cell_h):
+    for y in np.arange(orig_y, orig_y + cell_h * 7, cell_h):
         cv2.line(img_with_grid, (0, round(y)), (w, round(y)), (255, 0, 0), 1)
 
     return img_with_grid
@@ -73,11 +73,12 @@ cv2.namedWindow('Grid Editor')
 
 # Create trackbars for grid parameters with reasonable ranges
 cv2.createTrackbar('Cell Width', 'Grid Editor', cell_width, max_width, update_grid)
-cv2.setTrackbarPos('Cell Width', 'Grid Editor', 9)
+cv2.setTrackbarPos('Cell Width', 'Grid Editor', 11)
 cv2.createTrackbar('Cell Height', 'Grid Editor', cell_height, max_height, update_grid)
 cv2.setTrackbarPos('Cell Height', 'Grid Editor', 42)
 cv2.createTrackbar('Origin X', 'Grid Editor', origin_x, max_origin_x, update_grid)
 cv2.createTrackbar('Origin Y', 'Grid Editor', origin_y, max_origin_y, update_grid)
+initialized = True
 
 # Manually call update_grid once to initialize the display
 update_grid(0)
@@ -93,8 +94,8 @@ cv2.destroyAllWindows()
 def slice_image(img, cell_w, cell_h, orig_x, orig_y):
     characters = []
 
-    for y in np.arange(orig_y, orig_y + cell_h * 5, cell_h):
-        for x in np.arange(orig_x, orig_x + cell_w * 20, cell_w):
+    for y in np.arange(orig_y, orig_y + cell_h * 6, cell_h):
+        for x in np.arange(orig_x, orig_x + cell_w * 16, cell_w):
             char_img = img[y:y+cell_h, x:x+cell_w]
             characters.append(char_img)
 
