@@ -104,10 +104,12 @@ def slice_image(img, cell_w, cell_h, orig_x, orig_y):
 # Slice the image based on the final grid settings
 characters = slice_image(image, round(cell_width), round(cell_height), origin_x, origin_y)
 
-output_dir = 'input'
+output_dir = os.path.splitext(image_path)[0]
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
 
 # Save the individual characters as separate images
 for idx, char_img in enumerate(characters):
     cv2.imwrite(f'{output_dir}/character_{idx}.png', char_img)
+
+print(f'wrote images to {output_dir}')

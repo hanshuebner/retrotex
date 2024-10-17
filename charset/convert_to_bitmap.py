@@ -93,7 +93,9 @@ def process_images(image_paths, output_dir, pixel_width=8, pixel_height=14, enla
         enlarged_composite_img.save(output_path)
         print(f"Processed {image_path} -> {output_path}")
 
-    font_image.save('bitmap.png')
+    output_font_file=f'{output_dir}.png'
+    font_image.save(output_font_file)
+    print(f"Created output font file {output_font_file}")
 
 def main():
     # Set up argument parser
