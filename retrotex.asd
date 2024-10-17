@@ -17,6 +17,6 @@
                "queues.simple-cqueue"
                "usocket")
   :components ((:file "cept")
-               (:file "retrotex")
+               (:file "webserver")
                (:file "drcs")
-               (:file "webserver")))
+               (:file "retrotex")))

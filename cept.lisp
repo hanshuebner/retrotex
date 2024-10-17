@@ -38,7 +38,8 @@
            #:background-color
            #:left-charset
            #:right-charset
-           #:select-charset))
+           #:select-charset
+           #:dump-printable-chars))
 
 (in-package :cept)
 

@@ -1,9 +1,17 @@
 ;; -*- Lisp -*-
 
 (defpackage :webserver
-  (:use :cl :alexandria))
+  (:use :cl :alexandria)
+  (:export
+   #:start
+   #:*client-init-hook*))
 
 (in-package :webserver)
+
+(defvar *client-init-hook*
+  (lambda ()
+    (cept:reset-page)
+    (cept:dump-printable-chars 0 1)))
 
 (defclass binary-websocket-stream (trivial-gray-streams:fundamental-binary-input-stream
                                    trivial-gray-streams:fundamental-binary-output-stream
@@ -12,7 +20,9 @@
 
 (defmethod initialize-instance :after ((stream binary-websocket-stream) &key)
   (format t "; setting *cept-stream* to ~A~%" stream)
-  (setf cept:*cept-stream* stream))
+  (setf cept:*cept-stream* stream)
+  (when *client-init-hook*
+    (funcall *client-init-hook*)))
 
 (defmethod hunchensocket:binary-message-received (resource (stream binary-websocket-stream) data)
   (loop for byte across data

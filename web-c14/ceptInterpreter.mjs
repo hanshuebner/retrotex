@@ -52,7 +52,7 @@ export default (log, display) => {
                     chars[row][column] || 32,
                     row, column,
                     currentFont,
-                    0, 7)
+                    0xfff, 0x000)
             }
         }
         display.render()
