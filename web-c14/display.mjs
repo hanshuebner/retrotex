@@ -9,17 +9,18 @@ export default async (canvas) => {
     const drawString = (str, row, col, fontData, fgColor, bgColor, doubleWidth = false, doubleHeight = false) => {
         console.assert(col + str.length < 40)
         for (let i = 0; i < str.length; i++) {
-            drawGlyph(str.charCodeAt(i), row, col + i, fontData, fgColor, bgColor, doubleWidth, doubleHeight)
+            drawGlyph(str.charCodeAt(i) - 32, row, col + i, fontData, fgColor, bgColor, doubleWidth, doubleHeight)
         }
     }
 
     // Text rendering
-    const drawGlyph = (charCode, row, col, fontData, fgColor, bgColor, doubleWidth = false, doubleHeight = false) => {
+    const drawGlyph = (glyphIndex, row, col, fontData, fgColor, bgColor, doubleWidth = false, doubleHeight = false) => {
+        console.assert(0 <= glyphIndex && glyphIndex <= 96, `invalid glyph index ${glyphIndex}`)
+
         const glyphWidth = 12
         const glyphHeight = 10
         const glyphsPerFontRow = 16 // 96 glyphs in a 16x6 grid
 
-        const glyphIndex = charCode - 0x20
         const glyphX = (glyphIndex % glyphsPerFontRow) * glyphWidth
         const glyphY = Math.floor(glyphIndex / glyphsPerFontRow) * glyphHeight
 
@@ -52,6 +53,7 @@ export default async (canvas) => {
     }
 
     const loadFontData = async url => {
+        console.log(`loading font ${url}`)
         const response = await fetch(url)
         const blob = await response.blob()
         const img = await createImageBitmap(blob)
@@ -146,12 +148,17 @@ export default async (canvas) => {
         }
     }
 
-    const fontG0 = await loadFontData('font-g0.png')
-    const fontG1 = await loadFontData('font-g1.png')
+    const fonts = [
+        await loadFontData('font-g0.png'),
+        await loadFontData('font-g1.png'),
+        await loadFontData('font-g2.png'),
+        await loadFontData('font-g3.png'),
+    ]
+    const fontDiacritical = await loadFontData('font-diacritical.png')
 
     return {
-        fontG0,
-        fontG1,
+        fonts,
+        fontDiacritical,
         drawString,
         drawGlyph,
         render,

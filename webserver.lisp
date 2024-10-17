@@ -10,7 +10,6 @@
 
 (defvar *client-init-hook*
   (lambda ()
-    (cept:reset-page)
     (cept:dump-printable-chars 0 1)))
 
 (defclass binary-websocket-stream (trivial-gray-streams:fundamental-binary-input-stream

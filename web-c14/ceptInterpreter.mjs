@@ -4,7 +4,8 @@ export default (log, display) => {
     let rows
     let columns
 
-    let currentFont = display.fontG0
+    let currentLeftFont = 0
+    let currentRightFont = 1
 
     let chars
     let attrs
@@ -48,10 +49,14 @@ export default (log, display) => {
     const redraw = () => {
         for (let row = 0; row < rows; row++) {
             for (let column = 0; column < columns; column++) {
+                const char = chars[row][column]
+                const glyphIndex = char ? ((char & 0x7f) - 0x20) : 0
+                const font = (char >= 0x80) ? display.fonts[currentRightFont] : display.fonts[currentLeftFont]
+                console.assert(font)
                 display.drawGlyph(
-                    chars[row][column] || 32,
+                    glyphIndex,
                     row, column,
-                    currentFont,
+                    font,
                     0xfff, 0x000)
             }
         }
@@ -192,9 +197,11 @@ export default (log, display) => {
         },
         intoLeftCharset: (charset) => {
             log('intoLeftCharset', {charset})
+            currentLeftFont = charset
         },
         intoRightCharset: (charset) => {
             log('intoRightCharset', {charset})
+            currentRightFont = charset
         },
         invertBlinking: () => {
             log('invertBlinking')
