@@ -1,11 +1,10 @@
 {
-  "name": "cept-loader",
+  "name": "web-c14",
   "version": "1.0.0",
-  "description": "A script to load and decode CEPT files",
-  "main": "loadCeptFile.js",
-  "scripts": {
-    "start": "node loadCeptFile.js"
-  },
-  "dependencies": {},
-  "type": "module"
+  "description": "A Bildschirmtext (CEPT) decoder",
+  "scripts": {},
+  "type": "module",
+  "devDependencies": {
+    "esbuild": "0.24.0"
+  }
 }

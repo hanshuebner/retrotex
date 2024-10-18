@@ -1,21 +1,94 @@
-export default (log, display) => {
+import {Display} from "./display";
+
+export type CeptInterpreter = {
+    blink: (enabled: boolean) => void;
+    blinkPalettes: () => void;
+    blinkingShiftLeft: () => void;
+    blinkingShiftRight: () => void;
+    clearDrcsSet: (startCharCode: number, resolutionCode: number, colorDepthCode: number) => void;
+    clearToEndOfLine: () => void;
+    clearScreen: (clearAttributes: boolean) => void;
+    cursorDown: () => void;
+    cursorHome: () => void;
+    cursorBack: () => void;
+    cursorForward: () => void;
+    cursorToBeginningOfLine: () => void;
+    cursorUp: () => void;
+    defineColor: (index: number, r: number, g: number, b: number) => void;
+    doubleSize: (width: boolean, height: boolean) => void;
+    drcsDefinitionBlocks: (blocks: number[][]) => void;
+    endOfPage: () => void;
+    endSelection: () => void;
+    fastBlinking: (phase0: boolean, phase1: boolean, phase2: boolean) => void;
+    hide: () => void;
+    hideCursor: (hidden: boolean) => void;
+    intoLeftCharset: (charset: number) => void;
+    intoRightCharset: (charset: number) => void;
+    invertBlinking: () => void;
+    loadCharset: (intoCharset: number, loadCharset: number) => void;
+    mosaicOrTransparent: () => void;
+    reset: (parallel: boolean, limited: boolean) => void;
+    parallelMode: () => void;
+    polarity: (inverted: boolean) => void;
+    protectLine: () => void;
+    putChar: (charCode: number) => void;
+    repeatLastPrintedCharacter: (count: number) => void;
+    resetColorDefinitions: () => void;
+    resetShortcuts: () => void;
+    selectPalette: (palette: number) => void;
+    sendShortcut: (shortcut: number, suppressClearScreen: boolean) => void;
+    serialMode: () => void;
+    serviceBreakBack: () => void;
+    serviceBreakToRow: (row: number) => void;
+    setBgColorOfRow: (color: number) => void;
+    setBgColorOfScreen: (color: number) => void;
+    setColorDefinitionHeader: (colorDefinitionHeader: any) => void;
+    setCursor: (row: number, column: number) => void;
+    setFgColor: (color: number) => void;
+    setFgColorOfRow: (color: number) => void;
+    setFgColorOfScreen: (color: number) => void;
+    setScreenFormat: (columns: number, rows: number, wrapAround: boolean) => void;
+    setShortcut: (c: number, buf: number[]) => void;
+    startDrcsSet: (startCharCode: number, resolutionCode: number, colorDepthCode: number) => void;
+    startSelection: () => void;
+    switchCharsetForOneCharacter: (charset: number) => void;
+    transparency: (enabled: boolean) => void;
+    underline: (enabled: boolean) => void;
+    unprotectLine: () => void;
+    setBgColor: (color: number) => void;
+};
+
+export default (log: (...data: any) => void, display: Display): CeptInterpreter => {
     let currentRow = 0
     let currentColumn = 0
-    let rows
-    let columns
+    let rows: number
+    let columns: number
 
     let currentLeftFont = 0
     let currentRightFont = 1
 
-    let glyphs
-    let attrs
-    let rowColors
-    let screenColor
+    interface Attributes {
+        font: Uint8Array
+        backgroundColor?: number
+        foregroundColor?: number
+        doubleWidth: boolean
+        doubleHeight: boolean
+        boxed: boolean
+        concealed: boolean
+        blink?: boolean
+        lined: boolean
+        inverted: boolean
+        protected: boolean
+        marked: boolean
+    }
 
-    const defaultAttributes = {
+    let glyphs: Uint8Array[]
+    let attrs: Attributes[][]
+    let rowColors: number[]
+    let screenColor: number = 0
+
+    const defaultAttributes: Attributes = {
         font: display.fonts[0],
-        backgroundColor: undefined,
-        foregroundColor: undefined,
         doubleWidth: false,
         doubleHeight: false,
         boxed: false,
@@ -27,16 +100,16 @@ export default (log, display) => {
         marked: false,
     }
 
-    const setScreenSize = (rows_, columns_) => {
+    const setScreenSize = (rows_: number, columns_: number) => {
         currentRow = 0
         currentColumn = 0
         rows = rows_
         columns = columns_
-        glyphs = new Array(rows).fill().map(() => new Uint8Array(columns));
-        attrs = new Array(rows).fill().map(() => new Array(columns).fill().map(_ => {
+        glyphs = new Array(rows).fill(undefined).map(() => new Uint8Array(columns));
+        attrs = new Array(rows).fill(undefined).map(() => new Array(columns).fill(undefined).map(_ => {
             return {...defaultAttributes}
         }))
-        rowColors = new Array(rows).fill()
+        rowColors = new Array(rows).fill(undefined)
         screenColor = 0
     }
 
@@ -48,13 +121,13 @@ export default (log, display) => {
     ]
 
     setScreenSize(24, 40)
-    let wrapAround = true
-    let mode = 'serial'
+    let currentWrapAround = true
+    let currentMode: 'serial' | 'parallel' = 'serial'
     let currentAttributes = {...defaultAttributes}
 
-    const getFgColor = (row, column) => {
+    const getFgColor = (row: number, column: number): number => {
         if (attrs[row][column].foregroundColor !== undefined) {
-            return attrs[row][column].foregroundColor
+            return attrs[row][column].foregroundColor as number
         } else if (currentAttributes.foregroundColor !== undefined) {
             return currentAttributes.foregroundColor
         } else {
@@ -62,9 +135,9 @@ export default (log, display) => {
         }
     }
 
-    const getBgColor = (row, column) => {
+    const getBgColor = (row: number, column: number): number => {
         if (attrs[row][column].backgroundColor !== undefined) {
-            return attrs[row][column].backgroundColor
+            return attrs[row][column].backgroundColor as number
         } else if (rowColors[row] !== undefined) {
             return rowColors[row]
         } else {
@@ -93,7 +166,7 @@ export default (log, display) => {
     setInterval(redraw, 250)
 
     let lastCharCode = 0
-    const putChar = (charCode) => {
+    const putChar = (charCode: number) => {
         if (charCode < 0x80) {
             log(`putChar '${String.fromCharCode(charCode)}'`)
         } else {
@@ -106,7 +179,7 @@ export default (log, display) => {
         if (charCode < 0xc0 || charCode > 0xcf) { // diacritical marks
             if (currentColumn + 1 < columns) {
                 currentColumn += 1
-            } else if (wrapAround) {
+            } else if (currentWrapAround) {
                 currentColumn = 0
                 if (currentRow + 1 < rows) {
                     currentRow += 1
@@ -117,7 +190,7 @@ export default (log, display) => {
         }
     }
 
-    const clearScreen = (clearAttributes) => {
+    const clearScreen = (clearAttributes: boolean) => {
         log('clearScreen')
         for (let row = 0; row < rows; row++) {
             for (let column = 0; column < columns; column++) {
@@ -130,7 +203,7 @@ export default (log, display) => {
     }
 
     return {
-        blink: (enabled) => {
+        blink: (enabled: boolean) => {
             log('blink', {enabled})
         },
         blinkPalettes: () => {
@@ -142,7 +215,7 @@ export default (log, display) => {
         blinkingShiftRight: () => {
             log('blinkingShiftRight')
         },
-        clearDrcsSet: (startCharCode, resolutionCode, colorDepthCode) => {
+        clearDrcsSet: (startCharCode: number, resolutionCode: number, colorDepthCode: number) => {
             log('clearDrcsSet', {startCharCode, resolutionCode, colorDepthCode})
         },
         clearToEndOfLine: () => {
@@ -199,14 +272,14 @@ export default (log, display) => {
                 currentRow -= 1
             }
         },
-        defineColor: (index, r, g, b) => {
+        defineColor: (index: number, r: number, g: number, b: number) => {
             log('defineColor', {index, r, g, b})
             colors[index] = (b << 8) | (g << 4) | r
         },
-        doubleSize: (width, height) => {
+        doubleSize: (width: boolean, height: boolean) => {
             log('doubleSize', {width, height})
         },
-        drcsDefinitionBlocks: (blocks) => {
+        drcsDefinitionBlocks: (blocks: number[][]) => {
             log('drcsDefinitionBlocks', blocks.map(block => block.map(x => x.toString(16).padStart(2, '0')).join(' ')))
         },
         endOfPage: () => {
@@ -215,85 +288,90 @@ export default (log, display) => {
         endSelection: () => {
             log('endSelection')
         },
-        fastBlinking: (phase0, phase1, phase2) => {
+        fastBlinking: (phase0: boolean, phase1: boolean, phase2: boolean) => {
             log('fastBlinking', {phase0, phase1, phase2})
         },
         hide: () => {
             log('hide')
         },
-        hideCursor: (hidden) => {
+        hideCursor: (hidden: boolean) => {
             log('hideCursor', {hidden})
         },
-        intoLeftCharset: (charset) => {
+        intoLeftCharset: (charset: number) => {
             log('intoLeftCharset', {charset})
             currentLeftFont = charset
         },
-        intoRightCharset: (charset) => {
+        intoRightCharset: (charset: number) => {
             log('intoRightCharset', {charset})
             currentRightFont = charset
         },
         invertBlinking: () => {
             log('invertBlinking')
         },
-        loadCharset: (intoCharset, loadCharset) => {
+        loadCharset: (intoCharset: number, loadCharset: number) => {
             log('loadCharset', {intoCharset, loadCharset})
         },
         mosaicOrTransparent: () => {
             log('mosaicOrTransparent')
         },
-        reset: (parallel, limited) => {
+        reset: (parallel: boolean, limited: boolean) => {
             log('reset', {parallel, limited})
-            mode = parallel ? 'parallel' : 'serial'
+            currentMode = parallel ? 'parallel' : 'serial'
         },
         parallelMode: () => {
             log('parallelMode')
-            mode = 'parallel'
+            currentMode = 'parallel'
         },
-        polarity: (inverted_) => {
-            log('polarity', {inverted: inverted_})
-            currentAttributes.polarity = inverted_
+        polarity: (inverted: boolean) => {
+            log('polarity', {inverted})
+            currentAttributes.inverted = inverted
         },
         protectLine: () => {
             log('protectLine')
         },
         putChar,
-        repeatLastPrintedCharacter: (count) => {
+        repeatLastPrintedCharacter: (count: number) => {
             log('repeatLastPrintedCharacter', {count})
             for (let i = 0; i < count; i++) {
                 putChar(lastCharCode)
             }
         },
+        resetColorDefinitions: () => {
+            // fixme missing
+            log('resetColorDefinitions')
+        },
         resetShortcuts: () => {
             log('resetShortcuts')
         },
-        selectPalette: (palette) => {
+        selectPalette: (palette: number) => {
             log('selectPalette', {palette})
         },
-        sendShortcut: (shortcut, suppressClearScreen) => {
+        sendShortcut: (shortcut: number, suppressClearScreen: boolean) => {
             log('sendShortcut', {shortcut}, suppressClearScreen)
         },
         serialMode: () => {
             log('serialMode')
-            mode = 'serial'
+            currentMode = 'serial'
         },
         serviceBreakBack: () => {
             log('serviceBreakBack')
         },
-        serviceBreakToRow: (row) => {
+        serviceBreakToRow: (row: number) => {
             log('serviceBreakToRow', {row})
         },
-        setBgColorOfRow: (color) => {
+        setBgColorOfRow: (color: number) => {
             log('setBgColorOfRow', {color})
             rowColors[currentRow] = color
         },
-        setBgColorOfScreen: (color) => {
+        setBgColorOfScreen: (color: number) => {
             log('setBgColorOfScreen', {color})
             screenColor = color
         },
-        setColorDefinitionHeader: (colorDefinitionHeader) => {
+        setColorDefinitionHeader: (colorDefinitionHeader: any) => {
+            // fixme: any
             log('setColorDefinitionHeader', colorDefinitionHeader)
         },
-        setCursor: (row, column) => {
+        setCursor: (row: number, column: number) => {
             log('setCursor', {row, col: column})
             if (row >= 0 && row < rows && column >= 0 && column < columns) {
                 currentRow = row
@@ -302,43 +380,44 @@ export default (log, display) => {
                 log(`new cursor position ${row}/${column} out of range`)
             }
         },
-        setFgColor: (color) => {
+        setFgColor: (color: number) => {
             log('setFgColor', {color});
             currentAttributes.foregroundColor = color
         },
-        setFgColorOfRow: (color) => {
+        setFgColorOfRow: (color: number) => {
             log('setFgColorOfRow', {color})
         },
-        setFgColorOfScreen: (color) => {
+        setFgColorOfScreen: (color: number) => {
             log('setFgColorOfScreen', {color})
         },
-        setScreenFormat: (columns_, rows_, wrapAround_) => {
-            log('setScreenFormat', {columns: columns_, rows: rows_, wrapAround: wrapAround_})
-            setScreenSize(rows_, columns_)
-            wrapAround = wrapAround_
+        setScreenFormat: (columns: number, rows: number, wrapAround: boolean) => {
+            log('setScreenFormat', {columns, rows, wrapAround})
+            setScreenSize(rows, columns)
+            currentWrapAround = wrapAround
         },
-        setShortcut: (c, buf) => {
+        setShortcut: (c: number, buf: number[]) => {
             log('setShortcut', {c, buf})
         },
-        startDrcsSet: (startCharCode, resolutionCode, colorDepthCode) => {
+        startDrcsSet: (startCharCode: number, resolutionCode: number, colorDepthCode: number) => {
+            // fixme: types
             log('startDrcsSet', {startCharCode, resolutionCode, colorDepthCode})
         },
         startSelection: () => {
             log('startSelection')
         },
-        switchCharsetForOneCharacter: (charset) => {
+        switchCharsetForOneCharacter: (charset: number) => {
             log('switchCharsetForOneCharacter', {charset})
         },
-        transparency: (enabled) => {
+        transparency: (enabled: boolean) => {
             log('transparency', {enabled})
         },
-        underline: (enabled) => {
+        underline: (enabled: boolean) => {
             log('underline', {enabled})
         },
         unprotectLine: () => {
             log('unprotectLine')
         },
-        setBgColor: (color) => {
+        setBgColor: (color: number) => {
             log('setBgColor', {color})
         },
     }

@@ -1,12 +1,25 @@
-export default async (canvas) => {
+export interface Display {
+    fonts: Uint8Array[];
+    fontDiacritical: Uint8Array;
+    drawString: (str: string, row: number, col: number, fontData: Uint8Array, fgColor: number, bgColor: number, doubleWidth?: boolean, doubleHeight?: boolean) => void;
+    drawGlyph: (glyphIndex: number, row: number, col: number, fontData: Uint8Array, fgColor: number, bgColor: number, doubleWidth?: boolean, doubleHeight?: boolean) => void;
+    render: () => void;
+}
+
+export default async (canvas: HTMLCanvasElement): Promise<Display> => {
     const ctx = canvas.getContext('2d')
+    if (!ctx) {
+        throw new Error('Could not get 2d context')
+    }
 
     const screen_pixel_width = 40 * 12
     const screen_pixel_height = 25 * 10
 
     const framebuffer = new Uint16Array(screen_pixel_width * screen_pixel_height)
 
-    const drawString = (str, row, col, fontData, fgColor, bgColor, doubleWidth = false, doubleHeight = false) => {
+    const drawString = (str: string, row: number, col: number, fontData: Uint8Array,
+                        fgColor: number, bgColor: number,
+                        doubleWidth: boolean = false, doubleHeight: boolean = false) => {
         console.assert(col + str.length < 40)
         for (let i = 0; i < str.length; i++) {
             drawGlyph(str.charCodeAt(i) - 32, row, col + i, fontData, fgColor, bgColor, doubleWidth, doubleHeight)
@@ -14,7 +27,8 @@ export default async (canvas) => {
     }
 
     // Text rendering
-    const drawGlyph = (glyphIndex, row, col, fontData, fgColor, bgColor, doubleWidth = false, doubleHeight = false) => {
+    const drawGlyph = (glyphIndex: number, row: number, col: number, fontData: Uint8Array,
+                       fgColor: number, bgColor: number, doubleWidth: boolean = false, doubleHeight: boolean = false) => {
         console.assert(0 <= glyphIndex && glyphIndex <= 96, `invalid glyph index ${glyphIndex}`)
 
         const glyphWidth = 12
@@ -37,10 +51,9 @@ export default async (canvas) => {
         }
     }
 
-    const setPixel = (x, y, color, doubleWidth, doubleHeight) => {
+    const setPixel = (x: number, y: number, color: number, doubleWidth: boolean, doubleHeight: boolean) => {
         if (x < 0 || x >= screen_pixel_width || y < 0 || y >= screen_pixel_height) return
 
-        const [r, g, b] = color12to24(color)
         const index = y * screen_pixel_width + x
         framebuffer[index] = color
 
@@ -52,7 +65,7 @@ export default async (canvas) => {
         }
     }
 
-    const loadFontData = async url => {
+    const loadFontData = async (url: string) => {
         console.log(`loading font ${url}`)
         const response = await fetch(url)
         const blob = await response.blob()
@@ -61,7 +74,6 @@ export default async (canvas) => {
         const canvas = document.createElement('canvas')
         canvas.width = img.width
         canvas.height = img.height
-        const ctx = canvas.getContext('2d')
         ctx.drawImage(img, 0, 0)
 
         const imageData = ctx.getImageData(0, 0, img.width, img.height)
@@ -72,19 +84,19 @@ export default async (canvas) => {
                 const index = (y * img.width + x) * 4
                 const bitIndex = y * img.width + x
 
-                bitmap[bitIndex] = imageData.data[index] > 128
+                bitmap[bitIndex] = imageData.data[index] > 128 ? 1 : 0
             }
         }
 
         return bitmap
     }
 
-// Create an ImageData object for rendering
+    // Create an ImageData object for rendering
     const imageData = ctx.createImageData(screen_pixel_width, screen_pixel_height)
     const data = imageData.data
 
     // Convert a 12-bit color to a 24-bit RGB color
-    function color12to24(color) {
+    const color12to24 = (color: number) => {
         const r = ((color >> 8) & 0xf) * 17 // Scale from 0-15 to 0-255
         const g = ((color >> 4) & 0xf) * 17
         const b = (color & 0xf) * 17

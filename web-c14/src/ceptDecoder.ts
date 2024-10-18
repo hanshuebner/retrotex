@@ -1,4 +1,6 @@
-const decode = async (interpreter, next, putback, error) => {
+import {CeptInterpreter} from "./ceptInterpreter";
+
+const decode = async (interpreter: CeptInterpreter, next: () => Promise<number>, putback: (code: number) => void, error: (...args: any) => void) => {
   const esc = async () => {
     const c = await next()
     switch (c) {
@@ -113,7 +115,7 @@ const decode = async (interpreter, next, putback, error) => {
         interpreter.startDrcsSet(startCharCode, resolutionCode, colorDepthCode)
       }
     } else if (startCharCode > 0x20 && startCharCode < 0x7f) {
-      let drcsBlock = []
+      let drcsBlock: number[] = []
       const drcsBlocks = [drcsBlock]
       while (true) {
         const c = await next()
@@ -136,7 +138,7 @@ const decode = async (interpreter, next, putback, error) => {
     }
   }
 
-  const readDefaulting = async (defaults) => {
+  const readDefaulting = async (defaults: number[]) => {
     const result = [...defaults]
     for (let i = 0; i < defaults.length; i++) {
       const c = await next()
@@ -162,7 +164,14 @@ const decode = async (interpreter, next, putback, error) => {
     }
   }
 
-  const decodeColorDefinitionHeader = (header) => {
+  type ColorTableDefinitionHeader = {
+    tableType: number
+    tableNumber: number
+    bitsPerUnit: number
+    rgb: boolean
+  }
+
+  const decodeColorDefinitionHeader = (header: number[]): ColorTableDefinitionHeader => {
     const [tableType, tableNumber, unitResolution, codingMethod] = header
     return {
       tableType: tableType & 0x0f,
@@ -264,7 +273,7 @@ const decode = async (interpreter, next, putback, error) => {
             } else {
               columns = accumulator
             }
-            accumulator = undefined
+            accumulator = 0
           } else {
             accumulator = accumulator * 10 + (c & 0x0f)
           }
@@ -391,7 +400,7 @@ const decode = async (interpreter, next, putback, error) => {
       interpreter.cursorUp()
       break
     case 0x0c:
-      interpreter.clearScreen()
+      interpreter.clearScreen(true)
       break
     case 0x0d:
       interpreter.cursorToBeginningOfLine()
@@ -469,10 +478,10 @@ const decode = async (interpreter, next, putback, error) => {
       interpreter.underline(true)
       break
     case 0x9c:
-      interpreter.polarity(0) // todo: serial mode
+      interpreter.polarity(false) // todo: serial mode
       break
     case 0x9d:
-      interpreter.polarity(1) // todo: serial mode
+      interpreter.polarity(true) // todo: serial mode
       break
     case 0x9e:
       interpreter.mosaicOrTransparent()
@@ -490,9 +499,9 @@ const decode = async (interpreter, next, putback, error) => {
   }
 }
 
-const isPrintable = c => (0x20 <= c && c <= 0x7f) || c >= 0xa0
+const isPrintable = (c: number) => (0x20 <= c && c <= 0x7f) || c >= 0xa0
 
-const decodeRes = c => {
+const decodeRes = (c: number) => {
   switch (c - 0x40) {
     case 6:
       return '12x12'
@@ -511,7 +520,7 @@ const decodeRes = c => {
   }
 }
 
-const decodeCol = c => {
+const decodeCol = (c: number) => {
   switch (c - 0x40) {
     case 1:
       return 2
@@ -521,32 +530,6 @@ const decodeCol = c => {
       return 16
     default:
       return -1
-  }
-}
-
-const printPalette = (s, p, c) => {
-  let first = true
-  let q = p
-  for (let i = 0; i < c / 2; i++) {
-    if (!first) s.push(', ')
-    first = false
-    const r3 = (q[0] >> 5) & 1
-    const g3 = (q[0] >> 4) & 1
-    const b3 = (q[0] >> 3) & 1
-    const r2 = (q[0] >> 2) & 1
-    const g2 = (q[0] >> 1) & 1
-    const b2 = (q[0] >> 0) & 1
-    const r1 = (q[1] >> 5) & 1
-    const g1 = (q[1] >> 4) & 1
-    const b1 = (q[1] >> 3) & 1
-    const r0 = (q[1] >> 2) & 1
-    const g0 = (q[1] >> 1) & 1
-    const b0 = (q[1] >> 0) & 1
-    const r = r0 | (r1 << 1) | (r2 << 2) | (r3 << 3)
-    const g = g0 | (g1 << 1) | (g2 << 2) | (g3 << 3)
-    const b = b0 | (b1 << 1) | (b2 << 2) | (b3 << 3)
-    s.push(`"#${r.toString(16)}${g.toString(16)}${b.toString(16)}"`)
-    q += 2
   }
 }
 

@@ -1,13 +1,13 @@
 
-const initKeyboard = (send) => {
-    const modifiersPressed = []
+const initKeyboard = (send: (code: number) => void) => {
+    const modifiersPressed: Element[] = []
     // Function to handle clicks on SVG elements
-    const handleSvgClick = event => {
-        const target = event.target.closest('[id]')
+    const handleSvgClick = (event: MouseEvent) => {
+        const target = (event.target as Element).closest('[id]')
         if (!target) {
             return
         }
-        const keyCode = parseInt(target.getAttribute('data-keycode'))
+        const keyCode = parseInt(target?.getAttribute('data-keycode') as string)
         console.log('keycode', keyCode)
         send(keyCode)
         target.classList.toggle('black')
@@ -27,23 +27,25 @@ const initKeyboard = (send) => {
                 const dataGroup = target.getAttribute('data-group')
 
                 if (dataGroup) {
-                    if (!target.querySelector('.led').classList.contains('active')) {
+                    if (!target.querySelector('.led')?.classList.contains('active')) {
                         const groupElements = target.ownerDocument.querySelectorAll(`.led-key[data-group="${dataGroup}"]`)
                         groupElements.forEach(element => {
-                            element.querySelector('.led').classList.remove('active')
+                            element.querySelector('.led')?.classList.remove('active')
                         })
-                        target.querySelector('.led').classList.toggle('active', true)
+                        target.querySelector('.led')?.classList.toggle('active', true)
                     }
                 } else {
-                    target.querySelector('.led').classList.toggle('active')
+                    target.querySelector('.led')?.classList.toggle('active')
                 }
             }
         }
     }
 
+    // Add event listener to the embedded SVG once it's loaded
+    const svgDoc = (document.getElementById('svg-object') as HTMLObjectElement)!.contentDocument as Document
+
     // Function to set the active state of an element's LED child
-    const setLed = (elementId, isActive) => {
-        const svgDoc = document.getElementById('svg-object').contentDocument
+    const setLed = (elementId: string, isActive: boolean) => {
         const element = svgDoc.getElementById(elementId)
         if (element) {
             const led = element.querySelector('.led')
@@ -53,15 +55,21 @@ const initKeyboard = (send) => {
         }
     }
 
-    // Add event listener to the embedded SVG once it's loaded
-    const svgDoc = document.getElementById('svg-object').contentDocument
-    svgDoc.addEventListener('click', handleSvgClick)
+    svgDoc.documentElement.addEventListener('click', handleSvgClick)
+
+    const ensureIntegerAttribute = (element: Element, attributeName: string) => {
+        const attribute = element.getAttribute(attributeName)
+        if (!attribute) {
+            throw new Error(`Attribute ${attributeName} not found on element`)
+        }
+        return parseInt(attribute)
+    }
 
     const resizeKeyboard = () => {
+        const svgElement = svgDoc.documentElement
         const keyboardContainer = document.getElementById('keyboard-container');
-        const svgObject = document.getElementById('svg-object');
-        const aspectRatio = svgObject.getAttribute('width') / svgObject.getAttribute('height');
-        const containerWidth = keyboardContainer.clientWidth;
+        const aspectRatio = ensureIntegerAttribute(svgElement, 'width') / ensureIntegerAttribute(svgElement, 'height');
+        const containerWidth = keyboardContainer!.clientWidth;
         const containerHeight = window.innerHeight * (1 / 3); // One-third of the window height
 
         let width, height;
@@ -76,14 +84,14 @@ const initKeyboard = (send) => {
         }
 
         // Apply the new size to the SVG object
-        svgObject.style.width = `${width}px`;
-        svgObject.style.height = `${height}px`;
+        svgElement.style.width = `${width}px`;
+        svgElement.style.height = `${height}px`;
 
         // Center the SVG object horizontally if the window is too wide
-        svgObject.style.marginLeft = `${(containerWidth - width) / 2}px`;
-        svgObject.style.marginRight = `${(containerWidth - width) / 2}px`;
-        svgObject.style.marginTop = '0';
-        svgObject.style.marginBottom = '0';
+        svgElement.style.marginLeft = `${(containerWidth - width) / 2}px`;
+        svgElement.style.marginRight = `${(containerWidth - width) / 2}px`;
+        svgElement.style.marginTop = '0';
+        svgElement.style.marginBottom = '0';
     };
 
     window.addEventListener('resize', resizeKeyboard);
