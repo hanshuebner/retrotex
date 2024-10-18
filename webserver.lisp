@@ -1,7 +1,7 @@
 ;; -*- Lisp -*-
 
 (defpackage :webserver
-  (:use :cl :alexandria)
+  (:use :cl :alexandria :lparallel.queue)
   (:export
    #:start
    #:*client-init-hook*))
@@ -15,7 +15,7 @@
 (defclass binary-websocket-stream (trivial-gray-streams:fundamental-binary-input-stream
                                    trivial-gray-streams:fundamental-binary-output-stream
                                    hunchensocket:websocket-client)
-  ((queue :initform (queues:make-queue :simple-cqueue) :accessor queue)))
+  ((queue :initform (make-queue) :accessor queue)))
 
 (defmethod initialize-instance :after ((stream binary-websocket-stream) &key)
   (format t "; setting *cept-stream* to ~A~%" stream)
@@ -25,13 +25,11 @@
 
 (defmethod hunchensocket:binary-message-received (resource (stream binary-websocket-stream) data)
   (loop for byte across data
-        do (queues:qpush (queue stream) byte)))
+        do (push-queue byte (queue stream))))
 
 (defmethod trivial-gray-streams:stream-read-byte ((stream binary-websocket-stream))
   (with-slots (queue) stream
-    (if (zerop (queues:qsize queue))
-        :eof
-        (queues:qpop queue))))
+    (pop-queue queue)))
 
 (defmethod trivial-gray-streams:stream-write-byte ((stream binary-websocket-stream) byte)
   (hunchensocket:send-binary-message stream (make-array 1 :element-type '(unsigned-byte 8) :initial-element byte)))

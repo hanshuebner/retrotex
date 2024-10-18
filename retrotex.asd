@@ -14,7 +14,7 @@
                "cl-ppcre"
                "flexi-streams"
                "trivial-gray-streams"
-               "queues.simple-cqueue"
+               "lparallel"
                "usocket")
   :components ((:file "cept")
                (:file "webserver")
