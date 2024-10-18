@@ -32,6 +32,10 @@ const makeWebsocket = () => {
     const socket = new WebSocket(socketUrl);
     console.log('websocket opened', socket)
 
+    const send = (data) => {
+        socket.send(data)
+    }
+
     socket.onmessage = async (event) => {
         const reader = new FileReader();
         reader.onload = () => {
@@ -53,7 +57,7 @@ const makeWebsocket = () => {
         console.log('WebSocket closed:', event);
     };
 
-    return { next, putback, currentChunk }
+    return { next, putback, currentChunk, send }
 }
 
 export default makeWebsocket
