@@ -7,7 +7,7 @@ const initKeyboard = (send) => {
         if (!target) {
             return
         }
-        const keyCode = target.getAttribute('data-keycode')
+        const keyCode = parseInt(target.getAttribute('data-keycode'))
         console.log('keycode', keyCode)
         send(keyCode)
         target.classList.toggle('black')

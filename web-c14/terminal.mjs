@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded',
         const interpreter = ceptInterpreter(console.log, display)
         const websocket = initWebsocket()
         const keyPressed = (keyCode) => {
-            console.log('key pressed', keyCode)
             websocket.send(new Uint8Array([keyCode]))
         }
         const keyboard = initKeyboard(keyPressed)

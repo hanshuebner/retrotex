@@ -19,9 +19,7 @@
 
 (defmethod initialize-instance :after ((stream binary-websocket-stream) &key)
   (format t "; setting *cept-stream* to ~A~%" stream)
-  (setf cept:*cept-stream* stream)
-  (when *client-init-hook*
-    (funcall *client-init-hook*)))
+  (setf cept:*cept-stream* stream))
 
 (defmethod hunchensocket:binary-message-received (resource (stream binary-websocket-stream) data)
   (loop for byte across data
@@ -46,6 +44,19 @@
                                         (opcode (eql hunchensocket::+binary-frame+))
                                         length total))
 
+(defmethod hunchensocket:client-connected ((resource cept-websocket-resource)
+                                           (client binary-websocket-stream))
+  (format t "; client connected~%")
+  (when *client-init-hook*
+    (bt:make-thread (lambda ()
+                      (handler-case
+                          (funcall *client-init-hook*)
+                        (error (e)
+                          (format t "; error handling client: ~A~%" e))))
+                    :name "Websocket client handler process"
+                    :initial-bindings (cons (cons 'cept:*cept-stream* client)
+                                            bt:*default-special-bindings*))))
+
 (defmethod hunchensocket:client-disconnected ((resource cept-websocket-resource)
                                               (client binary-websocket-stream))
   (format t "; client disconnected~%")
@@ -58,7 +69,6 @@
 (defun start (&key (port 8881))
   (when *acceptor*
     (hunchentoot:stop *acceptor*))
-  (push '("application/x-javascript" "js" "mjs") hunchentoot::*mime-type-list*)
   (setf *acceptor* (make-instance 'hunchensocket:websocket-acceptor
                                   :port port
                                   :document-root #p"web-c14/"))
