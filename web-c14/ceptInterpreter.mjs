@@ -57,7 +57,7 @@ export default (log, display) => {
                     glyphIndex,
                     row, column,
                     attributes.font,
-                    0xfff, 0x000)
+                    colors[attributes.foregroundColor], colors[attributes.backgroundColor])
             }
         }
         display.render()
@@ -74,6 +74,7 @@ export default (log, display) => {
         }
         lastCharCode = charCode
         glyphs[currentRow][currentColumn] = (charCode & 0x7f) - 0x20
+        attrs[currentRow][currentColumn] = {...currentAttributes}
         attrs[currentRow][currentColumn].font = (charCode >= 0x80) ? display.fonts[currentRightFont] : display.fonts[currentLeftFont]
         if (charCode < 0xc0 || charCode > 0xcf) { // diacritical marks
             if (currentColumn + 1 < columns) {
@@ -95,7 +96,7 @@ export default (log, display) => {
             for (let column = 0; column < columns; column++) {
                 glyphs[row][column] = 0
                 if (clearAttributes) {
-                    attrs[row][column] = {...defaultAttributes}
+                    attrs[row][column] = {...currentAttributes}
                 }
             }
         }
