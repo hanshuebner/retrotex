@@ -9,11 +9,13 @@ export default (log, display) => {
 
     let glyphs
     let attrs
+    let rowColors
+    let screenColor
 
     const defaultAttributes = {
         font: display.fonts[0],
-        backgroundColor: 8,
-        foregroundColor: 7,
+        backgroundColor: undefined,
+        foregroundColor: undefined,
         doubleWidth: false,
         doubleHeight: false,
         boxed: false,
@@ -33,7 +35,9 @@ export default (log, display) => {
         glyphs = new Array(rows).fill().map(() => new Uint8Array(columns));
         attrs = new Array(rows).fill().map(() => new Array(columns).fill().map(_ => {
             return {...defaultAttributes}
-        }));
+        }))
+        rowColors = new Array(rows).fill()
+        screenColor = 0
     }
 
     const colors = [
@@ -48,16 +52,39 @@ export default (log, display) => {
     let mode = 'serial'
     let currentAttributes = {...defaultAttributes}
 
+    const getFgColor = (row, column) => {
+        if (attrs[row][column].foregroundColor !== undefined) {
+            return attrs[row][column].foregroundColor
+        } else if (currentAttributes.foregroundColor !== undefined) {
+            return currentAttributes.foregroundColor
+        } else {
+            return 7
+        }
+    }
+
+    const getBgColor = (row, column) => {
+        if (attrs[row][column].backgroundColor !== undefined) {
+            return attrs[row][column].backgroundColor
+        } else if (rowColors[row] !== undefined) {
+            return rowColors[row]
+        } else {
+            return screenColor
+        }
+    }
+
     const redraw = () => {
         for (let row = 0; row < rows; row++) {
             for (let column = 0; column < columns; column++) {
                 const glyphIndex = glyphs[row][column]
                 const attributes = attrs[row][column]
+                const fgColor = getFgColor(row, column)
+                const bgColor = getBgColor(row, column)
                 display.drawGlyph(
                     glyphIndex,
                     row, column,
                     attributes.font,
-                    colors[attributes.foregroundColor], colors[attributes.backgroundColor])
+                    colors[attributes.inverted ? bgColor : fgColor],
+                    colors[attributes.inverted ? fgColor : bgColor])
             }
         }
         display.render()
@@ -65,7 +92,7 @@ export default (log, display) => {
 
     setInterval(redraw, 250)
 
-    let lastCharCode = 0x20
+    let lastCharCode = 0
     const putChar = (charCode) => {
         if (charCode < 0x80) {
             log(`putChar '${String.fromCharCode(charCode)}'`)
@@ -217,7 +244,6 @@ export default (log, display) => {
         reset: (parallel, limited) => {
             log('reset', {parallel, limited})
             mode = parallel ? 'parallel' : 'serial'
-            setScreenSize(24, 40)
         },
         parallelMode: () => {
             log('parallelMode')
@@ -258,9 +284,11 @@ export default (log, display) => {
         },
         setBgColorOfRow: (color) => {
             log('setBgColorOfRow', {color})
+            rowColors[currentRow] = color
         },
         setBgColorOfScreen: (color) => {
             log('setBgColorOfScreen', {color})
+            screenColor = color
         },
         setColorDefinitionHeader: (colorDefinitionHeader) => {
             log('setColorDefinitionHeader', colorDefinitionHeader)
