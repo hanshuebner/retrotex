@@ -109,7 +109,7 @@
     <key type="led" logo="prestel-1-0"/>
     <key type="led" logo="prestel-1-1"/>
     <space width="0.25"/>
-    <key>CTRL</key>
+    <key modifier="true">CTRL</key>
     <key type="led"><label>CAPS</label><label>LOCK</label></key>
     <key><label>A</label><label></label><label></label></key>
     <key><label>S</label><label></label><label></label></key>
@@ -137,7 +137,7 @@
     <key type="led" logo="prestel-2-0"/>
     <key type="led" logo="prestel-2-1"/>
     <space width="0.25"/>
-    <key width="1.5">SHIFT</key>
+    <key modifier="true" width="1.5">SHIFT</key>
     <key><label>&lt;</label><label>&gt;</label><label>³</label><label>²</label></key>
     <key><label>Y</label><label></label><label></label></key>
     <key><label>X</label><label></label><label></label></key>
@@ -149,7 +149,7 @@
     <key><label>,</label><label>;</label><label></label><label></label></key>
     <key><label>.</label><label>:</label><label></label><label></label></key>
     <key><label>-</label><label>_</label><label></label><label></label></key>
-    <key width="1.5">SHIFT</key>
+    <key modifier="true" width="1.5">SHIFT</key>
     <key><label>↵</label></key>
     <space width="0.25"/>
     <key><label>⇙</label></key>

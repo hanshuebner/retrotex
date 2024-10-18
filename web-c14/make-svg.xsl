@@ -151,6 +151,9 @@
        id="key-{accumulator-before('key-number')}"
        data-keycode="{accumulator-before('key-number')}"
        transform="translate({accumulator-before('x-position')},{accumulator-before('y-position')})">
+      <xsl:if test="@modifier">
+        <xsl:attribute name="data-modifier">true</xsl:attribute>
+      </xsl:if>
       <rect x="5" y="5" width="{90 + $stretch}" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 0,0 50,80 L{50 + $stretch},80 A35,35 0 0,0 {75 + $stretch},25 Z"/>
       <xsl:variable name="label-center-offset" select="$stretch div 2"/>
@@ -176,6 +179,9 @@
        id="key-{accumulator-before('key-number')}"
        data-keycode="{accumulator-before('key-number')}"
        transform="translate({accumulator-before('x-position')},{accumulator-before('y-position')})">
+      <xsl:if test="@modifier">
+        <xsl:attribute name="data-modifier">true</xsl:attribute>
+      </xsl:if>
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
 

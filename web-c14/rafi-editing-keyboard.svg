@@ -937,7 +937,8 @@
    <g class="key standard-key "
        id="key-93"
        data-keycode="93"
-       transform="translate(225,400)">
+       transform="translate(225,400)"
+       data-modifier="true">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="62" font-size="18">CTRL</text>
@@ -1155,7 +1156,8 @@
    <g class="key standard-key "
        id="key-115"
        data-keycode="115"
-       transform="translate(225,500)">
+       transform="translate(225,500)"
+       data-modifier="true">
       <rect x="5" y="5" width="140" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 0,0 50,80 L100,80 A35,35 0 0,0 125,25 Z"/>
       <text x="75" y="62" font-size="18">SHIFT</text>
@@ -1277,7 +1279,8 @@
    <g class="key standard-key "
        id="key-127"
        data-keycode="127"
-       transform="translate(1475,500)">
+       transform="translate(1475,500)"
+       data-modifier="true">
       <rect x="5" y="5" width="140" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 0,0 50,80 L100,80 A35,35 0 0,0 125,25 Z"/>
       <text x="75" y="62" font-size="18">SHIFT</text>

@@ -1,5 +1,6 @@
 
 const initKeyboard = (send) => {
+    const modifiersPressed = []
     // Function to handle clicks on SVG elements
     const handleSvgClick = event => {
         const target = event.target.closest('[id]')
@@ -10,20 +11,32 @@ const initKeyboard = (send) => {
         console.log('keycode', keyCode)
         send(keyCode)
         target.classList.toggle('black')
-        setTimeout(() => target.classList.toggle('black'), 100)
-        if (target.classList.contains('led-key')) {
-            const dataGroup = target.getAttribute('data-group')
-
-            if (dataGroup) {
-                if (!target.querySelector('.led').classList.contains('active')) {
-                    const groupElements = target.ownerDocument.querySelectorAll(`.led-key[data-group="${dataGroup}"]`)
-                    groupElements.forEach(element => {
-                        element.querySelector('.led').classList.remove('active')
-                    })
-                    target.querySelector('.led').classList.toggle('active', true)
-                }
+        if (target.getAttribute('data-modifier')) {
+            if (modifiersPressed.includes(target)) {
+                modifiersPressed.splice(modifiersPressed.indexOf(target), 1)
             } else {
-                target.querySelector('.led').classList.toggle('active')
+                modifiersPressed.push(target)
+            }
+        } else {
+            setTimeout(() => {
+                target.classList.toggle('black')
+                modifiersPressed.forEach(modifier => modifier.classList.toggle('black'))
+                modifiersPressed.length = 0
+            }, 100)
+            if (target.classList.contains('led-key')) {
+                const dataGroup = target.getAttribute('data-group')
+
+                if (dataGroup) {
+                    if (!target.querySelector('.led').classList.contains('active')) {
+                        const groupElements = target.ownerDocument.querySelectorAll(`.led-key[data-group="${dataGroup}"]`)
+                        groupElements.forEach(element => {
+                            element.querySelector('.led').classList.remove('active')
+                        })
+                        target.querySelector('.led').classList.toggle('active', true)
+                    }
+                } else {
+                    target.querySelector('.led').classList.toggle('active')
+                }
             }
         }
     }
@@ -72,12 +85,6 @@ const initKeyboard = (send) => {
         svgObject.style.marginTop = '0';
         svgObject.style.marginBottom = '0';
     };
-
-    document.getElementById('svg-object').addEventListener('load', () => {
-        resizeKeyboard();
-        const svgDoc = document.getElementById('svg-object').contentDocument;
-        svgDoc.addEventListener('click', handleSvgClick);
-    });
 
     window.addEventListener('resize', resizeKeyboard);
     resizeKeyboard();
