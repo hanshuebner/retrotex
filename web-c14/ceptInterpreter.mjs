@@ -7,16 +7,33 @@ export default (log, display) => {
     let currentLeftFont = 0
     let currentRightFont = 1
 
-    let chars
+    let glyphs
     let attrs
+
+    const defaultAttributes = {
+        font: display.fonts[0],
+        backgroundColor: 8,
+        foregroundColor: 7,
+        doubleWidth: false,
+        doubleHeight: false,
+        boxed: false,
+        concealed: false,
+        blink: undefined,
+        lined: false,
+        inverted: false,
+        protected: false,
+        marked: false,
+    }
 
     const setScreenSize = (rows_, columns_) => {
         currentRow = 0
         currentColumn = 0
         rows = rows_
         columns = columns_
-        chars = new Array(rows).fill().map(() => new Uint8Array(columns));
-        attrs = new Array(rows).fill().map(() => new Array(columns).map);
+        glyphs = new Array(rows).fill().map(() => new Uint8Array(columns));
+        attrs = new Array(rows).fill().map(() => new Array(columns).fill().map(_ => {
+            return {...defaultAttributes}
+        }));
     }
 
     const colors = [
@@ -29,34 +46,18 @@ export default (log, display) => {
     setScreenSize(24, 40)
     let wrapAround = true
     let mode = 'serial'
-    const defaultAttributes = {
-        screenBackgroundColor: 0,
-        displayBackgroundColor: 8,
-        foregroundColor: 7,
-        doubleWidth: false,
-        doubleHeight: false,
-        boxed: false,
-        concealed: false,
-        blink: undefined,
-        lined: false,
-        inverted: false,
-        protected: false,
-        marked: false,
-    }
-    let parallelModeAttributes = { ...defaultAttributes }
-    let serialModeAttributes = { ...defaultAttributes }
+    let parallelModeAttributes = {...defaultAttributes}
+    let serialModeAttributes = {...defaultAttributes}
 
     const redraw = () => {
         for (let row = 0; row < rows; row++) {
             for (let column = 0; column < columns; column++) {
-                const char = chars[row][column]
-                const glyphIndex = char ? ((char & 0x7f) - 0x20) : 0
-                const font = (char >= 0x80) ? display.fonts[currentRightFont] : display.fonts[currentLeftFont]
-                console.assert(font)
+                const glyphIndex = glyphs[row][column]
+                const attributes = attrs[row][column]
                 display.drawGlyph(
                     glyphIndex,
                     row, column,
-                    font,
+                    attributes.font,
                     0xfff, 0x000)
             }
         }
@@ -72,8 +73,9 @@ export default (log, display) => {
         } else {
             log(`putChar 0x${charCode.toString(16).padStart(2, '0')}`)
         }
-        chars[currentRow][currentColumn] = charCode
         lastCharCode = charCode
+        glyphs[currentRow][currentColumn] = (charCode & 0x7f) - 0x20
+        attrs[currentRow][currentColumn].font = (charCode >= 0x80) ? display.fonts[currentRightFont] : display.fonts[currentLeftFont]
         if (charCode < 0xc0 || charCode > 0xcf) { // diacritical marks
             if (currentColumn + 1 < columns) {
                 currentColumn += 1
@@ -92,9 +94,9 @@ export default (log, display) => {
         log('clearScreen')
         for (let row = 0; row < rows; row++) {
             for (let column = 0; column < columns; column++) {
-                chars[row][column] = 0x20;
+                glyphs[row][column] = 0
                 if (clearAttributes) {
-                    attrs[row][column] = 0x00;
+                    attrs[row][column] = {...defaultAttributes}
                 }
             }
         }
@@ -119,7 +121,7 @@ export default (log, display) => {
         clearToEndOfLine: () => {
             log('clearToEndOfLine')
             for (let column = currentColumn; column < columns; column++) {
-                chars[currentRow][column] = 0x20;
+                glyphs[currentRow][column] = 0
             }
         },
         clearScreen,
@@ -273,8 +275,12 @@ export default (log, display) => {
             }
         },
         setFgColor: (color) => {
-            log('setFgColor', {color})
-            ((mode === 'serial') ? serialModeAttributes : parallelModeAttributes).foregroundColor = color
+            log('setFgColor', {color});
+            if (mode === 'serial') {
+                serialModeAttributes.foregroundColor = color
+            } else {
+                parallelModeAttributes.foregroundColor = color
+            }
         },
         setFgColorOfRow: (color) => {
             log('setFgColorOfRow', {color})
