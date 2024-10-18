@@ -46,6 +46,11 @@
                                         (opcode (eql hunchensocket::+binary-frame+))
                                         length total))
 
+(defmethod hunchensocket:client-disconnected ((resource cept-websocket-resource)
+                                              (client binary-websocket-stream))
+  (format t "; client disconnected~%")
+  (push-queue :eof (queue client)))
+
 (setf hunchensocket:*websocket-dispatch-table* (list (constantly (make-instance 'cept-websocket-resource))))
 
 (defvar *acceptor* nil)

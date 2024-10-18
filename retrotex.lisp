@@ -182,22 +182,26 @@
 (defun slideshow (&key sleep (cept-files (directory "pages/*.cept")))
   (let* ((cept-files (sort cept-files 'string-lessp :key 'pathname-name)))
     (assert cept-files)
-    (loop
-      (loop with i = 0
-            do (load-page (nth i cept-files))
-               (if sleep
-                   (sleep sleep)
-                   (case (code-char (read-cept-byte))
-                     ((#\backspace #\delete)
-                      (when (zerop i)
-                        (setf i (length cept-files)))
-                      (decf i))
-                     ((#\space #\return)
-                      (incf i))
-                     (#\q
-                      (return-from slideshow))))
-               (when (= i (length cept-files))
-                 (setf i 0))))))
+    (let ((i 0))
+      (loop
+        (cept:reset)
+        (load-page (nth i cept-files))
+        (cond
+          (sleep
+           (sleep sleep)
+           (incf i))
+          (t
+           (case (code-char (read-cept-byte))
+             ((#\backspace #\delete)
+              (when (zerop i)
+                (setf i (length cept-files)))
+              (decf i))
+             ((#\space #\return)
+              (incf i))
+             (#\q
+              (return-from slideshow)))))
+        (when (= i (length cept-files))
+          (setf i 0))))))
 
 (defun editor ()
   (set-pc-mode)

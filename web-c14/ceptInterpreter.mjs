@@ -46,8 +46,7 @@ export default (log, display) => {
     setScreenSize(24, 40)
     let wrapAround = true
     let mode = 'serial'
-    let parallelModeAttributes = {...defaultAttributes}
-    let serialModeAttributes = {...defaultAttributes}
+    let currentAttributes = {...defaultAttributes}
 
     const redraw = () => {
         for (let row = 0; row < rows; row++) {
@@ -225,7 +224,7 @@ export default (log, display) => {
         },
         polarity: (inverted_) => {
             log('polarity', {inverted: inverted_})
-            ((mode === 'serial') ? serialModeAttributes : parallelModeAttributes).polarity = inverted_
+            currentAttributes.polarity = inverted_
         },
         protectLine: () => {
             log('protectLine')
@@ -276,11 +275,7 @@ export default (log, display) => {
         },
         setFgColor: (color) => {
             log('setFgColor', {color});
-            if (mode === 'serial') {
-                serialModeAttributes.foregroundColor = color
-            } else {
-                parallelModeAttributes.foregroundColor = color
-            }
+            currentAttributes.foregroundColor = color
         },
         setFgColorOfRow: (color) => {
             log('setFgColorOfRow', {color})
