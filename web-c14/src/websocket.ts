@@ -38,34 +38,46 @@ const makeWebsocket = (): Websocket => {
   }
 
   const socketUrl = `ws://${window.location.host}/cept/ws`
-  console.log(`opening websocket at ${socketUrl}`)
-  const socket = new WebSocket(socketUrl)
-  console.log('websocket opened', socket)
+  let socket: WebSocket
 
   const send = (data: Uint8Array) => {
-    socket.send(data)
-  }
-
-  socket.onmessage = async (event) => {
-    const reader = new FileReader()
-    reader.onload = () => {
-      const arrayBuffer = reader.result
-      const data = new Uint8Array(arrayBuffer as ArrayBuffer)
-      buffer.push(...data)
-      if (resolveNext) {
-        resolveNext(null)
-        resolveNext = undefined
-      }
+    if (socket) {
+      socket?.send(data)
+    } else {
+      console.log('cannot send, WebSocket not connected')
     }
-    reader.readAsArrayBuffer(event.data)
-  }
-  socket.onerror = (event) => {
-    console.error('WebSocket error:', event)
   }
 
-  socket.onclose = (event) => {
-    console.log('WebSocket closed:', event)
+  const openWebsocket = () => {
+    console.log('Opening WebSocket', socketUrl)
+    socket = new WebSocket(socketUrl)
+    console.log('WebSocket opened', socket)
+
+    socket.onmessage = async (event) => {
+      const reader = new FileReader()
+      reader.onload = () => {
+        const arrayBuffer = reader.result
+        const data = new Uint8Array(arrayBuffer as ArrayBuffer)
+        buffer.push(...data)
+        if (resolveNext) {
+          resolveNext(null)
+          resolveNext = undefined
+        }
+      }
+      reader.readAsArrayBuffer(event.data)
+    }
+
+    socket.onerror = (event) => {
+      console.error('WebSocket error:', event)
+    }
+
+    socket.onclose = (event) => {
+      console.log('WebSocket closed:', event)
+      setTimeout(openWebsocket, 1000)
+    }
   }
+
+  openWebsocket()
 
   return { next, putback, currentChunk, send }
 }

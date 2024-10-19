@@ -80,6 +80,7 @@ export interface Attributes {
   inverted?: boolean
   protected?: boolean
   marked?: boolean
+  notRendered?: boolean
 }
 
 export default (
@@ -170,6 +171,9 @@ export default (
       for (let column = 0; column < screenColumns; column++) {
         const glyphIndex = glyphs[row][column]
         const attributes = attrs[row][column]
+        if (attributes.notRendered) {
+          continue
+        }
         const fgColor = getFgColor(row, column)
         const bgColor = getBgColor(row, column)
         display.drawGlyph(
@@ -179,7 +183,12 @@ export default (
           attributes.font || display.fonts[0],
           colors[attributes.inverted ? bgColor : fgColor],
           colors[attributes.inverted ? fgColor : bgColor],
+          attributes.doubleWidth,
+          attributes.doubleHeight,
         )
+        if (attributes.doubleWidth) {
+          column += 1
+        }
       }
     }
     display.render()
@@ -201,14 +210,31 @@ export default (
       charCode >= 0x80
         ? display.fonts[currentRightFont]
         : display.fonts[currentLeftFont]
+    const { doubleWidth, doubleHeight } = currentAttributes
+    const columnIncrement = doubleWidth ? 2 : 1
+    const rowIncrement = doubleHeight ? 2 : 1
+    if (doubleWidth && currentColumn < screenColumns - 1) {
+      attrs[currentRow][currentColumn + 1].notRendered = true
+    }
+    if (doubleHeight && currentRow < screenRows - 1) {
+      attrs[currentRow + 1][currentColumn].notRendered = true
+    }
+    if (
+      doubleHeight &&
+      currentRow < screenRows - 1 &&
+      doubleWidth &&
+      currentColumn < screenColumns - 1
+    ) {
+      attrs[currentRow + 1][currentColumn + 1].notRendered = true
+    }
     if (charCode < 0xc0 || charCode > 0xcf) {
       // diacritical marks
-      if (currentColumn + 1 < screenColumns) {
-        currentColumn += 1
+      if (currentColumn + columnIncrement < screenColumns) {
+        currentColumn += columnIncrement
       } else if (currentWrapAround) {
         currentColumn = 0
-        if (currentRow + 1 < screenRows) {
-          currentRow += 1
+        if (currentRow + rowIncrement < screenRows) {
+          currentRow += rowIncrement
         } else {
           currentRow = 0
         }
@@ -310,6 +336,8 @@ export default (
     },
     doubleSize: (width: boolean, height: boolean) => {
       log('doubleSize', { width, height })
+      currentAttributes.doubleWidth = width
+      currentAttributes.doubleHeight = height
     },
     drcsDefinitionBlocks: (blocks: number[][]) => {
       log(
