@@ -71,5 +71,5 @@
     (hunchentoot:stop *acceptor*))
   (setf *acceptor* (make-instance 'hunchensocket:websocket-acceptor
                                   :port port
-                                  :document-root #p"web-c14/"))
+                                  :document-root #p"web-c14/public/"))
   (hunchentoot:start *acceptor*))

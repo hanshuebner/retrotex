@@ -1,7 +1,7 @@
 
 all: rafi-editing-keyboard.svg
 
-DEPS=rafi-editing-keyboard.xml make-svg.xsl svg-styles.css
+DEPS=rafi-editing-keyboard.xml make-svg.xsl
 
 rafi-editing-keyboard.svg: $(DEPS)
 	saxon -o:rafi-editing-keyboard.svg rafi-editing-keyboard.xml make-svg.xsl
