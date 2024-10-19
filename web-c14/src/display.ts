@@ -123,6 +123,9 @@ export default async (canvas: HTMLCanvasElement): Promise<Display> => {
     if (doubleHeight) {
       setPixel(x, y + 1, color, doubleWidth, false)
     }
+    if (doubleWidth && doubleHeight) {
+      setPixel(x + 1, y + 1, color, doubleWidth, false)
+    }
   }
 
   const loadFontData = async (url: string) => {

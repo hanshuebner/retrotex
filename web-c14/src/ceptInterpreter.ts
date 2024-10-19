@@ -164,8 +164,8 @@ export default (
       for (let column = 0; column < screenColumns; column++) {
         const glyphIndex = glyphs[row][column]
         const attributes = attrs[row][column]
-        const fgColor = 0xfff // getFgColor(row, column)
-        const bgColor = 0x000 // getBgColor(row, column)
+        const fgColor = getFgColor(row, column)
+        const bgColor = getBgColor(row, column)
         display.drawGlyph(
           glyphIndex,
           row,
