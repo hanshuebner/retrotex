@@ -2,9 +2,19 @@
   "name": "web-c14",
   "version": "1.0.0",
   "description": "A Bildschirmtext (CEPT) decoder",
-  "scripts": {},
+  "scripts": {
+    "build": "tsc --noEmit && node esbuild.config.js",
+    "watch": "node esbuild.config.js --watch"
+  },
   "type": "module",
   "devDependencies": {
-    "esbuild": "0.24.0"
+    "@types/node": "^22.7.7",
+    "esbuild": "0.24.0",
+    "eslint": "^9.13.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "prettier": "^3.3.3"
+  },
+  "dependencies": {
+    "undici-types": "^6.20.0"
   }
 }

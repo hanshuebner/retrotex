@@ -6,7 +6,12 @@
     "strict": true,
     "outDir": "./public",
     "rootDir": "./src",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "paths": {
+      "undici-types": [
+        "./node_modules/undici-types/index.d.ts"
+      ]
+    }
   },
   "include": [
     "src/**/*"
