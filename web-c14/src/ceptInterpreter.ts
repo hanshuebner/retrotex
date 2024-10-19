@@ -1,4 +1,5 @@
 import { Display } from './display'
+import { renderDebugDisplay } from './ceptInterpreterDebug'
 
 export type CeptInterpreter = {
   blink: (enabled: boolean) => void
@@ -66,6 +67,21 @@ export type CeptInterpreter = {
   setBgColor: (color: number) => void
 }
 
+export interface Attributes {
+  font?: Uint8Array
+  backgroundColor?: number
+  foregroundColor?: number
+  doubleWidth?: boolean
+  doubleHeight?: boolean
+  boxed?: boolean
+  concealed?: boolean
+  blink?: boolean
+  lined?: boolean
+  inverted?: boolean
+  protected?: boolean
+  marked?: boolean
+}
+
 export default (
   log: (...data: any) => void,
   display: Display,
@@ -78,25 +94,12 @@ export default (
   let currentLeftFont = 0
   let currentRightFont = 1
 
-  interface Attributes {
-    font?: Uint8Array
-    backgroundColor?: number
-    foregroundColor?: number
-    doubleWidth?: boolean
-    doubleHeight?: boolean
-    boxed?: boolean
-    concealed?: boolean
-    blink?: boolean
-    lined?: boolean
-    inverted?: boolean
-    protected?: boolean
-    marked?: boolean
-  }
-
   let glyphs: Uint8Array[]
   let attrs: Attributes[][]
   let rowColors: number[]
   let screenColor: number = 4
+
+  const debug = () => renderDebugDisplay(glyphs, attrs, rowColors, screenColor)
 
   const defaultAttributes: Attributes = {
     font: display.fonts[0],
@@ -210,6 +213,7 @@ export default (
     } else {
       console.log('skipping diacritical mark for now')
     }
+    debug()
   }
 
   const clearScreen = (clearAttributes: boolean) => {
