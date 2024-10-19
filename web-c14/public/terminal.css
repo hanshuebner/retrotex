@@ -15,7 +15,7 @@ body {
 
 #keyboard-container {
     flex: 1;
-    display: flex;
+    display: none; /* flex; */
     justify-content: center;
     align-items: center;
 }
@@ -24,7 +24,7 @@ canvas {
     image-rendering: pixelated;
 }
 
-#svg-object {
+#keyboard-svg {
     width: 100%;
     height: auto;
     display: block;

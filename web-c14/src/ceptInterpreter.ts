@@ -100,6 +100,7 @@ export default (
   let screenColor: number = 4
 
   const debug = () => renderDebugDisplay(glyphs, attrs, rowColors, screenColor)
+  setInterval(debug, 500)
 
   const defaultAttributes: Attributes = {
     font: display.fonts[0],
@@ -112,6 +113,8 @@ export default (
     inverted: false,
     protected: false,
     marked: false,
+    backgroundColor: 4,
+    foregroundColor: 7,
   }
 
   const setScreenSize = (rows: number, columns: number) => {
@@ -124,7 +127,7 @@ export default (
       .map(() => new Uint8Array(screenColumns))
     attrs = new Array(screenRows).fill(undefined).map(() =>
       new Array(screenColumns).fill(undefined).map((_) => {
-        return { ...defaultAttributes }
+        return {}
       }),
     )
     rowColors = new Array(screenRows).fill(undefined)
@@ -213,7 +216,6 @@ export default (
     } else {
       console.log('skipping diacritical mark for now')
     }
-    debug()
   }
 
   const clearScreen = (clearAttributes: boolean) => {

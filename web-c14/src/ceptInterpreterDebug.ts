@@ -8,6 +8,7 @@ export const renderDebugDisplay = (
 ) => {
   const createChip = (label: string, color: string) => {
     const chip = document.createElement('div')
+    chip.style.minWidth = '1em'
     chip.style.display = 'inline-block'
     chip.style.padding = '2px 4px'
     chip.style.margin = '2px'
@@ -25,38 +26,67 @@ export const renderDebugDisplay = (
   }
   container.innerHTML = ''
 
-  container.style.display = 'grid'
-  container.style.gridTemplateColumns = `repeat(${glyphs[0].length + 1}, auto)`
-  container.style.gap = '4px'
+  container.style.backgroundColor = 'white'
+  container.style.fontFamily = 'Arial, sans-serif' // Modern, non-serif font
+  container.style.fontSize = '12px' // Smaller font size
+
+  // Tooltip element
+  const tooltip = document.createElement('div')
+  tooltip.style.position = 'absolute'
+  tooltip.style.padding = '4px'
+  tooltip.style.backgroundColor = '#333'
+  tooltip.style.color = '#fff'
+  tooltip.style.borderRadius = '4px'
+  tooltip.style.visibility = 'hidden'
+  tooltip.style.zIndex = '1000'
+  container.appendChild(tooltip)
 
   // Screen color
   const screenColorChip = createChip(
-    'Screen Color',
+    `#${screenColor.toString(16).padStart(3, '0')}`,
     `#${screenColor.toString(16).padStart(3, '0')}`,
   )
+  screenColorChip.style.width = '25px'
   container.appendChild(screenColorChip)
 
-  // Empty cell for alignment
-  container.appendChild(document.createElement('div'))
+  const grid = document.createElement('div')
+  container.appendChild(grid)
+
+  grid.style.display = 'grid'
+  grid.style.gridTemplateColumns = `repeat(${glyphs[0].length + 1}, auto)`
+  grid.style.gap = '4px'
 
   // Row colors and grid
   for (let row = 0; row < glyphs.length; row++) {
     // Row color
-    if (rowColors[row] !== undefined) {
-      const rowColorChip = createChip(
-        'Row Color',
-        `#${rowColors[row].toString(16).padStart(3, '0')}`,
-      )
-      container.appendChild(rowColorChip)
-    } else {
-      container.appendChild(document.createElement('div'))
-    }
+    const rowColorChip =
+      rowColors[row] !== undefined
+        ? createChip(
+            `#${rowColors[row].toString(16).padStart(3, '0')}`,
+            `#${rowColors[row].toString(16).padStart(3, '0')}`,
+          )
+        : document.createElement('div')
+    rowColorChip.style.width = '25px'
+    grid.appendChild(rowColorChip)
 
     for (let col = 0; col < glyphs[row].length; col++) {
       const cell = document.createElement('div')
       cell.style.border = '1px solid #ccc'
       cell.style.padding = '4px'
-      cell.style.position = 'relative'
+      cell.style.position = 'relative' // Ensure the cell is the positioning context
+      cell.style.width = '15px'
+      cell.style.height = '15px'
+      cell.style.overflow = 'hidden'
+
+      // Check if the cell has any attributes defined
+      const hasAttributes =
+        attrs[row][col].foregroundColor !== undefined ||
+        attrs[row][col].backgroundColor !== undefined ||
+        Object.values(attrs[row][col]).some((attr) => attr === true)
+
+      if (hasAttributes) {
+        cell.style.backgroundColor = '#ffeb3b' // Distinct background color
+      }
 
       // Glyph number
       const glyphNumber = document.createElement('div')
@@ -66,51 +96,29 @@ export const renderDebugDisplay = (
       glyphNumber.textContent = glyphs[row][col].toString()
       cell.appendChild(glyphNumber)
 
-      // Foreground and background colors
-      if (attrs[row][col].foregroundColor !== undefined) {
-        const fgColorChip = createChip(
-          'FG',
-          `#${attrs[row][col].foregroundColor!.toString(16).padStart(3, '0')}`,
-        )
-        fgColorChip.style.position = 'absolute'
-        fgColorChip.style.top = '2px'
-        fgColorChip.style.right = '2px'
-        cell.appendChild(fgColorChip)
-      }
-      if (attrs[row][col].backgroundColor !== undefined) {
-        const bgColorChip = createChip(
-          'BG',
-          `#${attrs[row][col].backgroundColor!.toString(16).padStart(3, '0')}`,
-        )
-        bgColorChip.style.position = 'absolute'
-        bgColorChip.style.top = '20px'
-        bgColorChip.style.right = '2px'
-        cell.appendChild(bgColorChip)
-      }
-
-      // Boolean attributes
-      const booleanAttributes = [
-        'doubleWidth',
-        'doubleHeight',
-        'boxed',
-        'concealed',
-        'blink',
-        'lined',
-        'inverted',
-        'protected',
-        'marked',
-      ]
-      booleanAttributes.forEach((attr, index) => {
-        if (attrs[row][col][attr as keyof Attributes]) {
-          const attrChip = createChip(attr.slice(0, 2).toUpperCase(), '#007bff')
-          attrChip.style.position = 'absolute'
-          attrChip.style.bottom = `${index * 16}px`
-          attrChip.style.left = '2px'
-          cell.appendChild(attrChip)
+      // Mouse events for tooltip
+      cell.addEventListener('mouseenter', (event) => {
+        tooltip.innerHTML = ''
+        for (const [key, value] of Object.entries(attrs[row][col])) {
+          if (key !== 'font') {
+            tooltip.innerHTML += `${key}:${value}<br>`
+          }
         }
+        tooltip.style.visibility = 'visible'
+        tooltip.style.top = `${event.clientY + window.scrollY + 10}px`
+        tooltip.style.left = `${event.clientX + window.scrollX + 10}px`
       })
 
-      container.appendChild(cell)
+      cell.addEventListener('mousemove', (event) => {
+        tooltip.style.top = `${event.clientY + window.scrollY + 10}px`
+        tooltip.style.left = `${event.clientX + window.scrollX + 10}px`
+      })
+
+      cell.addEventListener('mouseleave', () => {
+        tooltip.style.visibility = 'hidden'
+      })
+
+      grid.appendChild(cell)
     }
   }
 }

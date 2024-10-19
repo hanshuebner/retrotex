@@ -45,7 +45,7 @@ const initKeyboard = (send: (code: number) => void) => {
   }
 
   // Add event listener to the embedded SVG once it's loaded
-  const svgDoc = (document.getElementById('svg-object') as HTMLObjectElement)!
+  const svgDoc = (document.getElementById('keyboard-svg') as HTMLObjectElement)!
     .contentDocument as Document
 
   // Function to set the active state of an element's LED child
@@ -58,8 +58,6 @@ const initKeyboard = (send: (code: number) => void) => {
       }
     }
   }
-
-  svgDoc.documentElement.addEventListener('mousedown', handleSvgClick)
 
   const ensureIntegerAttribute = (element: Element, attributeName: string) => {
     const attribute = element.getAttribute(attributeName)
@@ -94,8 +92,17 @@ const initKeyboard = (send: (code: number) => void) => {
     svgElement.style.height = `${height}px`
   }
 
-  window.addEventListener('resize', resizeKeyboard)
-  resizeKeyboard()
+  if (svgDoc) {
+    // keyboard might not be displayed
+    svgDoc.addEventListener('mousedown', handleSvgClick)
+    window.addEventListener('resize', resizeKeyboard)
+    resizeKeyboard()
+  }
+  window.addEventListener('keypress', (event: KeyboardEvent) => {
+    console.log(event)
+    send(event.key.charCodeAt(0))
+    event.preventDefault()
+  })
 
   return { setLed }
 }
