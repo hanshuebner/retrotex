@@ -61,22 +61,27 @@ const decode = async (
       case 0x2b:
         switch (await next()) {
           case 0x40:
-            interpreter.loadCharset(c - 0x28, 0)
+            interpreter.assignFont(c - 0x28, 0)
             break
           case 0x62:
-            interpreter.loadCharset(c - 0x28, 2)
+            interpreter.assignFont(c - 0x28, 2)
             break
           case 0x63:
-            interpreter.loadCharset(c - 0x28, 1)
+            interpreter.assignFont(c - 0x28, 1)
             break
           case 0x64:
-            interpreter.loadCharset(c - 0x28, 3)
+            interpreter.assignFont(c - 0x28, 3)
             break
           case 0x20:
-            if (c !== 0x28 && (await next()) === 0x40) {
-              interpreter.loadCharset(c - 0x28, 4)
-            } else {
-              error()
+            {
+              const terminatingCharacter = await next()
+              if (terminatingCharacter === 0x40) {
+                interpreter.assignFont(c - 0x28, 5)
+              } else {
+                error(
+                  `unexpected character 0x${terminatingCharacter} terminating font assignment`,
+                )
+              }
             }
             break
           default:

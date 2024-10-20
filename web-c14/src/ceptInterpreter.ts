@@ -30,7 +30,7 @@ export type CeptInterpreter = {
   intoLeftCharset: (charset: number) => void
   intoRightCharset: (charset: number) => void
   invertBlinking: () => void
-  loadCharset: (intoCharset: number, loadCharset: number) => void
+  assignFont: (intoCharset: number, loadCharset: number) => void
   mosaicOrTransparent: () => void
   reset: (parallel: boolean, limited: boolean) => void
   parallelMode: () => void
@@ -94,6 +94,8 @@ export default (
 
   let currentLeftFont = 0
   let currentRightFont = 1
+
+  let currentDrcsGlyph = 0
 
   let glyphs: Uint8Array[]
   let attrs: Attributes[][]
@@ -271,6 +273,59 @@ export default (
     }
   }
 
+  const defineDrcs = (glyphNumber: number, block: number[]) => {
+    const rowOfOnes = new Array(12).fill(1)
+    const rowOfZeros = new Array(12).fill(0)
+    const rows = new Array(10).fill(undefined).map(() => new Array(12).fill(0))
+    const iterateBlocks = () => {
+      let currentRow = 0
+      let rowAccumulator: number[] = []
+      for (let code of block) {
+        const lastCompleteRow = currentRow > 0 ? rows[currentRow - 1] : rows[0]
+        if (code === 0x20) {
+          return
+        } else if (0x21 <= code && code <= 0x2a) {
+          const count = code & 0x0f
+          for (let i = 1; i <= count; i++) {
+            rows[currentRow + i] = lastCompleteRow
+          }
+          currentRow += count
+        } else if (code === 0x2c) {
+          rows[currentRow++] = rowOfZeros
+        } else if (code === 0x2c) {
+          rows[currentRow++] = rowOfOnes
+        } else if (code === 0x2e) {
+          for (; currentRow < 10; currentRow++) {
+            rows[currentRow] = lastCompleteRow
+          }
+        } else if (code === 0x2f) {
+          for (; currentRow < 10; currentRow++) {
+            rows[currentRow] = rowOfZeros
+          }
+          return
+        } else if (0x30 <= code && code <= 0x33) {
+        } else if ((code & 0xc0) !== 0x40) {
+          console.log(
+            `unrecognized byte 0x${code.toString(16).padStart(2, '0')} in DRCS definition block`,
+          )
+        } else {
+          const bits = (code & 0x3f)
+            .toString(2)
+            .padStart(6, '0')
+            .split('')
+            .map((s) => parseInt(s, 2))
+          rowAccumulator = [...rowAccumulator, ...bits]
+          if (rowAccumulator.length == 12) {
+            rows[currentRow++] = [...rowAccumulator]
+            rowAccumulator = []
+          }
+        }
+      }
+    }
+    iterateBlocks()
+    console.log('glyph', glyphNumber, 'rows', rows)
+  }
+
   return {
     blink: (enabled: boolean) => {
       log('blink', { enabled })
@@ -290,6 +345,7 @@ export default (
       colorDepthCode: number,
     ) => {
       log('clearDrcsSet', { startCharCode, resolutionCode, colorDepthCode })
+      currentDrcsGlyph = startCharCode - 0x20
     },
     clearToEndOfLine: () => {
       log('clearToEndOfLine')
@@ -361,6 +417,10 @@ export default (
           block.map((x) => x.toString(16).padStart(2, '0')).join(' '),
         ),
       )
+      blocks.forEach((block) => {
+        defineDrcs(currentDrcsGlyph, block)
+        currentDrcsGlyph += 1
+      })
     },
     endOfPage: () => {
       log('endOfPage')
@@ -388,8 +448,8 @@ export default (
     invertBlinking: () => {
       log('invertBlinking')
     },
-    loadCharset: (intoCharset: number, loadCharset: number) => {
-      log('loadCharset', { intoCharset, loadCharset })
+    assignFont: (charset: number, fontNumber: number) => {
+      log('loadCharset', { charset, fontNumber })
     },
     mosaicOrTransparent: () => {
       log('mosaicOrTransparent')
@@ -495,6 +555,7 @@ export default (
     ) => {
       // fixme: types
       log('startDrcsSet', { startCharCode, resolutionCode, colorDepthCode })
+      currentDrcsGlyph = 0
     },
     startSelection: () => {
       log('startSelection')

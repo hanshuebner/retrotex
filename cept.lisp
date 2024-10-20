@@ -410,6 +410,7 @@
 (defun test-background-colors ()
   (parallel-mode)
   (clear-page)
+  (screen-color 4)
   (goto 0 0)
   (dotimes (color 8)
     (row-background-color color)
