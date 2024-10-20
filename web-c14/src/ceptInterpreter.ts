@@ -12,7 +12,7 @@ export type CeptInterpreter = {
     colorDepthCode: number,
   ) => void
   clearToEndOfLine: () => void
-  clearScreen: (clearAttributes: boolean) => void
+  clearScreen: (keepAttributes: boolean) => void
   cursorDown: () => void
   cursorHome: () => void
   cursorBack: () => void
@@ -100,7 +100,18 @@ export default (
   let rowColors: number[]
   let screenColor: number = 4
 
-  const debug = () => renderDebugDisplay(glyphs, attrs, rowColors, screenColor)
+  let noAttributes: boolean = false
+
+  const debug = () =>
+    renderDebugDisplay(
+      glyphs,
+      attrs,
+      rowColors,
+      screenColor,
+      currentRow,
+      currentColumn,
+      currentAttributes,
+    )
   setInterval(debug, 500)
 
   const defaultAttributes: Attributes = {
@@ -114,7 +125,7 @@ export default (
     inverted: false,
     protected: false,
     marked: false,
-    backgroundColor: 4,
+    backgroundColor: 0,
     foregroundColor: 7,
   }
 
@@ -170,12 +181,16 @@ export default (
     for (let row = 0; row < screenRows; row++) {
       for (let column = 0; column < screenColumns; column++) {
         const glyphIndex = glyphs[row][column]
-        const attributes = attrs[row][column]
+        const attributes = noAttributes ? defaultAttributes : attrs[row][column]
         if (attributes.notRendered) {
           continue
         }
-        const fgColor = getFgColor(row, column)
-        const bgColor = getBgColor(row, column)
+        const fgColor = noAttributes
+          ? (defaultAttributes.foregroundColor as number)
+          : getFgColor(row, column)
+        const bgColor = noAttributes
+          ? (defaultAttributes.backgroundColor as number)
+          : getBgColor(row, column)
         display.drawGlyph(
           glyphIndex,
           row,
@@ -210,25 +225,26 @@ export default (
       charCode >= 0x80
         ? display.fonts[currentRightFont]
         : display.fonts[currentLeftFont]
-    const { doubleWidth, doubleHeight } = currentAttributes
-    const columnIncrement = doubleWidth ? 2 : 1
-    const rowIncrement = doubleHeight ? 2 : 1
-    if (doubleWidth && currentColumn < screenColumns - 1) {
-      attrs[currentRow][currentColumn + 1].notRendered = true
-    }
-    if (doubleHeight && currentRow < screenRows - 1) {
-      attrs[currentRow + 1][currentColumn].notRendered = true
-    }
-    if (
-      doubleHeight &&
-      currentRow < screenRows - 1 &&
-      doubleWidth &&
-      currentColumn < screenColumns - 1
-    ) {
-      attrs[currentRow + 1][currentColumn + 1].notRendered = true
-    }
-    if (charCode < 0xc0 || charCode > 0xcf) {
-      // diacritical marks
+
+    if (currentLeftFont !== 0 || charCode < 0xc0 || charCode > 0xcf) {
+      // diacritical marks don't move the cursor
+      const { doubleWidth, doubleHeight } = currentAttributes
+      const columnIncrement = doubleWidth ? 2 : 1
+      const rowIncrement = doubleHeight ? 2 : 1
+      if (doubleWidth && currentColumn < screenColumns - 1) {
+        attrs[currentRow][currentColumn + 1].notRendered = true
+      }
+      if (doubleHeight && currentRow < screenRows - 1) {
+        attrs[currentRow + 1][currentColumn].notRendered = true
+      }
+      if (
+        doubleHeight &&
+        currentRow < screenRows - 1 &&
+        doubleWidth &&
+        currentColumn < screenColumns - 1
+      ) {
+        attrs[currentRow + 1][currentColumn + 1].notRendered = true
+      }
       if (currentColumn + columnIncrement < screenColumns) {
         currentColumn += columnIncrement
       } else if (currentWrapAround) {
@@ -244,12 +260,12 @@ export default (
     }
   }
 
-  const clearScreen = (clearAttributes: boolean) => {
+  const clearScreen = (keepAttributes: boolean) => {
     log('clearScreen')
     for (let row = 0; row < screenRows; row++) {
       for (let column = 0; column < screenColumns; column++) {
         glyphs[row][column] = 0
-        if (clearAttributes) {
+        if (!keepAttributes) {
           attrs[row][column] = {}
         }
       }
@@ -382,10 +398,12 @@ export default (
     reset: (parallel: boolean, limited: boolean) => {
       log('reset', { parallel, limited })
       currentMode = parallel ? 'parallel' : 'serial'
+      currentAttributes = { ...defaultAttributes }
     },
     parallelMode: () => {
       log('parallelMode')
       currentMode = 'parallel'
+      currentAttributes = { ...defaultAttributes }
     },
     polarity: (inverted: boolean) => {
       log('polarity', { inverted })
@@ -417,6 +435,7 @@ export default (
     serialMode: () => {
       log('serialMode')
       currentMode = 'serial'
+      currentAttributes = { ...defaultAttributes }
     },
     serviceBreakBack: () => {
       log('serviceBreakBack')

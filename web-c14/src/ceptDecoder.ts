@@ -1,6 +1,11 @@
-import {CeptInterpreter} from "./ceptInterpreter";
+import { CeptInterpreter } from './ceptInterpreter'
 
-const decode = async (interpreter: CeptInterpreter, next: () => Promise<number>, putback: (code: number) => void, error: (...args: any) => void) => {
+const decode = async (
+  interpreter: CeptInterpreter,
+  next: () => Promise<number>,
+  putback: (code: number) => void,
+  error: (...args: any) => void,
+) => {
   const esc = async () => {
     const c = await next()
     switch (c) {
@@ -110,7 +115,11 @@ const decode = async (interpreter: CeptInterpreter, next: () => Promise<number>,
         }
         resolutionCode = await next()
         colorDepthCode = await next()
-        interpreter.clearDrcsSet(startCharCode, resolutionCode & 0x0f, colorDepthCode & 0x0f)
+        interpreter.clearDrcsSet(
+          startCharCode,
+          resolutionCode & 0x0f,
+          colorDepthCode & 0x0f,
+        )
       } else {
         interpreter.startDrcsSet(startCharCode, resolutionCode, colorDepthCode)
       }
@@ -171,13 +180,15 @@ const decode = async (interpreter: CeptInterpreter, next: () => Promise<number>,
     rgb: boolean
   }
 
-  const decodeColorDefinitionHeader = (header: number[]): ColorTableDefinitionHeader => {
+  const decodeColorDefinitionHeader = (
+    header: number[],
+  ): ColorTableDefinitionHeader => {
     const [tableType, tableNumber, unitResolution, codingMethod] = header
     return {
       tableType: tableType & 0x0f,
       tableNumber: tableNumber & 0x0f,
       bitsPerUnit: unitResolution & 0x0f,
-      rgb: !!(codingMethod & 1)
+      rgb: !!(codingMethod & 1),
     }
   }
 
@@ -187,7 +198,9 @@ const decode = async (interpreter: CeptInterpreter, next: () => Promise<number>,
       interpreter.resetColorDefinitions()
     } else if (c === 0x20) {
       const headerDefaults = [0x20, 0x20, 0x34, 0x41, 0x4e]
-      const colorDefinitionHeader = decodeColorDefinitionHeader(await readDefaulting(headerDefaults))
+      const colorDefinitionHeader = decodeColorDefinitionHeader(
+        await readDefaulting(headerDefaults),
+      )
       interpreter.setColorDefinitionHeader(colorDefinitionHeader)
     } else if ((c & 0xf0) === 0x30) {
       let colorNumber = c & 0x0f
@@ -205,9 +218,21 @@ const decode = async (interpreter: CeptInterpreter, next: () => Promise<number>,
       if ((b2 & 0xc0) !== 0x40) {
         error(`invalid second color byte ${b2.toString(2)}`)
       }
-      const r = ((b1 & 0b00100000) >> 2) + ((b1 & 0b00000100) << 0) + ((b2 & 0b00100000) >> 4) + ((b2 & 0b00000100) >> 2)
-      const g = ((b1 & 0b00010000) >> 1) + ((b1 & 0b00000010) << 1) + ((b2 & 0b00010000) >> 3) + ((b2 & 0b00000010) >> 1)
-      const b = ((b1 & 0b00001000) >> 0) + ((b1 & 0b00000001) << 2) + ((b2 & 0b00001000) >> 2) + ((b2 & 0b00000001) >> 0)
+      const r =
+        ((b1 & 0b00100000) >> 2) +
+        ((b1 & 0b00000100) << 0) +
+        ((b2 & 0b00100000) >> 4) +
+        ((b2 & 0b00000100) >> 2)
+      const g =
+        ((b1 & 0b00010000) >> 1) +
+        ((b1 & 0b00000010) << 1) +
+        ((b2 & 0b00010000) >> 3) +
+        ((b2 & 0b00000010) >> 1)
+      const b =
+        ((b1 & 0b00001000) >> 0) +
+        ((b1 & 0b00000001) << 2) +
+        ((b2 & 0b00001000) >> 2) +
+        ((b2 & 0b00000001) >> 0)
       interpreter.defineColor(colorNumber, r, g, b)
     } else {
       error()
@@ -255,19 +280,37 @@ const decode = async (interpreter: CeptInterpreter, next: () => Promise<number>,
       switch (c & 0xf0) {
         case 0x40:
           switch (c) {
-            case 0x41: columns = 40; rows = 24; break
-            case 0x42: columns = 40; rows = 20; break
-            case 0x43: columns = 80; rows = 24; break
-            case 0x44: columns = 80; rows = 20; break
-            case 0x45: columns = 48; rows = 20; break
-            case 0x46: columns = 40; rows = 25; break
+            case 0x41:
+              columns = 40
+              rows = 24
+              break
+            case 0x42:
+              columns = 40
+              rows = 20
+              break
+            case 0x43:
+              columns = 80
+              rows = 24
+              break
+            case 0x44:
+              columns = 80
+              rows = 20
+              break
+            case 0x45:
+              columns = 48
+              rows = 20
+              break
+            case 0x46:
+              columns = 40
+              rows = 25
+              break
             default:
               error('unknown screen format code in vpde')
               return
           }
           break
         case 0x30:
-          if (c === 0x3B) {
+          if (c === 0x3b) {
             if (rows === undefined) {
               rows = accumulator
             } else {
@@ -400,7 +443,7 @@ const decode = async (interpreter: CeptInterpreter, next: () => Promise<number>,
       interpreter.cursorUp()
       break
     case 0x0c:
-      interpreter.clearScreen(true)
+      interpreter.clearScreen(false)
       break
     case 0x0d:
       interpreter.cursorToBeginningOfLine()

@@ -5,6 +5,9 @@ export const renderDebugDisplay = (
   attrs: Attributes[][],
   rowColors: number[],
   screenColor: number,
+  currentRow: number,
+  currentColumn: number,
+  currentAttributes: Attributes,
 ) => {
   const createChip = (label: string, color: string) => {
     const chip = document.createElement('div')
@@ -84,6 +87,10 @@ export const renderDebugDisplay = (
         attrs[row][col].backgroundColor !== undefined ||
         Object.values(attrs[row][col]).some((attr) => attr === true)
 
+      if (row == currentRow && col === currentColumn) {
+        cell.style.borderWidth = '3px'
+        cell.style.borderColor = 'red'
+      }
       if (hasAttributes) {
         cell.style.backgroundColor = '#ffeb3b' // Distinct background color
       }

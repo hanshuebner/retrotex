@@ -88,44 +88,29 @@ export default async (canvas: HTMLCanvasElement): Promise<Display> => {
         const pixelIndex =
           (glyphY + y) * (glyphsPerFontRow * glyphWidth) + (glyphX + x)
         const pixel = fontData[pixelIndex]
-
-        const screenX =
-          col * glyphWidth + (glyphWidth + x) * (doubleWidth ? 2 : 1)
+        const screenX = col * glyphWidth + x * (doubleWidth ? 2 : 1)
         const screenY = row * glyphHeight + y * (doubleHeight ? 2 : 1)
-
-        setPixel(
-          screenX,
-          screenY,
-          pixel ? fgColor : bgColor,
-          doubleWidth,
-          doubleHeight,
-        )
+        const color = pixel ? fgColor : bgColor
+        setPixel(screenX, screenY, color)
+        if (doubleWidth) {
+          setPixel(screenX + 1, screenY, color)
+        }
+        if (doubleHeight) {
+          setPixel(screenX, screenY + 1, color)
+        }
+        if (doubleWidth && doubleHeight) {
+          setPixel(screenX + 1, screenY + 1, color)
+        }
       }
     }
   }
 
-  const setPixel = (
-    x: number,
-    y: number,
-    color: number,
-    doubleWidth: boolean,
-    doubleHeight: boolean,
-  ) => {
+  const setPixel = (x: number, y: number, color: number) => {
     if (x < 0 || x >= screen_pixel_width || y < 0 || y >= screen_pixel_height)
       return
 
     const index = y * screen_pixel_width + x
     framebuffer[index] = color
-
-    if (doubleWidth) {
-      setPixel(x + 1, y, color, false, doubleHeight)
-    }
-    if (doubleHeight) {
-      setPixel(x, y + 1, color, doubleWidth, false)
-    }
-    if (doubleWidth && doubleHeight) {
-      setPixel(x + 1, y + 1, color, doubleWidth, false)
-    }
   }
 
   const loadFontData = async (url: string) => {

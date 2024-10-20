@@ -39,7 +39,9 @@
            #:left-charset
            #:right-charset
            #:select-charset
-           #:dump-printable-chars))
+           #:dump-printable-chars
+           #:serial-mode
+           #:parallel-mode))
 
 (in-package :cept)
 
@@ -135,6 +137,12 @@
 
 (defun color-polarity (swap)
   (write-cept #x1b #x23 #x21 (if swap #x5d #x5c)))
+
+(defun serial-mode ()
+  (write-cept #x1B #x22 #x40))
+
+(defun parallel-mode ()
+  (write-cept #x1B #x22 #x41))
 
 (defun foreground-color (color)
   (assert (<= 0 color 7))
@@ -380,4 +388,21 @@
   (dolist (base '(#x20 #x40 #x60 #xa0 #xc0 #xe0))
     (dotimes (i 32)
       (write-cept (+ base i)))
-    (write-cept #\return #\linefeed)))
+    (write-cept #\return #\linefeed))
+  (left-charset 0)
+  (right-charset 1))
+
+(defun test-page ()
+  (parallel-mode)
+  (clear-page)
+  (goto 0 0)
+  (write-cept "Test page" #\return #\linefeed)
+  (double-width)
+  (write-cept "Double Width" #\return #\linefeed)
+  (double-height)
+  (write-cept "Double Height" #\return #\linefeed #\linefeed)
+  (quad-size)
+  (write-cept "Quad Size" #\return #\linefeed #\linefeed)
+  (normal-size)
+  (write-cept "Normal Size (and enabling double width)")
+  (double-width))
