@@ -125,7 +125,6 @@ export default (
     inverted: false,
     protected: false,
     marked: false,
-    backgroundColor: 0,
     foregroundColor: 7,
   }
 
@@ -446,10 +445,12 @@ export default (
     setBgColorOfRow: (color: number) => {
       log('setBgColorOfRow', { color })
       rowColors[currentRow] = color
+      display.setRowColor(currentRow, colors[color])
     },
     setBgColorOfScreen: (color: number) => {
       log('setBgColorOfScreen', { color })
       screenColor = color
+      display.setScreenColor(colors[color])
     },
     setColorDefinitionHeader: (colorDefinitionHeader: any) => {
       // fixme: any

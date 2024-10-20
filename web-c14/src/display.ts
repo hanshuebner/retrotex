@@ -22,6 +22,8 @@ export interface Display {
     doubleHeight?: boolean,
   ) => void
   render: () => void
+  setScreenColor: (color: number) => void
+  setRowColor: (row: number, color: number) => void
 }
 
 export default async (canvas: HTMLCanvasElement): Promise<Display> => {
@@ -30,10 +32,16 @@ export default async (canvas: HTMLCanvasElement): Promise<Display> => {
     throw new Error('Could not get 2d context')
   }
 
-  const screen_pixel_width = 40 * 12
-  const screen_pixel_height = 25 * 10
+  const glyphWidth = 12
+  const glyphHeight = 10
+  const screenPixelWidth = 40 * glyphWidth
+  const screenPixelHeight = 25 * glyphHeight
+  const borderPixelWidth = Math.floor((canvas.width - screenPixelWidth) / 2)
+  const borderPixelHeight = Math.floor((canvas.height - screenPixelHeight) / 2)
+  const renderImageWidth = screenPixelWidth + 2 * borderPixelWidth
+  const renderImageHeight = screenPixelHeight + 2 * borderPixelHeight
 
-  const framebuffer = new Uint16Array(screen_pixel_width * screen_pixel_height)
+  const framebuffer = new Uint16Array(renderImageWidth * renderImageHeight)
 
   const drawString = (
     str: string,
@@ -106,11 +114,44 @@ export default async (canvas: HTMLCanvasElement): Promise<Display> => {
   }
 
   const setPixel = (x: number, y: number, color: number) => {
-    if (x < 0 || x >= screen_pixel_width || y < 0 || y >= screen_pixel_height)
+    if (x < 0 || x >= screenPixelWidth || y < 0 || y >= screenPixelHeight)
       return
 
-    const index = y * screen_pixel_width + x
+    const index =
+      (y + borderPixelHeight) * (screenPixelWidth + 2 * borderPixelWidth) +
+      x +
+      borderPixelWidth
     framebuffer[index] = color
+  }
+
+  const setScreenPixel = (x: number, y: number, color: number) => {
+    const index = y * renderImageWidth + x
+    framebuffer[index] = color
+  }
+
+  const setScreenColor = (color: number) => {
+    for (let y = 0; y < renderImageHeight; y++) {
+      for (let x = 0; x < renderImageWidth; x++) {
+        if (
+          y < borderPixelHeight ||
+          y >= borderPixelHeight + screenPixelHeight ||
+          x < borderPixelWidth ||
+          x >= borderPixelWidth + screenPixelWidth
+        ) {
+          setScreenPixel(x, y, color)
+        }
+      }
+    }
+  }
+
+  const setRowColor = (row: number, color: number) => {
+    for (let y = 0; y < glyphHeight; y++) {
+      for (let x = 0; x < renderImageWidth; x++) {
+        if (x < borderPixelWidth || x >= borderPixelWidth + screenPixelWidth) {
+          setScreenPixel(x, y + row * glyphHeight + borderPixelHeight, color)
+        }
+      }
+    }
   }
 
   const loadFontData = async (url: string) => {
@@ -144,7 +185,7 @@ export default async (canvas: HTMLCanvasElement): Promise<Display> => {
   }
 
   // Create an ImageData object for rendering
-  const imageData = ctx.createImageData(screen_pixel_width, screen_pixel_height)
+  const imageData = ctx.createImageData(renderImageWidth, renderImageHeight)
   const data = imageData.data
 
   // Convert a 12-bit color to a 24-bit RGB color
@@ -174,8 +215,8 @@ export default async (canvas: HTMLCanvasElement): Promise<Display> => {
   }
 
   const resizeCanvas = () => {
-    const originalWidth = screen_pixel_width
-    const originalHeight = screen_pixel_height
+    const originalWidth = renderImageWidth
+    const originalHeight = renderImageHeight
 
     // Desired pixel aspect ratio
     const pixelAspectRatio = 0.6
@@ -209,11 +250,6 @@ export default async (canvas: HTMLCanvasElement): Promise<Display> => {
 
   // Initialize the canvas size
   resizeCanvas()
-  const fillFramebufferWithRandomColors = () => {
-    for (let i = 0; i < framebuffer.length; i++) {
-      framebuffer[i] = Math.floor(Math.random() * 4096)
-    }
-  }
 
   const fonts = [
     await loadFontData('font-g0.png'),
@@ -226,6 +262,8 @@ export default async (canvas: HTMLCanvasElement): Promise<Display> => {
   return {
     fonts,
     fontDiacritical,
+    setScreenColor,
+    setRowColor,
     drawString,
     drawGlyph,
     render,
