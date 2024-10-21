@@ -79,6 +79,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       (e: any) => console.log('Error', e),
     )
     atStep += 1
-    interpreter.updateDebugDisplay()
+    interpreter.updateDisplay()
   }
 })

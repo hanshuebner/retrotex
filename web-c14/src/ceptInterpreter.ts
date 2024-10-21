@@ -5,7 +5,7 @@ export type AttributeMode = 'serial' | 'parallel'
 
 export type CeptInterpreter = {
   attributeMode: () => AttributeMode
-  updateDebugDisplay: () => void
+  updateDisplay: () => void
   blink: (enabled: boolean) => void
   blinkPalettes: () => void
   blinkingShiftLeft: () => void
@@ -108,17 +108,6 @@ export default (
 
   let noAttributes: boolean = false
 
-  const updateDebugDisplay = () =>
-    renderDebugDisplay(
-      glyphs,
-      attrs,
-      rowColors,
-      screenColor,
-      currentRow,
-      currentColumn,
-      parallelAttributes,
-    )
-
   const defaultAttributes: Attributes = {
     font: display.fonts[0],
     doubleWidth: false,
@@ -161,23 +150,37 @@ export default (
   let currentMode: AttributeMode = 'serial'
   let parallelAttributes = { ...defaultAttributes }
 
-  const getFgColor = (row: number, column: number): number => {
-    if (attrs[row][column].foregroundColor !== undefined) {
-      return attrs[row][column].foregroundColor as number
-    } else if (parallelAttributes.foregroundColor !== undefined) {
-      return parallelAttributes.foregroundColor
+  const getFgColor = (attributes: Attributes): number => {
+    if (attributes.inverted) {
+      if (attributes.backgroundColor !== undefined) {
+        return attributes.backgroundColor as number
+      } else {
+        return 0
+      }
     } else {
-      return 7
+      if (attributes.foregroundColor !== undefined) {
+        return attributes.foregroundColor as number
+      } else {
+        return 7
+      }
     }
   }
 
-  const getBgColor = (row: number, column: number): number => {
-    if (attrs[row][column].backgroundColor !== undefined) {
-      return attrs[row][column].backgroundColor as number
-    } else if (rowColors[row] !== undefined) {
-      return rowColors[row]
+  const getBgColor = (attributes: Attributes, row: number): number => {
+    if (attributes.inverted) {
+      if (attributes.foregroundColor !== undefined) {
+        return attributes.foregroundColor as number
+      } else {
+        return screenColor
+      }
     } else {
-      return screenColor
+      if (attributes.backgroundColor !== undefined) {
+        return attributes.backgroundColor as number
+      } else if (rowColors[row] !== undefined) {
+        return rowColors[row]
+      } else {
+        return screenColor
+      }
     }
   }
 
@@ -194,17 +197,17 @@ export default (
         }
         const fgColor = noAttributes
           ? (defaultAttributes.foregroundColor as number)
-          : getFgColor(row, column)
+          : getFgColor(attributes)
         const bgColor = noAttributes
           ? (defaultAttributes.backgroundColor as number)
-          : getBgColor(row, column)
+          : getBgColor(attributes, currentRow)
         display.drawGlyph(
           glyphIndex,
           row,
           column,
           attributes.font || display.fonts[0],
-          colors[attributes.inverted ? bgColor : fgColor],
-          colors[attributes.inverted ? fgColor : bgColor],
+          colors[fgColor],
+          colors[bgColor],
           attributes.doubleWidth,
           attributes.doubleHeight,
         )
@@ -216,7 +219,18 @@ export default (
     display.render()
   }
 
-  setInterval(redraw, 250)
+  const updateDebugDisplay = () => {
+    renderDebugDisplay(
+      glyphs,
+      attrs,
+      rowColors,
+      screenColor,
+      currentRow,
+      currentColumn,
+      parallelAttributes,
+    )
+    redraw()
+  }
 
   const getCurrentRowAttributes = () => {
     if (currentMode == 'serial') {
@@ -286,11 +300,19 @@ export default (
 
   const changeAttribute = (change: Attributes) => {
     if (currentMode == 'serial') {
+      if ('inverted' in change) {
+        if (change.inverted) {
+          change = {
+            backgroundColor: getCurrentRowAttributes().foregroundColor,
+          }
+        } else {
+          change = { backgroundColor: 0 }
+        }
+      }
       attrs[currentRow][currentColumn] = {
         ...attrs[currentRow][currentColumn],
         ...change,
       }
-      glyphs[currentRow][currentColumn]
       currentColumn += 1
     } else {
       parallelAttributes = { ...parallelAttributes, ...change }
@@ -367,7 +389,7 @@ export default (
     attributeMode: () => {
       return currentMode
     },
-    updateDebugDisplay,
+    updateDisplay: updateDebugDisplay,
 
     // CEPT handlers
     blink: (enabled: boolean) => {
