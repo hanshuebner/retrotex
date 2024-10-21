@@ -21,6 +21,7 @@ export interface Display {
     doubleWidth?: boolean,
     doubleHeight?: boolean,
   ) => void
+  defineDrcs: (glyphNumber: number, rows: number[][]) => void
   render: () => void
   setScreenColor: (color: number) => void
   setRowColor: (row: number, color: number) => void
@@ -34,6 +35,7 @@ export default async (canvas: HTMLCanvasElement): Promise<Display> => {
 
   const glyphWidth = 12
   const glyphHeight = 10
+  const glyphsPerFontRow = 16 // 96 glyphs in a 16x6 grid
   const screenPixelWidth = 40 * glyphWidth
   const screenPixelHeight = 25 * glyphHeight
   const borderPixelWidth = Math.floor((canvas.width - screenPixelWidth) / 2)
@@ -69,6 +71,7 @@ export default async (canvas: HTMLCanvasElement): Promise<Display> => {
   }
 
   // Text rendering
+
   const drawGlyph = (
     glyphIndex: number,
     row: number,
@@ -83,10 +86,6 @@ export default async (canvas: HTMLCanvasElement): Promise<Display> => {
       0 <= glyphIndex && glyphIndex <= 96,
       `invalid glyph index ${glyphIndex}`,
     )
-
-    const glyphWidth = 12
-    const glyphHeight = 10
-    const glyphsPerFontRow = 16 // 96 glyphs in a 16x6 grid
 
     const glyphX = (glyphIndex % glyphsPerFontRow) * glyphWidth
     const glyphY = Math.floor(glyphIndex / glyphsPerFontRow) * glyphHeight
@@ -109,6 +108,20 @@ export default async (canvas: HTMLCanvasElement): Promise<Display> => {
         if (doubleWidth && doubleHeight) {
           setPixel(screenX + 1, screenY + 1, color)
         }
+      }
+    }
+  }
+
+  const drcsFont = new Uint8Array(96 * glyphHeight * glyphWidth)
+  const defineDrcs = (glyphIndex: number, rows: number[][]) => {
+    if (glyphIndex === 99) return
+    const glyphX = (glyphIndex % glyphsPerFontRow) * glyphWidth
+    const glyphY = Math.floor(glyphIndex / glyphsPerFontRow) * glyphHeight
+    for (let y = 0; y < glyphHeight; y++) {
+      for (let x = 0; x < glyphWidth; x++) {
+        const pixelIndex =
+          (glyphY + y) * (glyphsPerFontRow * glyphWidth) + (glyphX + x)
+        drcsFont[pixelIndex] = rows[y][x]
       }
     }
   }
@@ -251,11 +264,15 @@ export default async (canvas: HTMLCanvasElement): Promise<Display> => {
   // Initialize the canvas size
   resizeCanvas()
 
+  const fontG0 = await loadFontData('font-g0.png')
+
   const fonts = [
-    await loadFontData('font-g0.png'),
+    fontG0,
     await loadFontData('font-g1.png'),
     await loadFontData('font-g2.png'),
     await loadFontData('font-g3.png'),
+    new Uint8Array(fontG0.length).fill(0), // defaults for DRCS (?)
+    drcsFont,
   ]
   const fontDiacritical = await loadFontData('font-diacritical.png')
 
@@ -266,6 +283,7 @@ export default async (canvas: HTMLCanvasElement): Promise<Display> => {
     setRowColor,
     drawString,
     drawGlyph,
+    defineDrcs,
     render,
   }
 }

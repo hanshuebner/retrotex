@@ -96,8 +96,9 @@ export default (
   let screenRows: number
   let screenColumns: number
 
-  let currentLeftFont = 0
-  let currentRightFont = 1
+  let charsetFont = [0, 1, 2, 3]
+  let currentLeftCharset = 0
+  let currentRightCharset = 1
 
   let currentDrcsGlyph = 0
 
@@ -109,7 +110,6 @@ export default (
   let noAttributes: boolean = false
 
   const defaultAttributes: Attributes = {
-    font: display.fonts[0],
     doubleWidth: false,
     doubleHeight: false,
     boxed: false,
@@ -288,10 +288,10 @@ export default (
     }
     attrs[currentRow][currentColumn].font =
       charCode >= 0x80
-        ? display.fonts[currentRightFont]
-        : display.fonts[currentLeftFont]
+        ? display.fonts[charsetFont[currentRightCharset]]
+        : display.fonts[charsetFont[currentLeftCharset]]
 
-    if (currentLeftFont !== 0 || charCode < 0xc0 || charCode > 0xcf) {
+    if (currentLeftCharset !== 0 || charCode < 0xc0 || charCode > 0xcf) {
       // diacritical marks don't move the cursor
       advanceCursor()
     } else {
@@ -345,7 +345,7 @@ export default (
           return
         } else if (0x21 <= code && code <= 0x2a) {
           const count = code & 0x0f
-          for (let i = 1; i <= count; i++) {
+          for (let i = 0; i < count; i++) {
             rows[currentRow + i] = lastCompleteRow
           }
           currentRow += count
@@ -359,7 +359,7 @@ export default (
           }
         } else if (code === 0x2f) {
           for (; currentRow < 10; currentRow++) {
-            rows[currentRow] = rowOfZeros
+            rows[currentRow] = rowOfOnes
           }
           return
         } else if (0x30 <= code && code <= 0x33) {
@@ -383,6 +383,7 @@ export default (
     }
     iterateBlocks()
     console.log('glyph', glyphNumber, 'rows', rows)
+    display.defineDrcs(glyphNumber, rows)
   }
 
   return {
@@ -411,7 +412,7 @@ export default (
       colorDepthCode: number,
     ) => {
       log('clearDrcsSet', { startCharCode, resolutionCode, colorDepthCode })
-      currentDrcsGlyph = startCharCode - 0x20
+      currentDrcsGlyph = startCharCode - 0x1f
     },
     clearToEndOfLine: () => {
       log('clearToEndOfLine')
@@ -504,17 +505,18 @@ export default (
     },
     intoLeftCharset: (charset: number) => {
       log('intoLeftCharset', { charset })
-      currentLeftFont = charset
+      currentLeftCharset = charset
     },
     intoRightCharset: (charset: number) => {
       log('intoRightCharset', { charset })
-      currentRightFont = charset
+      currentRightCharset = charset
     },
     invertBlinking: () => {
       log('invertBlinking')
     },
     assignFont: (charset: number, fontNumber: number) => {
-      log('loadCharset', { charset, fontNumber })
+      log('assignFont', { charset, fontNumber })
+      charsetFont[charset] = fontNumber
     },
     mosaicOrTransparent: () => {
       log('mosaicOrTransparent')
