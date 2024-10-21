@@ -469,7 +469,7 @@ export default (
     },
     defineColor: (index: number, r: number, g: number, b: number) => {
       log('defineColor', { index, r, g, b })
-      colors[index] = (b << 8) | (g << 4) | r
+      colors[index] = (r << 8) | (g << 4) | b
     },
     doubleSize: (doubleWidth: boolean, doubleHeight: boolean) => {
       log('doubleSize', { doubleWidth, doubleHeight })
