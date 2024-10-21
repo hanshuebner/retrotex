@@ -5,6 +5,7 @@ export type AttributeMode = 'serial' | 'parallel'
 
 export type CeptInterpreter = {
   attributeMode: () => AttributeMode
+  updateDebugDisplay: () => void
   blink: (enabled: boolean) => void
   blinkPalettes: () => void
   blinkingShiftLeft: () => void
@@ -107,7 +108,7 @@ export default (
 
   let noAttributes: boolean = false
 
-  const debug = () =>
+  const updateDebugDisplay = () =>
     renderDebugDisplay(
       glyphs,
       attrs,
@@ -115,9 +116,8 @@ export default (
       screenColor,
       currentRow,
       currentColumn,
-      currentAttributes,
+      parallelAttributes,
     )
-  setInterval(debug, 500)
 
   const defaultAttributes: Attributes = {
     font: display.fonts[0],
@@ -159,13 +159,13 @@ export default (
   setScreenSize(24, 40) // bla
   let currentWrapAround = true
   let currentMode: AttributeMode = 'serial'
-  let currentAttributes = { ...defaultAttributes }
+  let parallelAttributes = { ...defaultAttributes }
 
   const getFgColor = (row: number, column: number): number => {
     if (attrs[row][column].foregroundColor !== undefined) {
       return attrs[row][column].foregroundColor as number
-    } else if (currentAttributes.foregroundColor !== undefined) {
-      return currentAttributes.foregroundColor
+    } else if (parallelAttributes.foregroundColor !== undefined) {
+      return parallelAttributes.foregroundColor
     } else {
       return 7
     }
@@ -183,9 +183,12 @@ export default (
 
   const redraw = () => {
     for (let row = 0; row < screenRows; row++) {
+      let attributes = { ...defaultAttributes }
       for (let column = 0; column < screenColumns; column++) {
         const glyphIndex = glyphs[row][column]
-        const attributes = noAttributes ? defaultAttributes : attrs[row][column]
+        if (!noAttributes) {
+          attributes = { ...attributes, ...attrs[row][column] }
+        }
         if (attributes.notRendered) {
           continue
         }
@@ -215,6 +218,47 @@ export default (
 
   setInterval(redraw, 250)
 
+  const getCurrentRowAttributes = () => {
+    if (currentMode == 'serial') {
+      let attributes = { ...defaultAttributes }
+      for (let column = 0; column <= currentColumn; column++) {
+        attributes = { ...attributes, ...attrs[currentRow][column] }
+      }
+      return attributes
+    } else {
+      return parallelAttributes
+    }
+  }
+
+  const advanceCursor = () => {
+    const { doubleWidth, doubleHeight } = getCurrentRowAttributes()
+    const columnIncrement = doubleWidth ? 2 : 1
+    if (doubleWidth && currentColumn < screenColumns - 1) {
+      attrs[currentRow][currentColumn + 1].notRendered = true
+    }
+    if (doubleHeight && currentRow < screenRows - 1) {
+      attrs[currentRow + 1][currentColumn].notRendered = true
+    }
+    if (
+      doubleHeight &&
+      currentRow < screenRows - 1 &&
+      doubleWidth &&
+      currentColumn < screenColumns - 1
+    ) {
+      attrs[currentRow + 1][currentColumn + 1].notRendered = true
+    }
+    if (currentColumn + columnIncrement < screenColumns) {
+      currentColumn += columnIncrement
+    } else if (currentWrapAround) {
+      currentColumn = 0
+      if (currentRow + 1 < screenRows) {
+        currentRow += 1
+      } else {
+        currentRow = 0
+      }
+    }
+  }
+
   let lastCharCode = 0
   const putChar = (charCode: number) => {
     if (charCode < 0x80) {
@@ -224,7 +268,9 @@ export default (
     }
     lastCharCode = charCode
     glyphs[currentRow][currentColumn] = (charCode & 0x7f) - 0x20
-    attrs[currentRow][currentColumn] = { ...currentAttributes }
+    if (currentMode == 'parallel') {
+      attrs[currentRow][currentColumn] = { ...parallelAttributes }
+    }
     attrs[currentRow][currentColumn].font =
       charCode >= 0x80
         ? display.fonts[currentRightFont]
@@ -232,35 +278,22 @@ export default (
 
     if (currentLeftFont !== 0 || charCode < 0xc0 || charCode > 0xcf) {
       // diacritical marks don't move the cursor
-      const { doubleWidth, doubleHeight } = currentAttributes
-      const columnIncrement = doubleWidth ? 2 : 1
-      const rowIncrement = doubleHeight ? 2 : 1
-      if (doubleWidth && currentColumn < screenColumns - 1) {
-        attrs[currentRow][currentColumn + 1].notRendered = true
-      }
-      if (doubleHeight && currentRow < screenRows - 1) {
-        attrs[currentRow + 1][currentColumn].notRendered = true
-      }
-      if (
-        doubleHeight &&
-        currentRow < screenRows - 1 &&
-        doubleWidth &&
-        currentColumn < screenColumns - 1
-      ) {
-        attrs[currentRow + 1][currentColumn + 1].notRendered = true
-      }
-      if (currentColumn + columnIncrement < screenColumns) {
-        currentColumn += columnIncrement
-      } else if (currentWrapAround) {
-        currentColumn = 0
-        if (currentRow + rowIncrement < screenRows) {
-          currentRow += rowIncrement
-        } else {
-          currentRow = 0
-        }
-      }
+      advanceCursor()
     } else {
       console.log('skipping diacritical mark for now')
+    }
+  }
+
+  const changeAttribute = (change: Attributes) => {
+    if (currentMode == 'serial') {
+      attrs[currentRow][currentColumn] = {
+        ...attrs[currentRow][currentColumn],
+        ...change,
+      }
+      glyphs[currentRow][currentColumn]
+      currentColumn += 1
+    } else {
+      parallelAttributes = { ...parallelAttributes, ...change }
     }
   }
 
@@ -330,9 +363,13 @@ export default (
   }
 
   return {
+    // Internal handlers
     attributeMode: () => {
       return currentMode
     },
+    updateDebugDisplay,
+
+    // CEPT handlers
     blink: (enabled: boolean) => {
       log('blink', { enabled })
     },
@@ -373,7 +410,7 @@ export default (
     },
     cursorBack: () => {
       log('cursorBack')
-      if (currentColumn > 1) {
+      if (currentColumn > 0) {
         currentColumn -= 1
       } else {
         currentColumn = screenColumns - 1
@@ -411,10 +448,9 @@ export default (
       log('defineColor', { index, r, g, b })
       colors[index] = (b << 8) | (g << 4) | r
     },
-    doubleSize: (width: boolean, height: boolean) => {
-      log('doubleSize', { width, height })
-      currentAttributes.doubleWidth = width
-      currentAttributes.doubleHeight = height
+    doubleSize: (doubleWidth: boolean, doubleHeight: boolean) => {
+      log('doubleSize', { doubleWidth, doubleHeight })
+      changeAttribute({ doubleWidth, doubleHeight })
     },
     drcsDefinitionBlocks: (blocks: number[][]) => {
       log(
@@ -463,16 +499,16 @@ export default (
     reset: (parallel: boolean, limited: boolean) => {
       log('reset', { parallel, limited })
       currentMode = parallel ? 'parallel' : 'serial'
-      currentAttributes = { ...defaultAttributes }
+      parallelAttributes = { ...defaultAttributes }
     },
     parallelMode: () => {
       log('parallelMode')
       currentMode = 'parallel'
-      currentAttributes = { ...defaultAttributes }
+      parallelAttributes = { ...defaultAttributes }
     },
     polarity: (inverted: boolean) => {
       log('polarity', { inverted })
-      currentAttributes.inverted = inverted
+      changeAttribute({ inverted })
     },
     protectLine: () => {
       log('protectLine')
@@ -500,7 +536,6 @@ export default (
     serialMode: () => {
       log('serialMode')
       currentMode = 'serial'
-      currentAttributes = { ...defaultAttributes }
     },
     serviceBreakBack: () => {
       log('serviceBreakBack')
@@ -538,7 +573,7 @@ export default (
     },
     setFgColor: (color: number) => {
       log('setFgColor', { color })
-      currentAttributes.foregroundColor = color
+      changeAttribute({ foregroundColor: color })
     },
     setFgColorOfRow: (color: number) => {
       log('setFgColorOfRow', { color })
