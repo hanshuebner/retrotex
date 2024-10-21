@@ -148,6 +148,7 @@ export default (
   setScreenSize(24, 40) // bla
   let currentWrapAround = true
   let currentMode: AttributeMode = 'serial'
+  let currentPalette = 0
   let parallelAttributes = { ...defaultAttributes }
 
   const getFgColor = (attributes: Attributes): number => {
@@ -543,14 +544,18 @@ export default (
       }
     },
     resetColorDefinitions: () => {
-      // fixme missing
       log('resetColorDefinitions')
+      for (let color = 0; color < 8; color++) {
+        colors[color + 16] = colors[color]
+        colors[color + 24] = colors[color]
+      }
     },
     resetShortcuts: () => {
       log('resetShortcuts')
     },
     selectPalette: (palette: number) => {
       log('selectPalette', { palette })
+      currentPalette = palette
     },
     sendShortcut: (shortcut: number, suppressClearScreen: boolean) => {
       log('sendShortcut', { shortcut }, suppressClearScreen)
@@ -595,7 +600,7 @@ export default (
     },
     setFgColor: (color: number) => {
       log('setFgColor', { color })
-      changeAttribute({ foregroundColor: color })
+      changeAttribute({ foregroundColor: currentPalette * 8 + color })
     },
     setFgColorOfRow: (color: number) => {
       log('setFgColorOfRow', { color })

@@ -216,29 +216,33 @@ const decode = async (
         putback(low)
       }
       const colorBytes = await readColorDefinitionBytes()
-      const [b1, b2] = colorBytes
-      if ((b1 & 0xc0) !== 0x40) {
-        error(`invalid first color byte ${b1.toString(2)}`)
+      for (let i = 0; i < colorBytes.length; i += 2) {
+        const b1 = colorBytes[i]
+        const b2 = colorBytes[i + 1]
+        if ((b1 & 0xc0) !== 0x40) {
+          error(`invalid first color byte ${b1.toString(2)}`)
+        }
+        if ((b2 & 0xc0) !== 0x40) {
+          error(`invalid second color byte ${b2.toString(2)}`)
+        }
+        const r =
+          ((b1 & 0b00100000) >> 2) +
+          ((b1 & 0b00000100) << 0) +
+          ((b2 & 0b00100000) >> 4) +
+          ((b2 & 0b00000100) >> 2)
+        const g =
+          ((b1 & 0b00010000) >> 1) +
+          ((b1 & 0b00000010) << 1) +
+          ((b2 & 0b00010000) >> 3) +
+          ((b2 & 0b00000010) >> 1)
+        const b =
+          ((b1 & 0b00001000) >> 0) +
+          ((b1 & 0b00000001) << 2) +
+          ((b2 & 0b00001000) >> 2) +
+          ((b2 & 0b00000001) >> 0)
+        interpreter.defineColor(colorNumber, r, g, b)
+        colorNumber += 1
       }
-      if ((b2 & 0xc0) !== 0x40) {
-        error(`invalid second color byte ${b2.toString(2)}`)
-      }
-      const r =
-        ((b1 & 0b00100000) >> 2) +
-        ((b1 & 0b00000100) << 0) +
-        ((b2 & 0b00100000) >> 4) +
-        ((b2 & 0b00000100) >> 2)
-      const g =
-        ((b1 & 0b00010000) >> 1) +
-        ((b1 & 0b00000010) << 1) +
-        ((b2 & 0b00010000) >> 3) +
-        ((b2 & 0b00000010) >> 1)
-      const b =
-        ((b1 & 0b00001000) >> 0) +
-        ((b1 & 0b00000001) << 2) +
-        ((b2 & 0b00001000) >> 2) +
-        ((b2 & 0b00000001) >> 0)
-      interpreter.defineColor(colorNumber, r, g, b)
     } else {
       error()
     }
