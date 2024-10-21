@@ -16,18 +16,68 @@ document.addEventListener('DOMContentLoaded', async () => {
     0xfff,
     0x000,
   )
-  const interpreter = ceptInterpreter(console.log, display)
+  let atStep = 0
+
+  const interpreter = ceptInterpreter(
+    (message: string, ...args: any[]) =>
+      console.log.apply(console, [
+        `${atStep.toString(10).padStart(4, ' ')} [${interpreter.attributeMode()}] ${message}`,
+        ...args,
+      ]),
+    display,
+  )
   const websocket = initWebsocket()
   const keyPressed = (keyCode: number) => {
     websocket.send(new Uint8Array([keyCode]))
   }
   initKeyboard(keyPressed)
+
+  let runTo: number | undefined = undefined
+
+  const updateRunTo = () => {
+    if (runTo) {
+      ;(document.getElementById('run-to') as HTMLInputElement).value =
+        runTo.toString()
+    }
+  }
+
+  document.location.search.replace(/\WrunTo=(\d+)/, (match, runToString) => {
+    runTo = parseInt(runToString)
+    updateRunTo()
+    return match
+  })
+
+  document
+    .getElementById('run-to')!
+    .addEventListener('blur', (event: Event) => {
+      runTo = parseInt((event.target as HTMLInputElement).value)
+      if (runTo < atStep) {
+        document.location.search = `?runTo=${runTo}`
+      }
+    })
+
+  if (runTo) {
+    document
+      .getElementById('next')!
+      .addEventListener('click', (event: Event) => {
+        if (runTo) {
+          runTo += 1
+          updateRunTo()
+        }
+      })
+  }
   while (true) {
     await ceptDecoder(
       interpreter,
-      websocket.next,
+      async () => {
+        while (runTo && atStep >= runTo) {
+          await new Promise((fulfill) => setTimeout(fulfill, 100))
+        }
+        return websocket.next()
+      },
       websocket.putback,
       (e: any) => console.log('Error', e),
     )
+    atStep += 1
   }
 })

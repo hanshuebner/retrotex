@@ -1,7 +1,10 @@
 import { Display } from './display'
 import { renderDebugDisplay } from './ceptInterpreterDebug'
 
+export type AttributeMode = 'serial' | 'parallel'
+
 export type CeptInterpreter = {
+  attributeMode: () => AttributeMode
   blink: (enabled: boolean) => void
   blinkPalettes: () => void
   blinkingShiftLeft: () => void
@@ -155,7 +158,7 @@ export default (
 
   setScreenSize(24, 40) // bla
   let currentWrapAround = true
-  let currentMode: 'serial' | 'parallel' = 'serial'
+  let currentMode: AttributeMode = 'serial'
   let currentAttributes = { ...defaultAttributes }
 
   const getFgColor = (row: number, column: number): number => {
@@ -327,6 +330,9 @@ export default (
   }
 
   return {
+    attributeMode: () => {
+      return currentMode
+    },
     blink: (enabled: boolean) => {
       log('blink', { enabled })
     },
@@ -366,7 +372,7 @@ export default (
       currentColumn = 0
     },
     cursorBack: () => {
-      log('cursorLeft')
+      log('cursorBack')
       if (currentColumn > 1) {
         currentColumn -= 1
       } else {

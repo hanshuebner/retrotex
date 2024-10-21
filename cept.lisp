@@ -379,9 +379,11 @@
   (write-cept #\return #\linefeed #\linefeed)
   (left-charset 0))
 
-(defun dump-printable-chars (left right)
-  (left-charset left)
-  (right-charset right)
+(defun dump-printable-chars (&optional left right)
+  (when left
+    (left-charset left))
+  (when right
+    (right-charset right))
   (goto 0 0)
   (clear-page)
   (write-cept "....5....0....5....0....5....0.." #\return #\linefeed)
@@ -389,8 +391,10 @@
     (dotimes (i 32)
       (write-cept (+ base i)))
     (write-cept #\return #\linefeed))
-  (left-charset 0)
-  (right-charset 1))
+  (when left
+    (left-charset 0))
+  (when right
+    (right-charset 1)))
 
 (defun test-large-characters ()
   (parallel-mode)

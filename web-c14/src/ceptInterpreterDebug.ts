@@ -22,7 +22,7 @@ export const renderDebugDisplay = (
     return chip
   }
 
-  const container = document.getElementById('cept-debugger')
+  const container = document.getElementById('cept-debugger-screen')
   if (!container) {
     console.error('Element with ID "cept-debugger" not found.')
     return

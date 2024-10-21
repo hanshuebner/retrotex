@@ -45,8 +45,8 @@ const initKeyboard = (send: (code: number) => void) => {
   }
 
   // Add event listener to the embedded SVG once it's loaded
-  const svgDoc = (document.getElementById('keyboard-svg') as HTMLObjectElement)!
-    .contentDocument as Document
+  const container = document.getElementById('keyboard-svg') as HTMLObjectElement
+  const svgDoc = container.contentDocument as Document
 
   // Function to set the active state of an element's LED child
   const setLed = (elementId: string, isActive: boolean) => {
@@ -98,7 +98,7 @@ const initKeyboard = (send: (code: number) => void) => {
     window.addEventListener('resize', resizeKeyboard)
     resizeKeyboard()
   }
-  window.addEventListener('keypress', (event: KeyboardEvent) => {
+  container.addEventListener('keypress', (event: KeyboardEvent) => {
     console.log(event)
     send(event.key.charCodeAt(0))
     event.preventDefault()
