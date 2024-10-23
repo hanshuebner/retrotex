@@ -73,6 +73,7 @@ export type CeptInterpreter = {
 
 export interface Attributes {
   font?: Uint8Array
+  diacritical?: number
   backgroundColor?: number
   foregroundColor?: number
   doubleWidth?: boolean
@@ -125,7 +126,7 @@ export default (
   const setCharacterSetDefaults = () => {
     charsetFont = [0, 1, 2, 3]
     currentLeftCharset = 0
-    currentRightCharset = 1
+    currentRightCharset = 2
   }
 
   const setScreenSize = (rows: number, columns: number) => {
@@ -225,6 +226,19 @@ export default (
           attributes.doubleWidth,
           attributes.doubleHeight,
         )
+        if (attributes.diacritical) {
+          display.drawGlyph(
+            attributes.diacritical,
+            row - (currentMode === 'parallel' ? 1 : 0),
+            column,
+            display.fontDiacritical,
+            colors[fgColor],
+            colors[bgColor],
+            attributes.doubleWidth,
+            attributes.doubleHeight,
+            true,
+          )
+        }
         if (attributes.doubleWidth) {
           column += 1
         }
@@ -284,24 +298,34 @@ export default (
     }
     glyphs[currentRow][currentColumn] = (charCode & 0x7f) - 0x20
     if (currentMode == 'parallel') {
-      attrs[currentRow][currentColumn] = { ...parallelAttributes }
+      const diacritical = attrs[currentRow][currentColumn].diacritical
+      attrs[currentRow][currentColumn] = { ...parallelAttributes, diacritical }
     }
+    const attributes = attrs[currentRow][currentColumn]
     const font =
       charCode >= 0x80
         ? display.fonts[charsetFont[currentRightCharset]]
         : display.fonts[charsetFont[currentLeftCharset]]
-    attrs[currentRow][currentColumn].font = font
-    attrs[currentRow][currentColumn].doubleHeight = doubleHeight
-    attrs[currentRow][currentColumn].doubleWidth = doubleWidth
+    attributes.font = font
+    if (doubleWidth !== undefined) {
+      attributes.doubleWidth = doubleWidth
+    }
+    if (doubleHeight !== undefined) {
+      attributes.doubleHeight = doubleHeight
+    }
     const isDiacritical =
-      (charsetForOneCharacter === 2 || charCode & 0x80) &&
+      (charsetForOneCharacter === 2 || font === display.fonts[2]) &&
       (charCode & 0x70) === 0x40
 
     charsetForOneCharacter = undefined
 
     if (isDiacritical) {
       // diacritical marks don't move the cursor
-      console.log('skipping diacritical mark for now')
+      attributes.diacritical = charCode & 0x0f
+      console.log(
+        `skipping diacritical mark ${attributes.diacritical} for now`,
+        attributes,
+      )
       return
     }
 

@@ -20,6 +20,7 @@ export interface Display {
     bgColor: number,
     doubleWidth?: boolean,
     doubleHeight?: boolean,
+    justSetPixels?: boolean,
   ) => void
   defineDrcs: (glyphNumber: number, rows: number[][]) => void
   render: () => void
@@ -81,6 +82,7 @@ export default async (canvas: HTMLCanvasElement): Promise<Display> => {
     bgColor: number,
     doubleWidth: boolean = false,
     doubleHeight: boolean = false,
+    justSetPixels: boolean = false,
   ) => {
     console.assert(
       0 <= glyphIndex && glyphIndex <= 96,
@@ -95,6 +97,9 @@ export default async (canvas: HTMLCanvasElement): Promise<Display> => {
         const pixelIndex =
           (glyphY + y) * (glyphsPerFontRow * glyphWidth) + (glyphX + x)
         const pixel = fontData[pixelIndex]
+        if (justSetPixels && !pixel) {
+          continue
+        }
         const screenX = col * glyphWidth + x * (doubleWidth ? 2 : 1)
         const screenY = row * glyphHeight + y * (doubleHeight ? 2 : 1)
         const color = pixel ? fgColor : bgColor
