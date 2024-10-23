@@ -41,7 +41,8 @@
            #:select-charset
            #:dump-printable-chars
            #:serial-mode
-           #:parallel-mode))
+           #:parallel-mode
+           #:set-screen-format))
 
 (in-package :cept)
 
@@ -152,7 +153,7 @@
   (assert (<= 0 color 7))
   (write-cept (+ #x90 color)))
 
-(defun reset-basic-state (&optional (state #x41))
+(defun set-screen-format (&optional (state #x41))
   (write-cept #x1f #x2f state))
 
 (defun reset-palette ()

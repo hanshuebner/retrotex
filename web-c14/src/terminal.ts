@@ -28,10 +28,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   )
   const websocket = initWebsocket()
   const keyPressed = (keyCode: number) => {
-    websocket.send(new Uint8Array([keyCode]))
+    if (keyCode == 23) {
+      debuggerStatus(true)
+    } else {
+      websocket.send(new Uint8Array([keyCode]))
+    }
   }
   initKeyboard(keyPressed)
 
+  // debugger functionality
   let runTo: number | undefined = undefined
 
   const updateRunTo = () => {
@@ -58,14 +63,38 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   if (runTo) {
     document
-      .getElementById('next')!
+      .getElementById('next-step')!
       .addEventListener('click', (event: Event) => {
         if (runTo) {
           runTo += 1
           updateRunTo()
         }
       })
+  } else {
+    document.getElementById('next-step')!.style.display = 'none'
   }
+
+  const debuggerStatus = (enabled: boolean) => {
+    document.getElementById('keyboard-container')!.style.display = enabled
+      ? 'none'
+      : 'flex'
+    document.getElementById('cept-debugger')!.style.display = enabled
+      ? 'block'
+      : 'none'
+  }
+
+  debuggerStatus(true)
+
+  document
+    .getElementById('previous-page')!
+    .addEventListener('click', () => websocket.send(new Uint8Array(1).fill(8)))
+  document
+    .getElementById('next-page')!
+    .addEventListener('click', () => websocket.send(new Uint8Array(1).fill(32)))
+  document
+    .getElementById('close-debugger')!
+    .addEventListener('click', () => debuggerStatus(false))
+
   while (true) {
     await ceptDecoder(
       interpreter,

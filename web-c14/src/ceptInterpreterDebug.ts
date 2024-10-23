@@ -77,8 +77,7 @@ export const renderDebugDisplay = (
       cell.style.border = '1px solid #ccc'
       cell.style.padding = '4px'
       cell.style.position = 'relative' // Ensure the cell is the positioning context
-      cell.style.width = '15px'
-      cell.style.height = '15px'
+      cell.style.height = '1em'
       cell.style.overflow = 'hidden'
 
       // Check if the cell has any attributes defined
@@ -98,8 +97,8 @@ export const renderDebugDisplay = (
       // Glyph number
       const glyphNumber = document.createElement('div')
       glyphNumber.style.position = 'absolute'
-      glyphNumber.style.top = '2px'
-      glyphNumber.style.left = '2px'
+      glyphNumber.style.top = '0px'
+      glyphNumber.style.left = '0px'
       glyphNumber.textContent = glyphs[row][col].toString()
       cell.appendChild(glyphNumber)
 

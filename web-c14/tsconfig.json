@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": ["ES2017", "DOM"],
+    "lib": ["dom","ES2017"],
+    "types": [],
     "module": "ESNext",
     "strict": true,
     "outDir": "./public",

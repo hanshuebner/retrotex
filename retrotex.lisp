@@ -184,7 +184,7 @@
     (assert cept-files)
     (let ((i 0))
       (loop
-        (cept:reset)
+        (cept:set-screen-format)
         (load-page (nth i cept-files))
         (cond
           (sleep
