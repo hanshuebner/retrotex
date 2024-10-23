@@ -84,7 +84,6 @@ export interface Attributes {
   inverted?: boolean
   protected?: boolean
   marked?: boolean
-  notRendered?: boolean
 }
 
 export default (
@@ -99,6 +98,7 @@ export default (
   let charsetFont = [0, 1, 2, 3]
   let currentLeftCharset = 0
   let currentRightCharset = 1
+  let charsetForOneCharacter: number | undefined = undefined
 
   let currentDrcsGlyph = 0
 
@@ -199,7 +199,14 @@ export default (
         if (!noAttributes) {
           attributes = { ...attributes, ...attrs[row][column] }
         }
-        if (attributes.notRendered) {
+        if (
+          (row > 0 && attrs[row - 1][column].doubleHeight) ||
+          (column > 0 && attrs[row][column - 1].doubleWidth) ||
+          (row > 0 &&
+            column > 0 &&
+            attrs[row - 1][column - 1].doubleWidth &&
+            attrs[row - 1][column - 1].doubleHeight)
+        ) {
           continue
         }
         const fgColor = noAttributes
@@ -258,34 +265,47 @@ export default (
     }
   }
 
-  const advanceCursor = () => {
-    const { doubleWidth, doubleHeight } = getCurrentRowAttributes()
+  let lastCharCode = 0
+  const putChar = (charCode: number) => {
+    if (charCode < 0x80) {
+      log(`putChar '${String.fromCharCode(charCode)}'`)
+    } else {
+      log(`putChar 0x${charCode.toString(16).padStart(2, '0')}`)
+    }
+    lastCharCode = charCode
+    let { doubleWidth, doubleHeight } = getCurrentRowAttributes()
+    let rowAdjust = 0
+    if (currentMode == 'parallel' && doubleHeight) {
+      if (currentRow > 0) {
+        rowAdjust = 1
+        currentRow -= 1
+      }
+      // fixme in parallel mode: need to delete double height attribute in first row
+    }
+    glyphs[currentRow][currentColumn] = (charCode & 0x7f) - 0x20
+    if (currentMode == 'parallel') {
+      attrs[currentRow][currentColumn] = { ...parallelAttributes }
+    }
+    const font =
+      charCode >= 0x80
+        ? display.fonts[charsetFont[currentRightCharset]]
+        : display.fonts[charsetFont[currentLeftCharset]]
+    attrs[currentRow][currentColumn].font = font
+    attrs[currentRow][currentColumn].doubleHeight = doubleHeight
+    attrs[currentRow][currentColumn].doubleWidth = doubleWidth
+    const isDiacritical =
+      (charsetForOneCharacter === 2 || charCode & 0x80) &&
+      (charCode & 0x70) === 0x40
+
+    charsetForOneCharacter = undefined
+
+    if (isDiacritical) {
+      // diacritical marks don't move the cursor
+      console.log('skipping diacritical mark for now')
+      return
+    }
+
     const columnIncrement = doubleWidth ? 2 : 1
-    if (doubleWidth && currentColumn < screenColumns - 1) {
-      attrs[currentRow][currentColumn + 1].notRendered = true
-    }
-    if (doubleHeight) {
-      if (currentMode == 'parallel') {
-        if (currentRow > 0) {
-          attrs[currentRow - 1][currentColumn].notRendered = true
-        }
-      } else {
-        if (currentRow + 1 < screenRows) {
-          attrs[currentRow + 1][currentColumn].notRendered = true
-        }
-      }
-    }
-    if (doubleHeight && doubleWidth && currentColumn < screenColumns - 1) {
-      if (currentMode == 'parallel') {
-        if (currentRow > 0) {
-          attrs[currentRow - 1][currentColumn + 1].notRendered = true
-        }
-      } else {
-        if (currentRow + 1 < screenRows) {
-          attrs[currentRow + 1][currentColumn + 1].notRendered = true
-        }
-      }
-    }
     if (currentColumn + columnIncrement < screenColumns) {
       currentColumn += columnIncrement
     } else if (currentWrapAround) {
@@ -296,31 +316,7 @@ export default (
         currentRow = 0
       }
     }
-  }
-
-  let lastCharCode = 0
-  const putChar = (charCode: number) => {
-    if (charCode < 0x80) {
-      log(`putChar '${String.fromCharCode(charCode)}'`)
-    } else {
-      log(`putChar 0x${charCode.toString(16).padStart(2, '0')}`)
-    }
-    lastCharCode = charCode
-    glyphs[currentRow][currentColumn] = (charCode & 0x7f) - 0x20
-    if (currentMode == 'parallel') {
-      attrs[currentRow][currentColumn] = { ...parallelAttributes }
-    }
-    attrs[currentRow][currentColumn].font =
-      charCode >= 0x80
-        ? display.fonts[charsetFont[currentRightCharset]]
-        : display.fonts[charsetFont[currentLeftCharset]]
-
-    if (currentLeftCharset !== 0 || charCode < 0xc0 || charCode > 0xcf) {
-      // diacritical marks don't move the cursor
-      advanceCursor()
-    } else {
-      console.log('skipping diacritical mark for now')
-    }
+    currentRow += rowAdjust
   }
 
   const changeAttribute = (change: Attributes) => {
@@ -340,7 +336,69 @@ export default (
       }
       currentColumn += 1
     } else {
-      parallelAttributes = { ...parallelAttributes, ...change }
+      if ('doubleWidth' in change) {
+        if (!change.doubleWidth) {
+          delete parallelAttributes.doubleWidth
+        } else {
+          parallelAttributes.doubleWidth = true
+        }
+      }
+      if ('doubleHeight' in change) {
+        if (!change.doubleHeight) {
+          delete parallelAttributes.doubleHeight
+        } else {
+          parallelAttributes.doubleHeight = true
+        }
+      }
+      if ('boxed' in change) {
+        if (!change.boxed) {
+          delete parallelAttributes.boxed
+        } else {
+          parallelAttributes.boxed = true
+        }
+      }
+      if ('concealed' in change) {
+        if (!change.concealed) {
+          delete parallelAttributes.concealed
+        } else {
+          parallelAttributes.concealed = true
+        }
+      }
+      if ('blink' in change) {
+        if (!change.blink) {
+          delete parallelAttributes.blink
+        } else {
+          parallelAttributes.blink = true
+        }
+      }
+      if ('lined' in change) {
+        if (!change.lined) {
+          delete parallelAttributes.lined
+        } else {
+          parallelAttributes.lined = true
+        }
+      }
+      if ('inverted' in change) {
+        if (!change.inverted) {
+          delete parallelAttributes.inverted
+        } else {
+          parallelAttributes.inverted = true
+        }
+      }
+      if ('protected' in change) {
+        if (!change.protected) {
+          delete parallelAttributes.protected
+        } else {
+          parallelAttributes.protected = true
+        }
+      }
+      if ('marked' in change) {
+        if (!change.marked) {
+          delete parallelAttributes.marked
+        } else {
+          parallelAttributes.marked = true
+        }
+      }
     }
   }
 
@@ -498,14 +556,7 @@ export default (
     },
     doubleSize: (doubleWidth: boolean, doubleHeight: boolean) => {
       log('doubleSize', { doubleWidth, doubleHeight })
-      const change: Attributes = {}
-      if (doubleWidth) {
-        change.doubleWidth = true
-      }
-      if (doubleHeight) {
-        change.doubleHeight = true
-      }
-      changeAttribute(change)
+      changeAttribute({ doubleWidth, doubleHeight })
     },
     drcsDefinitionBlocks: (blocks: number[][]) => {
       log(
@@ -667,6 +718,7 @@ export default (
     },
     switchCharsetForOneCharacter: (charset: number) => {
       log('switchCharsetForOneCharacter', { charset })
+      charsetForOneCharacter = charset
     },
     transparency: (enabled: boolean) => {
       log('transparency', { enabled })
