@@ -220,17 +220,24 @@ export default (
     display.render()
   }
 
-  const updateDebugDisplay = () => {
-    renderDebugDisplay(
-      glyphs,
-      attrs,
-      rowColors,
-      screenColor,
-      currentRow,
-      currentColumn,
-      parallelAttributes,
-    )
-    redraw()
+  let updateTimer: number | undefined
+  const scheduleUpdate = () => {
+    if (updateTimer) {
+      clearTimeout(updateTimer)
+    }
+    updateTimer = setTimeout(() => {
+      renderDebugDisplay(
+        glyphs,
+        attrs,
+        rowColors,
+        screenColor,
+        currentRow,
+        currentColumn,
+        parallelAttributes,
+      )
+      redraw()
+      updateTimer = undefined
+    }, 100)
   }
 
   const getCurrentRowAttributes = () => {
@@ -391,7 +398,7 @@ export default (
     attributeMode: () => {
       return currentMode
     },
-    updateDisplay: updateDebugDisplay,
+    updateDisplay: scheduleUpdate,
 
     // CEPT handlers
     blink: (enabled: boolean) => {
