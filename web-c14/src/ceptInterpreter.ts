@@ -155,7 +155,7 @@ export default (
   let currentWrapAround = true
   let currentMode: AttributeMode = 'serial'
   let currentPalette = 0
-  let parallelAttributes = { ...defaultAttributes }
+  let parallelAttributes: Attributes = {}
 
   const getFgColor = (attributes: Attributes): number => {
     if (attributes.inverted) {
@@ -210,7 +210,7 @@ export default (
           : getBgColor(attributes, currentRow)
         display.drawGlyph(
           glyphIndex,
-          row,
+          row - (currentMode === 'parallel' ? 1 : 0),
           column,
           attributes.font || display.fonts[0],
           colors[fgColor],
@@ -264,16 +264,27 @@ export default (
     if (doubleWidth && currentColumn < screenColumns - 1) {
       attrs[currentRow][currentColumn + 1].notRendered = true
     }
-    if (doubleHeight && currentRow < screenRows - 1) {
-      attrs[currentRow + 1][currentColumn].notRendered = true
+    if (doubleHeight) {
+      if (currentMode == 'parallel') {
+        if (currentRow > 0) {
+          attrs[currentRow - 1][currentColumn].notRendered = true
+        }
+      } else {
+        if (currentRow + 1 < screenRows) {
+          attrs[currentRow + 1][currentColumn].notRendered = true
+        }
+      }
     }
-    if (
-      doubleHeight &&
-      currentRow < screenRows - 1 &&
-      doubleWidth &&
-      currentColumn < screenColumns - 1
-    ) {
-      attrs[currentRow + 1][currentColumn + 1].notRendered = true
+    if (doubleHeight && doubleWidth && currentColumn < screenColumns - 1) {
+      if (currentMode == 'parallel') {
+        if (currentRow > 0) {
+          attrs[currentRow - 1][currentColumn + 1].notRendered = true
+        }
+      } else {
+        if (currentRow + 1 < screenRows) {
+          attrs[currentRow + 1][currentColumn + 1].notRendered = true
+        }
+      }
     }
     if (currentColumn + columnIncrement < screenColumns) {
       currentColumn += columnIncrement
@@ -487,7 +498,14 @@ export default (
     },
     doubleSize: (doubleWidth: boolean, doubleHeight: boolean) => {
       log('doubleSize', { doubleWidth, doubleHeight })
-      changeAttribute({ doubleWidth, doubleHeight })
+      const change: Attributes = {}
+      if (doubleWidth) {
+        change.doubleWidth = true
+      }
+      if (doubleHeight) {
+        change.doubleHeight = true
+      }
+      changeAttribute(change)
     },
     drcsDefinitionBlocks: (blocks: number[][]) => {
       log(
@@ -537,7 +555,7 @@ export default (
     reset: (parallel: boolean, limited: boolean) => {
       log('reset', { parallel, limited })
       currentMode = parallel ? 'parallel' : 'serial'
-      parallelAttributes = { ...defaultAttributes }
+      parallelAttributes = {}
       setCharacterSetDefaults()
       if (!limited) {
         clearScreen(false)
@@ -546,7 +564,7 @@ export default (
     parallelMode: () => {
       log('parallelMode')
       currentMode = 'parallel'
-      parallelAttributes = { ...defaultAttributes }
+      parallelAttributes = {}
     },
     polarity: (inverted: boolean) => {
       log('polarity', { inverted })
