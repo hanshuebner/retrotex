@@ -122,6 +122,12 @@ export default (
     foregroundColor: 7,
   }
 
+  const setCharacterSetDefaults = () => {
+    charsetFont = [0, 1, 2, 3]
+    currentLeftCharset = 0
+    currentRightCharset = 1
+  }
+
   const setScreenSize = (rows: number, columns: number) => {
     currentRow = 0
     currentColumn = 0
@@ -532,6 +538,10 @@ export default (
       log('reset', { parallel, limited })
       currentMode = parallel ? 'parallel' : 'serial'
       parallelAttributes = { ...defaultAttributes }
+      setCharacterSetDefaults()
+      if (!limited) {
+        clearScreen(false)
+      }
     },
     parallelMode: () => {
       log('parallelMode')

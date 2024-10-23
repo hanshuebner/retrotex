@@ -278,7 +278,7 @@ const decode = async (
     }
   }
 
-  const readFormatVpde = async () => {
+  const readDefineFormatVPDE = async () => {
     let rows
     let columns
     let accumulator = 0
@@ -351,7 +351,7 @@ const decode = async (
         await handleColors()
         break
       case 0x2d:
-        await readFormatVpde()
+        await readDefineFormatVPDE()
         break
       case 0x2f:
         switch (await next()) {
