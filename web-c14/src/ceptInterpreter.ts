@@ -4,17 +4,14 @@ import { renderDebugDisplay } from './ceptInterpreterDebug'
 export type AttributeMode = 'serial' | 'parallel'
 
 export type CeptInterpreter = {
+  setTia: (state: boolean) => void
   attributeMode: () => AttributeMode
   updateDisplay: () => void
   blink: (enabled: boolean) => void
   blinkPalettes: () => void
   blinkingShiftLeft: () => void
   blinkingShiftRight: () => void
-  clearDrcsSet: (
-    startCharCode: number,
-    resolutionCode: number,
-    colorDepthCode: number,
-  ) => void
+  clearDrcsSet: (resolutionCode: number, colorDepthCode: number) => void
   clearToEndOfLine: () => void
   clearScreen: (keepAttributes: boolean) => void
   cursorDown: () => void
@@ -25,7 +22,7 @@ export type CeptInterpreter = {
   cursorUp: () => void
   defineColor: (index: number, r: number, g: number, b: number) => void
   doubleSize: (width: boolean, height: boolean) => void
-  drcsDefinitionBlocks: (blocks: number[][]) => void
+  drcsDefinitionBlocks: (charCode: number, blocks: number[][]) => void
   endOfPage: () => void
   endSelection: () => void
   fastBlinking: (phase0: boolean, phase1: boolean, phase2: boolean) => void
@@ -58,11 +55,7 @@ export type CeptInterpreter = {
   setFgColorOfScreen: (color: number) => void
   setScreenFormat: (columns: number, rows: number, wrapAround: boolean) => void
   setShortcut: (c: number, buf: number[]) => void
-  startDrcsSet: (
-    startCharCode: number,
-    resolutionCode: number,
-    colorDepthCode: number,
-  ) => void
+  startDrcsSet: (resolutionCode: number, colorDepthCode: number) => void
   startSelection: () => void
   switchCharsetForOneCharacter: (charset: number) => void
   transparency: (enabled: boolean) => void
@@ -74,6 +67,9 @@ export type CeptInterpreter = {
 export interface Attributes {
   font?: Uint8Array
   diacritical?: number
+  leftCharset?: number
+  rightCharset?: number
+
   backgroundColor?: number
   foregroundColor?: number
   doubleWidth?: boolean
@@ -97,20 +93,18 @@ export default (
   let screenColumns: number
 
   let charsetFont = [0, 1, 2, 3]
-  let currentLeftCharset = 0
-  let currentRightCharset = 1
   let charsetForOneCharacter: number | undefined = undefined
-
-  let currentDrcsGlyph = 0
 
   let glyphs: Uint8Array[]
   let attrs: Attributes[][]
   let rowColors: number[]
   let screenColor: number = 4
 
-  let noAttributes: boolean = false
+  let tia: boolean = false
 
   const defaultAttributes: Attributes = {
+    leftCharset: 0,
+    rightCharset: 2,
     doubleWidth: false,
     doubleHeight: false,
     boxed: false,
@@ -125,8 +119,6 @@ export default (
 
   const setCharacterSetDefaults = () => {
     charsetFont = [0, 1, 2, 3]
-    currentLeftCharset = 0
-    currentRightCharset = 2
   }
 
   const setScreenSize = (rows: number, columns: number) => {
@@ -197,7 +189,12 @@ export default (
       let attributes = { ...defaultAttributes }
       for (let column = 0; column < screenColumns; column++) {
         const glyphIndex = glyphs[row][column]
-        if (!noAttributes) {
+        if (tia) {
+          attributes = {
+            ...attributes,
+            font: attrs[row][column].font || display.fonts[0],
+          }
+        } else {
           attributes = { ...attributes, ...attrs[row][column] }
         }
         if (
@@ -208,12 +205,14 @@ export default (
             attrs[row - 1][column - 1].doubleWidth &&
             attrs[row - 1][column - 1].doubleHeight)
         ) {
-          continue
+          if (!tia) {
+            continue
+          }
         }
-        const fgColor = noAttributes
+        const fgColor = tia
           ? (defaultAttributes.foregroundColor as number)
           : getFgColor(attributes)
-        const bgColor = noAttributes
+        const bgColor = tia
           ? (defaultAttributes.backgroundColor as number)
           : getBgColor(attributes, currentRow)
         display.drawGlyph(
@@ -239,7 +238,7 @@ export default (
             true,
           )
         }
-        if (attributes.doubleWidth) {
+        if (attributes.doubleWidth && !tia) {
           column += 1
         }
       }
@@ -294,7 +293,7 @@ export default (
         rowAdjust = 1
         currentRow -= 1
       }
-      // fixme in parallel mode: need to delete double height attribute in first row
+      // fixme in parallel mode: need to delete double height attribute in first row (?)
     }
     glyphs[currentRow][currentColumn] = (charCode & 0x7f) - 0x20
     if (currentMode == 'parallel') {
@@ -304,8 +303,8 @@ export default (
     const attributes = attrs[currentRow][currentColumn]
     const font =
       charCode >= 0x80
-        ? display.fonts[charsetFont[currentRightCharset]]
-        : display.fonts[charsetFont[currentLeftCharset]]
+        ? display.fonts[charsetFont[attributes.rightCharset || 2]]
+        : display.fonts[charsetFont[attributes.leftCharset || 0]]
     attributes.font = font
     if (doubleWidth !== undefined) {
       attributes.doubleWidth = doubleWidth
@@ -322,10 +321,6 @@ export default (
     if (isDiacritical) {
       // diacritical marks don't move the cursor
       attributes.diacritical = charCode & 0x0f
-      console.log(
-        `skipping diacritical mark ${attributes.diacritical} for now`,
-        attributes,
-      )
       return
     }
 
@@ -360,6 +355,18 @@ export default (
       }
       currentColumn += 1
     } else {
+      if ('leftCharset' in change) {
+        parallelAttributes.leftCharset = change.leftCharset
+      }
+      if ('rightCharset' in change) {
+        parallelAttributes.rightCharset = change.rightCharset
+      }
+      if ('backgroundColor' in change) {
+        parallelAttributes.backgroundColor = change.backgroundColor
+      }
+      if ('foregroundColor' in change) {
+        parallelAttributes.foregroundColor = change.foregroundColor
+      }
       if ('doubleWidth' in change) {
         if (!change.doubleWidth) {
           delete parallelAttributes.doubleWidth
@@ -494,6 +501,10 @@ export default (
 
   return {
     // Internal handlers
+    setTia: (state: boolean) => {
+      tia = state
+      scheduleUpdate()
+    },
     attributeMode: () => {
       return currentMode
     },
@@ -512,13 +523,9 @@ export default (
     blinkingShiftRight: () => {
       log('blinkingShiftRight')
     },
-    clearDrcsSet: (
-      startCharCode: number,
-      resolutionCode: number,
-      colorDepthCode: number,
-    ) => {
-      log('clearDrcsSet', { startCharCode, resolutionCode, colorDepthCode })
-      currentDrcsGlyph = startCharCode - 0x1f
+    clearDrcsSet: (resolutionCode: number, colorDepthCode: number) => {
+      log('clearDrcsSet', { resolutionCode, colorDepthCode })
+      display.fonts[5].fill(0)
     },
     clearToEndOfLine: () => {
       log('clearToEndOfLine')
@@ -582,16 +589,16 @@ export default (
       log('doubleSize', { doubleWidth, doubleHeight })
       changeAttribute({ doubleWidth, doubleHeight })
     },
-    drcsDefinitionBlocks: (blocks: number[][]) => {
+    drcsDefinitionBlocks: (charCode: number, blocks: number[][]) => {
       log(
-        'drcsDefinitionBlocks',
+        `drcsDefinitionBlocks starting at 0x${charCode.toString(16).padStart(2, '0')}`,
         blocks.map((block) =>
           block.map((x) => x.toString(16).padStart(2, '0')).join(' '),
         ),
       )
       blocks.forEach((block) => {
-        defineDrcs(currentDrcsGlyph, block)
-        currentDrcsGlyph += 1
+        defineDrcs(charCode - 0x20, block)
+        charCode += 1
       })
     },
     endOfPage: () => {
@@ -611,11 +618,11 @@ export default (
     },
     intoLeftCharset: (charset: number) => {
       log('intoLeftCharset', { charset })
-      currentLeftCharset = charset
+      changeAttribute({ leftCharset: charset })
     },
     intoRightCharset: (charset: number) => {
       log('intoRightCharset', { charset })
-      currentRightCharset = charset
+      changeAttribute({ rightCharset: charset })
     },
     invertBlinking: () => {
       log('invertBlinking')
@@ -728,14 +735,9 @@ export default (
     setShortcut: (c: number, buf: number[]) => {
       log('setShortcut', { c, buf })
     },
-    startDrcsSet: (
-      startCharCode: number,
-      resolutionCode: number,
-      colorDepthCode: number,
-    ) => {
+    startDrcsSet: (resolutionCode: number, colorDepthCode: number) => {
       // fixme: types
-      log('startDrcsSet', { startCharCode, resolutionCode, colorDepthCode })
-      currentDrcsGlyph = 0
+      log('startDrcsSet', { resolutionCode, colorDepthCode })
     },
     startSelection: () => {
       log('startSelection')
@@ -755,6 +757,7 @@ export default (
     },
     setBgColor: (color: number) => {
       log('setBgColor', { color })
+      changeAttribute({ backgroundColor: currentPalette * 8 + color })
     },
   }
 }

@@ -10,7 +10,9 @@
    #:start-serial-server
    #:start-tcp-server
    #:show-article-file
-   #:stop-tcp-server))
+   #:stop-tcp-server
+   #:handle-client
+   #:define-cept-client-handler))
 
 (in-package :retrotex)
 
@@ -20,6 +22,14 @@
 
 (defvar *current-filename* #p"pages/page.cept")
 
+(defparameter *bind-last-client-p* t)
+
+(defparameter *client-handler*
+  (lambda (&key)
+    (cept:write-cept "Hello world")))
+
+(defparameter *client-handler-arguments* nil)
+
 (defun read-cept-byte ()
   (let ((byte (read-byte cept:*cept-stream*)))
     (format t "; read ~2,'0X (~A)~%" byte (code-char byte))
@@ -28,6 +38,17 @@
 (defmacro with-cept-stream ((stream) &body body)
   `(let ((cept:*cept-stream* ,stream))
      ,@body))
+
+(defun handle-client (stream)
+  (when *bind-last-client-p*
+    (setf cept:*cept-stream* stream)
+    (format t "; bound *cept-stream* to ~A~%" stream))
+  (with-cept-stream (stream)
+    (apply *client-handler* *client-handler-arguments*)))
+
+(defmacro define-cept-client-handler (() &body body)
+  `(setf *client-handler* (lambda ()
+                            ,@body)))
 
 (defmacro with-cept-port ((&optional (port *default-port*)) &body body)
   `(let ((cept:*cept-stream* (open-port ,port)))
@@ -264,17 +285,7 @@
         while (not (ppcre:scan "(?i)^AT.*D[PD]?[0-9]" line))
         finally (format character-stream "CONNECT~%")
                 (finish-output character-stream))
-  (format t "; dial command detected, continuing"))
-
-(defun handle-client (handler stream handler-arguments)
-  ;; for now, assume we're only handling one client at a time
-  (unwind-protect
-       (progn
-         (setf cept:*cept-stream* stream)
-         (apply handler handler-arguments))
-    (ignore-errors
-     (close stream))
-    (setf cept:*cept-stream* nil)))
+  (format t "; dial command detected, continuing~%"))
 
 (defvar *tcp-server* nil)
 
@@ -284,7 +295,7 @@
     (bt:interrupt-thread *tcp-server* (lambda () (throw 'exit nil)))
     (setf *tcp-server* nil)))
 
-(defun start-tcp-server (handler &rest handler-arguments &key (port 20000) emulate-modem-dialer-p &allow-other-keys)
+(defun start-tcp-server (&key (port 20000) emulate-modem-dialer-p)
   (stop-tcp-server)
   (setf *tcp-server*
        (bt:make-thread
@@ -301,14 +312,38 @@
                              (setf (sb-impl::fd-stream-buffering stream) :none)
                              (when emulate-modem-dialer-p
                                (emulate-modem-dialer stream))
-                             (handle-client handler stream
-                                            (remove-from-plist handler-arguments :port :emulate-modem-dialer-p)))
+                             (unwind-protect
+                                  (handle-client stream)
+                               (ignore-errors (close stream))))
                          (error (e)
                            (format t "Error handling client: ~a~%" e)))
                        (usocket:socket-close client-socket)))
                 (usocket:socket-close socket)))))
         :name (format nil "CEPT server on port ~A" port))))
 
-(defun start-serial-server (handler &rest handler-arguments &key (port *default-port*) &allow-other-keys)
+(defun start-serial-server (&key (port *default-port*) &allow-other-keys)
   (with-open-stream (stream (open-port port))
-    (handle-client handler stream (remove-from-plist handler-arguments :port))))
+    (handle-client stream)))
+
+(defun make-meta-keyword (s)
+  (intern (string-upcase (ppcre:regex-replace-all "_" s "-")) :keyword))
+
+(defun parse-meta-file (pathname)
+  (let ((sanitized-json-string (ppcre:regex-replace-all ":\\s*\"(true|false)\"" (alexandria:read-file-into-string pathname)
+                                                        (lambda (match true-or-false)
+                                                          (declare (ignore match))
+                                                          (format nil ":~:[false~;true~]" (string-equal true-or-false "true")))
+                                                        :simple-calls t)))
+    (ignore-errors (yason:parse sanitized-json-string :object-key-fn 'make-meta-keyword))))
+
+(defun load-pages (directory)
+  (let ((page-database (make-hash-table :test #'equal)))
+    (dolist (meta-file (directory (merge-pathnames #p"**/*.meta" directory)))
+      (when-let ((metadata (parse-meta-file meta-file)))
+        (let* ((page-path (enough-namestring meta-file directory))
+               (page-number (ppcre:regex-replace-all "\\D" page-path ""))
+               (sub-page (ppcre:regex-replace-all ".*([a-z])\\.meta$" page-path "\\1")))
+          (format t "~A ~A~%" page-number sub-page))))))
+
+(defun goto-page (number)
+  )

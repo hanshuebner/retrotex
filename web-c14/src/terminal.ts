@@ -94,6 +94,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   document
     .getElementById('close-debugger')!
     .addEventListener('click', () => debuggerStatus(false))
+  document
+    .getElementById('tia')!
+    .addEventListener('change', (e) =>
+      interpreter.setTia((e.target as HTMLInputElement).checked),
+    )
 
   while (true) {
     await ceptDecoder(

@@ -115,18 +115,14 @@ const decode = async (
       let colorDepthCode = await next()
       if (resolutionCode === 0x28 && colorDepthCode === 0x20) {
         if ((await next()) !== 0x40) {
-          error()
+          error('unsupported drcs definition')
           return
         }
         resolutionCode = await next()
         colorDepthCode = await next()
-        interpreter.clearDrcsSet(
-          startCharCode,
-          resolutionCode & 0x0f,
-          colorDepthCode & 0x0f,
-        )
+        interpreter.clearDrcsSet(resolutionCode & 0x0f, colorDepthCode & 0x0f)
       } else {
-        interpreter.startDrcsSet(startCharCode, resolutionCode, colorDepthCode)
+        interpreter.startDrcsSet(resolutionCode, colorDepthCode)
       }
     } else if (startCharCode > 0x20 && startCharCode < 0x7f) {
       let drcsBlock: number[] = []
@@ -146,7 +142,7 @@ const decode = async (
           break
         }
       }
-      interpreter.drcsDefinitionBlocks(drcsBlocks)
+      interpreter.drcsDefinitionBlocks(startCharCode, drcsBlocks)
     } else {
       error()
     }

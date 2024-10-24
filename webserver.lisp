@@ -50,7 +50,7 @@
   (when *client-init-hook*
     (bt:make-thread (lambda ()
                       (handler-case
-                          (funcall *client-init-hook*)
+                          (retrotex:handle-client client)
                         (error (e)
                           (format t "; error handling client: ~A~%" e))))
                     :name "Websocket client handler process"

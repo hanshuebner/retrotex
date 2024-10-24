@@ -15,8 +15,9 @@
                "flexi-streams"
                "trivial-gray-streams"
                "lparallel"
-               "usocket")
+               "usocket"
+               "yason")
   :components ((:file "cept")
-               (:file "webserver")
                (:file "drcs")
-               (:file "retrotex")))
+               (:file "retrotex")
+               (:file "webserver")))
