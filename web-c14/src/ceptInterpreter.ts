@@ -150,6 +150,24 @@ export default (
   let currentPalette = 0
   let parallelAttributes: Attributes = {}
 
+  const drcsResolutionMap = {
+    6: { x: 12, y: 12 },
+    7: { x: 12, y: 10 },
+    10: { x: 6, y: 12 },
+    11: { x: 6, y: 10 },
+    12: { x: 6, y: 5 },
+    15: { x: 6, y: 6 },
+  }
+  type DrcsColorDepth = 1 | 2 | 4
+
+  let currentDrcsType: {
+    resolution: { x: number; y: number }
+    colorDepth: DrcsColorDepth
+  } = {
+    resolution: { x: 12, y: 12 },
+    colorDepth: 1,
+  }
+
   const getFgColor = (attributes: Attributes): number => {
     if (attributes.inverted) {
       if (attributes.backgroundColor !== undefined) {
@@ -299,7 +317,10 @@ export default (
     glyphs[currentRow][currentColumn] = (charCode & 0x7f) - 0x20
     if (currentMode == 'parallel') {
       const diacritical = attrs[currentRow][currentColumn].diacritical
-      attrs[currentRow][currentColumn] = { ...parallelAttributes, diacritical }
+      attrs[currentRow][currentColumn] = { ...parallelAttributes }
+      if (diacritical !== undefined) {
+        attrs[currentRow][currentColumn].diacritical = diacritical
+      }
     }
     const attributes = attrs[currentRow][currentColumn] || {}
     const font =
@@ -502,8 +523,12 @@ export default (
             .split('')
             .map((s) => parseInt(s, 2))
           rowAccumulator = [...rowAccumulator, ...bits]
-          if (rowAccumulator.length == 12) {
-            rows[currentRow++] = [...rowAccumulator]
+          if (rowAccumulator.length == currentDrcsType.resolution.x) {
+            if (currentDrcsType.resolution.x === 12) {
+              rows[currentRow++] = [...rowAccumulator]
+            } else {
+              rows[currentRow++] = rowAccumulator.flatMap((x) => [x, x])
+            }
             rowAccumulator = []
           }
         }
@@ -749,9 +774,23 @@ export default (
     setShortcut: (c: number, buf: number[]) => {
       log('setShortcut', { c, buf })
     },
-    startDrcsSet: (resolutionCode: number, colorDepthCode: number) => {
+    startDrcsSet: (resolutionCode: number, colorDepth: number) => {
       // fixme: types
-      log('startDrcsSet', { resolutionCode, colorDepthCode })
+      log('startDrcsSet', { resolutionCode, colorDepth })
+      if (colorDepth !== 1 && colorDepth !== 2 && colorDepth !== 4) {
+        log(`invalid color depth code ${colors}`)
+        return
+      }
+      if (!(resolutionCode in drcsResolutionMap)) {
+        log(`invalid resolution code ${resolutionCode}`)
+        return
+      }
+      currentDrcsType = {
+        resolution: drcsResolutionMap[
+          resolutionCode as keyof typeof drcsResolutionMap
+        ] as { x: number; y: number },
+        colorDepth,
+      }
     },
     startSelection: () => {
       log('startSelection')

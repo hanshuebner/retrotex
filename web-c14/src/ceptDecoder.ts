@@ -122,7 +122,7 @@ const decode = async (
         colorDepthCode = await next()
         interpreter.clearDrcsSet(resolutionCode & 0x0f, colorDepthCode & 0x0f)
       } else {
-        interpreter.startDrcsSet(resolutionCode, colorDepthCode)
+        interpreter.startDrcsSet(resolutionCode & 0x0f, colorDepthCode & 0x0f)
       }
     } else if (startCharCode > 0x20 && startCharCode < 0x7f) {
       let drcsBlock: number[] = []
