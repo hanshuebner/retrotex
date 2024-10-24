@@ -286,7 +286,8 @@ export default (
       log(`putChar 0x${charCode.toString(16).padStart(2, '0')}`)
     }
     lastCharCode = charCode
-    let { doubleWidth, doubleHeight } = getCurrentRowAttributes()
+    let { doubleWidth, doubleHeight, leftCharset, rightCharset } =
+      getCurrentRowAttributes()
     let rowAdjust = 0
     if (currentMode == 'parallel' && doubleHeight) {
       if (currentRow > 0) {
@@ -300,11 +301,15 @@ export default (
       const diacritical = attrs[currentRow][currentColumn].diacritical
       attrs[currentRow][currentColumn] = { ...parallelAttributes, diacritical }
     }
-    const attributes = attrs[currentRow][currentColumn]
+    const attributes = attrs[currentRow][currentColumn] || {}
     const font =
       charCode >= 0x80
-        ? display.fonts[charsetFont[attributes.rightCharset || 2]]
-        : display.fonts[charsetFont[attributes.leftCharset || 0]]
+        ? display.fonts[
+            charsetFont[attributes.rightCharset || (rightCharset as number)]
+          ]
+        : display.fonts[
+            charsetFont[attributes.leftCharset || (leftCharset as number)]
+          ]
     attributes.font = font
     if (doubleWidth !== undefined) {
       attributes.doubleWidth = doubleWidth
@@ -336,9 +341,17 @@ export default (
       }
     }
     currentRow += rowAdjust
+    if (currentMode === 'serial') {
+      // wrap around some attributes
+      attrs[currentRow][currentColumn] = {
+        leftCharset: leftCharset,
+        rightCharset: rightCharset,
+        ...attrs[currentRow][currentColumn],
+      }
+    }
   }
 
-  const changeAttribute = (change: Attributes) => {
+  const changeAttribute = (change: Attributes, advance: boolean = true) => {
     if (currentMode == 'serial') {
       if ('inverted' in change) {
         if (change.inverted) {
@@ -353,7 +366,9 @@ export default (
         ...attrs[currentRow][currentColumn],
         ...change,
       }
-      currentColumn += 1
+      if (advance) {
+        currentColumn += 1
+      }
     } else {
       if ('leftCharset' in change) {
         parallelAttributes.leftCharset = change.leftCharset
@@ -618,11 +633,11 @@ export default (
     },
     intoLeftCharset: (charset: number) => {
       log('intoLeftCharset', { charset })
-      changeAttribute({ leftCharset: charset })
+      changeAttribute({ leftCharset: charset }, false)
     },
     intoRightCharset: (charset: number) => {
       log('intoRightCharset', { charset })
-      changeAttribute({ rightCharset: charset })
+      changeAttribute({ rightCharset: charset }, false)
     },
     invertBlinking: () => {
       log('invertBlinking')
@@ -637,7 +652,7 @@ export default (
     reset: (parallel: boolean, limited: boolean) => {
       log('reset', { parallel, limited })
       currentMode = parallel ? 'parallel' : 'serial'
-      parallelAttributes = {}
+      parallelAttributes = { leftCharset: 0, rightCharset: 2 }
       setCharacterSetDefaults()
       if (!limited) {
         clearScreen(false)
@@ -646,7 +661,6 @@ export default (
     parallelMode: () => {
       log('parallelMode')
       currentMode = 'parallel'
-      parallelAttributes = {}
     },
     polarity: (inverted: boolean) => {
       log('polarity', { inverted })
