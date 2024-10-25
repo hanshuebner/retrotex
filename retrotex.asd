@@ -20,4 +20,5 @@
   :components ((:file "cept")
                (:file "drcs")
                (:file "retrotex")
-               (:file "webserver")))
+               (:file "webserver")
+               (:file "page-db")))

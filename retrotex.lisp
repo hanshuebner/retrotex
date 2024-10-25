@@ -26,7 +26,8 @@
 
 (defparameter *client-handler*
   (lambda (&key)
-    (cept:write-cept "Hello world")))
+    (cept:write-cept "Hello world! ")
+    (loop until (= (read-byte cept:*cept-stream*) (char-code #\q)))))
 
 (defparameter *client-handler-arguments* nil)
 
@@ -313,7 +314,8 @@
                                (ignore-errors (close stream))))
                          (error (e)
                            (format t "Error handling client: ~a~%" e)))
-                       (usocket:socket-close client-socket)))
+                       (usocket:socket-close client-socket)
+                       (format t "TCP client disconnected")))
                 (usocket:socket-close socket)))))
         :name (format nil "CEPT server on port ~A" port))))
 
