@@ -1,13 +1,22 @@
 import type { Attributes } from './ceptInterpreter'
 
+const complement12Bit = (input: number) =>
+  parseInt(
+    input
+      .toString(2)
+      .padStart(12, '0')
+      .replace(/./g, (x) => (x == '1' ? '0' : '1')),
+    2,
+  )
+
 export const renderDebugDisplay = (
   glyphs: Uint8Array[],
   attrs: Attributes[][],
   rowColors: number[],
+  colors: number[],
   screenColor: number,
   currentRow: number,
   currentColumn: number,
-  currentAttributes: Attributes,
 ) => {
   const createChip = (label: string, color: string) => {
     const chip = document.createElement('div')
@@ -51,6 +60,15 @@ export const renderDebugDisplay = (
   )
   screenColorChip.style.width = '25px'
   container.appendChild(screenColorChip)
+  for (let i = 0; i < 32; i++) {
+    const colorChip = createChip(
+      `${i}`,
+      `#${colors[i].toString(16).padStart(3, '0')}`,
+    )
+    colorChip.style.color = `#${complement12Bit(colors[i]).toString(16).padStart(3, '0')}`
+
+    container.appendChild(colorChip)
+  }
 
   const grid = document.createElement('div')
   container.appendChild(grid)
@@ -72,7 +90,7 @@ export const renderDebugDisplay = (
     rowColorChip.style.width = '25px'
     grid.appendChild(rowColorChip)
 
-    for (let col = 0; col < glyphs[row].length; col++) {
+    for (let column = 0; column < glyphs[row].length; column++) {
       const cell = document.createElement('div')
       cell.style.border = '1px solid #ccc'
       cell.style.padding = '4px'
@@ -82,11 +100,11 @@ export const renderDebugDisplay = (
 
       // Check if the cell has any attributes defined
       const hasAttributes =
-        attrs[row][col].foregroundColor !== undefined ||
-        attrs[row][col].backgroundColor !== undefined ||
-        Object.values(attrs[row][col]).some((attr) => attr === true)
+        attrs[row][column].foregroundColor !== undefined ||
+        attrs[row][column].backgroundColor !== undefined ||
+        Object.values(attrs[row][column]).some((attr) => attr === true)
 
-      if (row == currentRow && col === currentColumn) {
+      if (row == currentRow && column === currentColumn) {
         cell.style.borderWidth = '3px'
         cell.style.borderColor = 'red'
       }
@@ -99,13 +117,13 @@ export const renderDebugDisplay = (
       glyphNumber.style.position = 'absolute'
       glyphNumber.style.top = '0px'
       glyphNumber.style.left = '0px'
-      glyphNumber.textContent = glyphs[row][col].toString()
+      glyphNumber.textContent = glyphs[row][column].toString()
       cell.appendChild(glyphNumber)
 
       // Mouse events for tooltip
       cell.addEventListener('mouseenter', (event) => {
-        tooltip.innerHTML = ''
-        for (const [key, value] of Object.entries(attrs[row][col])) {
+        tooltip.innerHTML = `${row}/${column}<br>`
+        for (const [key, value] of Object.entries(attrs[row][column])) {
           if (key !== 'font') {
             tooltip.innerHTML += `${key}:${value}<br>`
           }

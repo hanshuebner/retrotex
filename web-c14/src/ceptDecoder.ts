@@ -240,7 +240,7 @@ const decode = async (
         colorNumber += 1
       }
     } else {
-      error()
+      error('unsupported color definition')
     }
   }
 

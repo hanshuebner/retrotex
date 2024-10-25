@@ -274,10 +274,10 @@ export default (
         glyphs,
         attrs,
         rowColors,
+        colors,
         screenColor,
         currentRow,
         currentColumn,
-        parallelAttributes,
       )
       redraw()
       updateTimer = undefined
@@ -312,7 +312,7 @@ export default (
         rowAdjust = 1
         currentRow -= 1
       }
-      // fixme in parallel mode: need to delete double height attribute in first row (?)
+      // fixme in parallel mode: need to delete double height attribute in second row (?)
     }
     glyphs[currentRow][currentColumn] = (charCode & 0x7f) - 0x20
     if (currentMode == 'parallel') {
@@ -738,7 +738,7 @@ export default (
       screenColor = color
       display.setScreenColor(colors[color])
     },
-    setColorDefinitionHeader: (colorDefinitionHeader: any) => {
+    setColorDefinitionHeader: (colorDefinitionHeader: number[]) => {
       // fixme: any
       log('setColorDefinitionHeader', colorDefinitionHeader)
     },
