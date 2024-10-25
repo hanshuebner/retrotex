@@ -52,29 +52,12 @@
           (list :indexed-colors indexed-colors
                 :mapping mapping))))))
 
-(defun color-component-cept-bits (red green blue)
-  (let ((first #x40)
-        (second #x40))
-    (setf (ldb (byte 1 5) first) (ldb (byte 1 3) red)
-          (ldb (byte 1 4) first) (ldb (byte 1 3) green)
-          (ldb (byte 1 3) first) (ldb (byte 1 3) blue)
-          (ldb (byte 1 2) first) (ldb (byte 1 2) red)
-          (ldb (byte 1 1) first) (ldb (byte 1 2) green)
-          (ldb (byte 1 0) first) (ldb (byte 1 2) blue)
-          (ldb (byte 1 5) second) (ldb (byte 1 1) red)
-          (ldb (byte 1 4) second) (ldb (byte 1 1) green)
-          (ldb (byte 1 3) second) (ldb (byte 1 1) blue)
-          (ldb (byte 1 2) second) (ldb (byte 1 0) red)
-          (ldb (byte 1 1) second) (ldb (byte 1 0) green)
-          (ldb (byte 1 0) second) (ldb (byte 1 0) blue))
-    (list first second)))
-
 (defun make-cept-colors (colors)
   (dotimes (i (length colors))
     (cept:write-cept #x1F #x26 #x20
                      #x1F #x26
                      (format nil "~2,'0D" (+ i 16))
-                     (apply 'color-component-cept-bits (nth i colors)))))
+                     (cept:color-definition-bytes (nth i colors)))))
 
 (defun get-pixel-at (x y)
   (cl-gd:get-pixel (if (< x (cl-gd:image-width))

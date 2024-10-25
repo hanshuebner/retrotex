@@ -42,11 +42,19 @@
            #:dump-printable-chars
            #:serial-mode
            #:parallel-mode
-           #:set-screen-format))
+           #:set-screen-format
+           #:with-cept-stream
+           #:define-colors
+           #:color-definition-bytes
+           #:reset-colors))
 
 (in-package :cept)
 
 (defvar *cept-stream* nil)
+
+(defmacro with-cept-stream ((stream) &body body)
+  `(let ((cept:*cept-stream* ,stream))
+     ,@body))
 
 (defun to-octets (things)
   (flex:with-output-to-sequence (s)
@@ -161,6 +169,35 @@
 
 (defun select-palette (i)
   (write-cept #x9B (+ #x30 i) #x40))
+
+(defun color-definition-bytes (rgb)
+  (destructuring-bind (red green blue) rgb
+    (let ((first #x40)
+          (second #x40))
+      (setf (ldb (byte 1 5) first) (ldb (byte 1 3) red)
+            (ldb (byte 1 4) first) (ldb (byte 1 3) green)
+            (ldb (byte 1 3) first) (ldb (byte 1 3) blue)
+            (ldb (byte 1 2) first) (ldb (byte 1 2) red)
+            (ldb (byte 1 1) first) (ldb (byte 1 2) green)
+            (ldb (byte 1 0) first) (ldb (byte 1 2) blue)
+            (ldb (byte 1 5) second) (ldb (byte 1 1) red)
+            (ldb (byte 1 4) second) (ldb (byte 1 1) green)
+            (ldb (byte 1 3) second) (ldb (byte 1 1) blue)
+            (ldb (byte 1 2) second) (ldb (byte 1 0) red)
+            (ldb (byte 1 1) second) (ldb (byte 1 0) green)
+            (ldb (byte 1 0) second) (ldb (byte 1 0) blue))
+      (list first second))))
+
+(defun define-colors (start-color colors)
+  ;; start color definition sequence
+  (write-cept #x1f #x26 #x20)
+  ;; select start position
+  (write-cept #x1f #x26 (+ #x30 (floor start-color 10)) (+ #x30 (mod start-color 10)))
+  (dolist (color colors)
+    (write-cept (color-definition-bytes color))))
+
+(defun reset-colors ()
+  (write-cept #x1F #x26 #x21))
 
 (defun left-charset (set)
   (apply 'write-cept (ecase set

@@ -35,15 +35,11 @@
     (format t "; read ~2,'0X (~A)~%" byte (code-char byte))
     byte))
 
-(defmacro with-cept-stream ((stream) &body body)
-  `(let ((cept:*cept-stream* ,stream))
-     ,@body))
-
 (defun handle-client (stream)
   (when *bind-last-client-p*
     (setf cept:*cept-stream* stream)
     (format t "; bound *cept-stream* to ~A~%" stream))
-  (with-cept-stream (stream)
+  (cept:with-cept-stream (stream)
     (apply *client-handler* *client-handler-arguments*)))
 
 (defmacro define-cept-client-handler (() &body body)
@@ -62,7 +58,7 @@
                     :output *standard-output*
                     :error-output *standard-output*)
   (let ((stream (cserial-port:make-serial-stream (cserial-port:open-serial port :baud-rate baud-rate))))
-    (with-cept-stream (stream)
+    (cept:with-cept-stream (stream)
       (set-pc-mode)
       (cept:hide-cursor)
       (cept:disable-system-line))
@@ -325,25 +321,3 @@
   (with-open-stream (stream (open-port port))
     (handle-client stream)))
 
-(defun make-meta-keyword (s)
-  (intern (string-upcase (ppcre:regex-replace-all "_" s "-")) :keyword))
-
-(defun parse-meta-file (pathname)
-  (let ((sanitized-json-string (ppcre:regex-replace-all ":\\s*\"(true|false)\"" (alexandria:read-file-into-string pathname)
-                                                        (lambda (match true-or-false)
-                                                          (declare (ignore match))
-                                                          (format nil ":~:[false~;true~]" (string-equal true-or-false "true")))
-                                                        :simple-calls t)))
-    (ignore-errors (yason:parse sanitized-json-string :object-key-fn 'make-meta-keyword))))
-
-(defun load-pages (directory)
-  (let ((page-database (make-hash-table :test #'equal)))
-    (dolist (meta-file (directory (merge-pathnames #p"**/*.meta" directory)))
-      (when-let ((metadata (parse-meta-file meta-file)))
-        (let* ((page-path (enough-namestring meta-file directory))
-               (page-number (ppcre:regex-replace-all "\\D" page-path ""))
-               (sub-page (ppcre:regex-replace-all ".*([a-z])\\.meta$" page-path "\\1")))
-          (format t "~A ~A~%" page-number sub-page))))))
-
-(defun goto-page (number)
-  )
