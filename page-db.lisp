@@ -15,18 +15,12 @@
    (sub-page :reader page-sub-page)
    (basename :reader page-basename)
    (next-page :reader page-next-page :initform nil)
-   (shortcuts :initform (make-hash-table :test #'equal) :reader page-shortcuts)))
-
-(defmethod following-page-count ((page page))
-  (with-slots (next-page) page
-    (if next-page
-        (1+ (following-page-count next-page))
-        0)))
+   (shortcuts :initform nil :reader page-shortcuts)))
 
 (defmethod print-object ((page page) stream)
-  (with-slots (number sub-page basename) page
+  (with-slots (number sub-page basename next-page) page
     (print-unreadable-object (page stream :type t)
-      (format stream "~A~A [+~A]" number sub-page (following-page-count page)))))
+      (format stream "~A~A~:[~; (more)~]" number sub-page next-page))))
 
 (defun parse-page-number (s)
   (multiple-value-bind (match regs) (ppcre:scan-to-strings "(.*)(.)$" s)
@@ -35,6 +29,7 @@
 
 (defmethod make-shortcuts ((page page))
   (with-slots (next-page metadata shortcuts) page
+    (setf shortcuts (make-hash-table :test #'equal))
     (doplist (shortcut full-page-number (getf metadata :links))
       (destructuring-bind (page-number sub-page) (parse-page-number full-page-number)
         (if-let (shortcut-page (find-page page-number sub-page))
@@ -42,6 +37,11 @@
               (setf next-page shortcut-page)
               (setf (gethash shortcut shortcuts) shortcut-page))
           (format t "shortcut ~S from page ~A does not point to valid page ~S, ignored~%" shortcut page full-page-number))))))
+
+(defmethod page-shortcuts :before ((page page))
+  (with-slots (shortcuts) page
+    (unless shortcuts
+      (make-shortcuts page))))
 
 (defun make-next-file (pathname)
   (ppcre:regex-replace "([a-z])(?=\\.meta$)"
@@ -59,8 +59,7 @@
   (let ((next-meta-file (make-next-file pathname)))
     (when (probe-file next-meta-file)
       (with-slots (next-page) page
-        (setf next-page (make-page base-directory next-meta-file)))))
-  (make-shortcuts page))
+        (setf next-page (make-page base-directory next-meta-file))))))
 
 (defmethod page-file ((page page) type)
   (probe-file (make-pathname :type type :defaults (page-pathname page))))
@@ -194,10 +193,12 @@
                 (cept:write-cept input-char)))
              ;; check shortcut
              (when (ppcre:scan "^[0-9]" input)
-               (when-let (page-number (gethash input (page-shortcuts page)))
-                 (return (find-page page-number)))
+               (when-let (page (gethash input (page-shortcuts page)))
+                 (format t "; shortcut ~S => ~A~%" input page)
+                 (return page))
                (when (= (length input) 2)
                  ;; two digits entered, no shortcut found
+                 (format t "; no shortcut found, returning ~A~%" page)
                  (return page))))))
     (cept:service-jump-return)))
 
