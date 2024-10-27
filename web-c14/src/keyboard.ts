@@ -1,6 +1,14 @@
 const initKeyboard = (send: (code: number) => void) => {
   const modifiersPressed: Element[] = []
 
+  const keyToCept = {
+    c14Star: [0x13],
+    c14Hash: [0x1c],
+    Enter: [0x0a],
+    Space: [0x20],
+    Delete: [0x7f],
+  }
+
   // Flash a typed key
   const flashKey = (element: Element) => {
     element.classList.toggle('black')
@@ -46,7 +54,10 @@ const initKeyboard = (send: (code: number) => void) => {
     }
     const code = target?.getAttribute('data-code') as string
     console.log('key', code)
-    send(code)
+    const sequence = keyToCept[code]
+    if (sequence) {
+      send(sequence)
+    }
     flashKey(target)
   }
 
@@ -104,7 +115,7 @@ const initKeyboard = (send: (code: number) => void) => {
     window.addEventListener('resize', resizeKeyboard)
     resizeKeyboard()
   }
-  document.addEventListener('keydown', (event: KeyboardEvent) => {
+  const handleKeyDownEvent = (event: KeyboardEvent) => {
     console.log('event.code', event.code)
     let keyElement = svgDoc.getElementById(`key-${event.code}`)
     switch (event.key) {
@@ -133,7 +144,9 @@ const initKeyboard = (send: (code: number) => void) => {
       flashKey(keyElement)
     }
     event.preventDefault()
-  })
+  }
+  document.addEventListener('keydown', handleKeyDownEvent)
+  svgDoc.addEventListener('keydown', handleKeyDownEvent)
 
   document.addEventListener('keyup', (event: KeyboardEvent) => {})
 

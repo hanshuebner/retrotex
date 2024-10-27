@@ -180,7 +180,7 @@
                ;; delete => delete character
                ((member input-char '(#\backspace #\delete))
                 (when (zerop (length input))
-                  (return page))
+                  (return))
                 (vector-pop input)
                 (cept:write-cept #\backspace #\space #\backspace))
                ;; digits => stuff into buffer
