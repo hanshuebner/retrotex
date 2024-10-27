@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       : 'none'
   }
 
-  debuggerStatus(true)
+  debuggerStatus(false)
 
   document
     .getElementById('previous-page')!

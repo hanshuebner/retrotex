@@ -150,6 +150,16 @@ export default (
   let currentPalette = 0
   let parallelAttributes: Attributes = {}
 
+  let serviceBreakSave:
+    | {
+        mode: AttributeMode
+        row: number
+        column: number
+        palette: number
+        attributes: Attributes
+      }
+    | undefined
+
   const drcsResolutionMap = {
     6: { x: 12, y: 12 },
     7: { x: 12, y: 10 },
@@ -724,9 +734,31 @@ export default (
     },
     serviceBreakBack: () => {
       log('serviceBreakBack')
+      if (serviceBreakSave) {
+        let { mode, row, column, palette, attributes } = serviceBreakSave
+        currentMode = mode
+        currentRow = row
+        currentColumn = column
+        currentPalette = palette
+        parallelAttributes = attributes
+        serviceBreakSave = undefined
+      }
     },
     serviceBreakToRow: (row: number) => {
       log('serviceBreakToRow', { row })
+      serviceBreakSave = {
+        mode: currentMode,
+        row: currentRow,
+        column: currentColumn,
+        palette: currentPalette,
+        attributes: parallelAttributes,
+      }
+      //currentMode = 'serial'
+      currentRow = row
+      currentColumn = 0
+      currentPalette = 0
+      parallelAttributes = { ...defaultAttributes }
+      parallelAttributes.backgroundColor = 0
     },
     setBgColorOfRow: (color: number) => {
       log('setBgColorOfRow', { color })

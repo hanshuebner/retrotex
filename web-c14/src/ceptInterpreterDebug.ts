@@ -62,7 +62,7 @@ export const renderDebugDisplay = (
   container.appendChild(screenColorChip)
   for (let i = 0; i < 32; i++) {
     const colorChip = createChip(
-      `${i}`,
+      `${Math.floor(i / 8)}.${i % 8}`,
       `#${colors[i].toString(16).padStart(3, '0')}`,
     )
     colorChip.style.color = `#${complement12Bit(colors[i]).toString(16).padStart(3, '0')}`
