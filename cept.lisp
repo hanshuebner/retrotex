@@ -46,7 +46,8 @@
            #:with-cept-stream
            #:define-colors
            #:color-definition-bytes
-           #:reset-colors))
+           #:reset-colors
+           #:delete-to-end-of-line))
 
 (in-package :cept)
 
@@ -84,10 +85,13 @@
   (write-cept #x0c))
 
 (defun service-jump (&optional (line 23))
-  (write-cept #x1f #x2f #x40 (+ #x41 line)))
+  (write-cept #x1f #x2f #x40 (+ #x40 line)))
 
 (defun service-jump-return ()
   (write-cept #x1F #x2F #x4F))
+
+(defun delete-to-end-of-line ()
+  (write-cept #x18))
 
 (defun reset-page (&optional (arg #x42))
   (write-cept #x1f #x2f arg))
