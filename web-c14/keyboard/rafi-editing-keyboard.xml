@@ -1,184 +1,184 @@
 <keyboard>
   <row>
     <key type="lock"/>
-    <key type="led" on="true" group="page" logo="page-number"><label>1</label></key>
-    <key type="led" group="page" logo="page-number"><label>2</label></key>
-    <key type="led" group="page" logo="page-number"><label>3</label></key>
-    <key type="led" group="page" logo="page-number"><label>4</label></key>
+    <key code="c14Page1" type="led" on="true" group="page" logo="page-number"><label>1</label></key>
+    <key code="c14Page2" type="led" group="page" logo="page-number"><label>2</label></key>
+    <key code="c14Page3" type="led" group="page" logo="page-number"><label>3</label></key>
+    <key code="c14Page4" type="led" group="page" logo="page-number"><label>4</label></key>
     <space width="1" has-busy-led="1"/>
-    <key type="led" on="true" group="charset" color="dark-grey">ALPHA</key>
-    <key type="led" group="charset" color="dark-grey">GRAF1</key>
-    <key type="led" group="charset" color="dark-grey">GRAF2</key>
-    <key type="led" group="charset" color="dark-grey">GRAF3</key>
-    <key type="led" group="charset" color="dark-grey">DRCS</key>
-    <key type="led"><label>SER</label><label>PAR</label></key>
-    <key color="mid-grey"><label>INV</label><label>BLINK</label><label>NORM</label></key>
-    <key color="mid-grey"><label>DEC</label><label>BLINK</label><label>INC</label></key>
-    <key color="mid-grey"><label></label><label>BLINK</label><label>FTAB</label></key>
-    <key color="mid-grey"><label>PH2</label><label>BLINK</label><label>PH1</label></key>
-    <key color="mid-grey"><label>PH3</label><label>BLINK</label><label>AUS</label></key>
-    <key>REIHE</key>
-    <key>SCHIRM</key>
-    <key><label>EB</label><label>SB</label></key>
-    <key>TRSP</key>
-    <key><label>RG</label><label>HG</label></key>
-    <key type="led" logo="tv-go-online"/>
-    <key logo="tv-go-offline"/>
+    <key code="c14Alpha" type="led" on="true" group="charset" color="dark-grey">ALPHA</key>
+    <key code="c14Graf1" type="led" group="charset" color="dark-grey">GRAF1</key>
+    <key code="c14Graf2" type="led" group="charset" color="dark-grey">GRAF2</key>
+    <key code="c14Graf3" type="led" group="charset" color="dark-grey">GRAF3</key>
+    <key code="c14Drcs" type="led" group="charset" color="dark-grey">DRCS</key>
+    <key code="c14SerPar" type="led"><label>SER</label><label>PAR</label></key>
+    <key code="c14BlinkNormInv" color="mid-grey"><label>INV</label><label>BLINK</label><label>NORM</label></key>
+    <key code="c14BlinkDecInc" color="mid-grey"><label>DEC</label><label>BLINK</label><label>INC</label></key>
+    <key code="c14BlinkFtab" color="mid-grey"><label></label><label>BLINK</label><label>FTAB</label></key>
+    <key code="c14BlinkPh1Ph2" color="mid-grey"><label>PH2</label><label>BLINK</label><label>PH1</label></key>
+    <key code="c14BlinkPh3Aus" color="mid-grey"><label>PH3</label><label>BLINK</label><label>AUS</label></key>
+    <key code="c14Reihe">REIHE</key>
+    <key code="c14Schirm">SCHIRM</key>
+    <key code="c14EbSb"><label>EB</label><label>SB</label></key>
+    <key code="c14Trsp">TRSP</key>
+    <key code="c14RgHg"><label>RG</label><label>HG</label></key>
+    <key code="c14GoOnline" type="led" logo="tv-go-online"/>
+    <key code="c14GoOffline" logo="tv-go-offline"/>
   </row>
   <row>
-    <key color="red-key"><label>C</label></key>
-    <key color="red-key"><label>R</label></key>
-    <key type="led" group="palette" on="true">PAL 1</key>
-    <key type="led" group="palette">PAL 2</key>
-    <key type="led" group="palette">PAL 3</key>
-    <key type="led" group="palette">PAL 4</key>
-    <key color="black">1</key>
-    <key color="red">2</key>
-    <key color="green">3</key>
-    <key color="yellow">4</key>
-    <key color="blue">5</key>
-    <key color="magenta">6</key>
-    <key color="cyan">7</key>
-    <key color="white">8</key>
-    <key>ZEILE</key>
-    <key>NB</key>
-    <key>BB</key>
-    <key><label>CG</label><label>SG</label></key>
-    <key>INV</key>
-    <key>NORM</key>
-    <key color="mid-grey">NH</key>
-    <key color="mid-grey">DH</key>
-    <key color="mid-grey">DB</key>
-    <key color="mid-grey">DG</key>
+    <key code="c14C" color="red-key"><label>C</label></key>
+    <key code="c14R" color="red-key"><label>R</label></key>
+    <key code="c14Pal1" type="led" group="palette" on="true">PAL 1</key>
+    <key code="c14Pal2" type="led" group="palette">PAL 2</key>
+    <key code="c14Pal3" type="led" group="palette">PAL 3</key>
+    <key code="c14Pal4" type="led" group="palette">PAL 4</key>
+    <key code="c14Black" color="black">1</key>
+    <key code="c14Red" color="red">2</key>
+    <key code="c14Green" color="green">3</key>
+    <key code="c14Yellow" color="yellow">4</key>
+    <key code="c14Blue" color="blue">5</key>
+    <key code="c14Magenta" color="magenta">6</key>
+    <key code="c14Cyan" color="cyan">7</key>
+    <key code="c14White" color="white">8</key>
+    <key code="c14Zeile">ZEILE</key>
+    <key code="c14Nb">NB</key>
+    <key code="c14Bb">BB</key>
+    <key code="c14Cg"><label>CG</label><label>SG</label></key>
+    <key code="c14Inv">INV</key>
+    <key code="c14Norm">NORM</key>
+    <key code="c14Nh" color="mid-grey">NH</key>
+    <key code="c14Dh" color="mid-grey">DH</key>
+    <key code="c14Db" color="mid-grey">DB</key>
+    <key code="c14Dg" color="mid-grey">DG</key>
   </row>
   <row>
-    <key><label>AUS</label><label>PROTEC</label><label>EIN</label></key>
-    <key><label>AUS</label><label>MARKED</label><label>EIN</label></key>
+    <key code="c14ProtecEinAus"><label>AUS</label><label>PROTEC</label><label>EIN</label></key>
+    <key code="c14MarkedEinAus"><label>AUS</label><label>MARKED</label><label>EIN</label></key>
     <space width="0.25"/>
-    <key width="1.25"><label>μ</label><label>°</label><label>⌐</label><label>&#x0311;</label></key>
-    <key><label>1</label><label>!</label><label>ˡ</label><label>¡</label></key>
-    <key><label>2</label><label>"</label><label>½</label><label>¥</label></key>
-    <key><label>3</label><label>§</label><label>¾</label><label>£</label></key>
-    <key><label>4</label><label>$</label><label>¼</label><label>¤</label></key>
-    <key><label>5</label><label>%</label><label></label><label>¢</label></key>
-    <key><label>6</label><label>&amp;</label><label>’</label><label>@</label></key>
-    <key><label>7</label><label>/</label><label>\</label><label>‘</label></key>
-    <key><label>8</label><label>(</label><label>{</label><label>[</label></key>
-    <key><label>9</label><label>)</label><label>}</label><label>]</label></key>
-    <key><label>0</label><label>=</label><label>≪</label><label>|</label></key>
-    <key><label>ß</label><label>?</label><label>≫</label><label>¿</label></key>
-    <key><label>&#x0301;</label><label>&#x0300;</label><label>&#x2e0c;</label><label>&#x30c;</label></key>
-    <key width="1.75"><label>⌫</label></key>
+    <key code="c14Micro" width="1.25"><label>μ</label><label>°</label><label>⌐</label><label>&#x0311;</label></key>
+    <key code="Digit1"><label>1</label><label>!</label><label>ˡ</label><label>¡</label></key>
+    <key code="Digit2"><label>2</label><label>"</label><label>½</label><label>¥</label></key>
+    <key code="Digit3"><label>3</label><label>§</label><label>¾</label><label>£</label></key>
+    <key code="Digit4"><label>4</label><label>$</label><label>¼</label><label>¤</label></key>
+    <key code="Digit5"><label>5</label><label>%</label><label></label><label>¢</label></key>
+    <key code="Digit6"><label>6</label><label>&amp;</label><label>’</label><label>@</label></key>
+    <key code="Digit7"><label>7</label><label>/</label><label>\</label><label>‘</label></key>
+    <key code="Digit8"><label>8</label><label>(</label><label>{</label><label>[</label></key>
+    <key code="Digit9"><label>9</label><label>)</label><label>}</label><label>]</label></key>
+    <key code="Digit0"><label>0</label><label>=</label><label>≪</label><label>|</label></key>
+    <key code="c14esZet"><label>ß</label><label>?</label><label>≫</label><label>¿</label></key>
+    <key code="c14backTick"><label>&#x0301;</label><label>&#x0300;</label><label>&#x2e0c;</label><label>&#x30c;</label></key>
+    <key code="Delete" width="1.75"><label>⌫</label></key>
     <space width="0.25"/>
-    <key><label>24</label><label>FORMAT</label><label>20</label></key>
-    <key><label>AUS</label><label>VERD</label><label>EIN</label></key>
-    <key><label>AUS</label><label>&#x22a6;SCRL</label><label>EIN</label></key>
+    <key code="c14Format2024"><label>24</label><label>FORMAT</label><label>20</label></key>
+    <key code="c14VerdEinAus"><label>AUS</label><label>VERD</label><label>EIN</label></key>
+    <key code="c14ScrlEinAus"><label>AUS</label><label>&#x22a6;SCRL</label><label>EIN</label></key>
     <space width="0.5"/>
-    <key logo="tv-show-attributes"/>
-    <key logo="print"/>
-    <key logo="tv-reveal"/>
+    <key code="c14ShowAttributes" logo="tv-show-attributes"/>
+    <key code="c14Print" logo="print"/>
+    <key code="c14Reveal" logo="tv-reveal"/>
   </row>
   <row>
-    <key type="led" logo="prestel-0-0"/>
-    <key type="led" logo="prestel-0-1"/>
+    <key code="c14Prestel00" type="led" logo="prestel-0-0"/>
+    <key code="c14Prestel01" type="led" logo="prestel-0-1"/>
     <space width="0.25"/>
-    <key color="dark-grey" width="1.75"><label>F</label></key>
-    <key><label>Q</label><label></label><label></label></key>
-    <key><label>W</label><label></label><label></label></key>
-    <key><label>E</label><label></label><label></label></key>
-    <key><label>R</label><label></label><label></label></key>
-    <key><label>T</label><label></label><label></label></key>
-    <key><label>Z</label><label></label><label></label></key>
-    <key><label>U</label><label></label><label></label></key>
-    <key><label>I</label><label></label><label></label></key>
-    <key><label>O</label><label></label><label></label></key>
-    <key><label>P</label><label></label><label></label></key>
-    <key><label>Ü</label><label></label><label></label></key>
-    <key><label>+</label><label>*</label><label></label><label></label></key>
-    <key type="enter" width="1.25"/>
+    <key code="c14F" color="dark-grey" width="1.75"><label>F</label></key>
+    <key code="KeyQ"><label>Q</label><label></label><label></label></key>
+    <key code="KeyW"><label>W</label><label></label><label></label></key>
+    <key code="KeyE"><label>E</label><label></label><label></label></key>
+    <key code="KeyR"><label>R</label><label></label><label></label></key>
+    <key code="KeyT"><label>T</label><label></label><label></label></key>
+    <key code="KeyY"><label>Z</label><label></label><label></label></key>
+    <key code="KeyU"><label>U</label><label></label><label></label></key>
+    <key code="KeyI"><label>I</label><label></label><label></label></key>
+    <key code="KeyO"><label>O</label><label></label><label></label></key>
+    <key code="KeyP"><label>P</label><label></label><label></label></key>
+    <key code="BracketLeft"><label>Ü</label><label></label><label></label></key>
+    <key code="BracketRight"><label>+</label><label>*</label><label></label><label></label></key>
+    <key code="Enter" type="enter" width="1.25"/>
     <space width="0.25"/>
-    <key><label>⇖</label></key>
-    <key color="mid-grey"><label>↑</label></key>
-    <key><label>⇈</label></key>
+    <key code="c14LeftUp"><label>⇖</label></key>
+    <key code="ArrowUp" color="mid-grey"><label>↑</label></key>
+    <key code="PageUp"><label>⇈</label></key>
     <space width="0.5"/>
-    <key><label>7</label></key>
-    <key><label>8</label></key>
-    <key><label>9</label></key>
+    <key code="Keypad7"><label>7</label></key>
+    <key code="Keypad8"><label>8</label></key>
+    <key code="Keypad9"><label>9</label></key>
   </row>
   <row>
-    <key type="led" logo="prestel-1-0"/>
-    <key type="led" logo="prestel-1-1"/>
+    <key code="c14Prestel10" type="led" logo="prestel-1-0"/>
+    <key code="c14Prestel11" type="led" logo="prestel-1-1"/>
     <space width="0.25"/>
-    <key modifier="true">CTRL</key>
-    <key type="led"><label>CAPS</label><label>LOCK</label></key>
-    <key><label>A</label><label></label><label></label></key>
-    <key><label>S</label><label></label><label></label></key>
-    <key><label>D</label><label></label><label></label></key>
-    <key><label>F</label><label></label><label></label></key>
-    <key><label>G</label><label></label><label></label></key>
-    <key><label>H</label><label></label><label></label></key>
-    <key><label>J</label><label></label><label></label></key>
-    <key><label>K</label><label></label><label></label></key>
-    <key><label>L</label><label></label><label></label></key>
-    <key><label>Ö</label><label></label><label></label></key>
-    <key><label>Ä</label><label></label><label></label></key>
-    <key><label>#</label><label>'</label><label>^</label><label></label></key>
+    <key code="Control" modifier="true">CTRL</key>
+    <key code="CapsLock" type="led"><label>CAPS</label><label>LOCK</label></key>
+    <key code="KeyA"><label>A</label><label></label><label></label></key>
+    <key code="KeyS"><label>S</label><label></label><label></label></key>
+    <key code="KeyD"><label>D</label><label></label><label></label></key>
+    <key code="KeyF"><label>F</label><label></label><label></label></key>
+    <key code="KeyG"><label>G</label><label></label><label></label></key>
+    <key code="KeyH"><label>H</label><label></label><label></label></key>
+    <key code="KeyJ"><label>J</label><label></label><label></label></key>
+    <key code="KeyK"><label>K</label><label></label><label></label></key>
+    <key code="KeyL"><label>L</label><label></label><label></label></key>
+    <key code="Semicolon"><label>Ö</label><label></label><label></label></key>
+    <key code="Quote"><label>Ä</label><label></label><label></label></key>
+    <key code="Backslash"><label>#</label><label>'</label><label>^</label><label></label></key>
     <space width="1"/> <!-- part of the enter key -->
     <space width="0.25"/>
-    <key color="mid-grey"><label>←</label></key>
-    <key color="mid-grey"><label>↖</label></key>
-    <key color="mid-grey"><label>→</label></key>
+    <key code="ArrowLeft" color="mid-grey"><label>←</label></key>
+    <key code="Home" color="mid-grey"><label>↖</label></key>
+    <key code="ArrowRight" color="mid-grey"><label>→</label></key>
     <space width="0.5"/>
-    <key><label>4</label></key>
-    <key><label>5</label></key>
-    <key><label>6</label></key>
+    <key code="Keypad4"><label>4</label></key>
+    <key code="Keypad5"><label>5</label></key>
+    <key code="Keypad6"><label>6</label></key>
   </row>
   <row>
-    <key type="led" logo="prestel-2-0"/>
-    <key type="led" logo="prestel-2-1"/>
+    <key code="c14Prestel20" type="led" logo="prestel-2-0"/>
+    <key code="c14Prestel21" type="led" logo="prestel-2-1"/>
     <space width="0.25"/>
-    <key modifier="true" width="1.5">SHIFT</key>
-    <key><label>&lt;</label><label>&gt;</label><label>³</label><label>²</label></key>
-    <key><label>Y</label><label></label><label></label></key>
-    <key><label>X</label><label></label><label></label></key>
-    <key><label>C</label><label></label><label></label></key>
-    <key><label>V</label><label></label><label></label></key>
-    <key><label>B</label><label></label><label></label></key>
-    <key><label>N</label><label></label><label></label></key>
-    <key><label>M</label><label></label><label></label></key>
-    <key><label>,</label><label>;</label><label></label><label></label></key>
-    <key><label>.</label><label>:</label><label></label><label></label></key>
-    <key><label>-</label><label>_</label><label></label><label></label></key>
-    <key modifier="true" width="1.5">SHIFT</key>
-    <key><label>↵</label></key>
+    <key code="Shift" modifier="true" width="1.5">SHIFT</key>
+    <key code="Backquote"><label>&lt;</label><label>&gt;</label><label>³</label><label>²</label></key>
+    <key code="KeyZ"><label>Y</label><label></label><label></label></key>
+    <key code="KeyX"><label>X</label><label></label><label></label></key>
+    <key code="KeyC"><label>C</label><label></label><label></label></key>
+    <key code="KeyV"><label>V</label><label></label><label></label></key>
+    <key code="KeyB"><label>B</label><label></label><label></label></key>
+    <key code="KeyN"><label>N</label><label></label><label></label></key>
+    <key code="KeyM"><label>M</label><label></label><label></label></key>
+    <key code="Comma"><label>,</label><label>;</label><label></label><label></label></key>
+    <key code="Period"><label>.</label><label>:</label><label></label><label></label></key>
+    <key code="Slash"><label>-</label><label>_</label><label></label><label></label></key>
+    <key code="Shift" modifier="true" width="1.5">SHIFT</key>
+    <key code="c14Return"><label>↵</label></key>
     <space width="0.25"/>
-    <key><label>⇙</label></key>
-    <key color="mid-grey"><label>↓</label></key>
-    <key><label>⇊</label></key>
+    <key code="c14LeftDown"><label>⇙</label></key>
+    <key code="ArrowDown" color="mid-grey"><label>↓</label></key>
+    <key code="PageDown"><label>⇊</label></key>
     <space width="0.5"/>
-    <key><label>1</label></key>
-    <key><label>2</label></key>
-    <key><label>3</label></key>
+    <key code="Keypad1"><label>1</label></key>
+    <key code="Keypad2"><label>2</label></key>
+    <key code="Keypad3"><label>3</label></key>
   </row>
   <row>
     <space width="0.5"/>
-    <key logo="prestel"/>
+    <key code="c14Prestel" logo="prestel"/>
     <space width="0.75"/>
-    <key><label>FARB</label><label>EDIT</label></key>
-    <key><label>DRCS</label><label>EDIT</label></key>
-    <key><label>SCROL</label><label>EDIT</label></key>
-    <key width="8"/>
+    <key code="c14FarbEdit"><label>FARB</label><label>EDIT</label></key>
+    <key code="c14DrcsEdit"><label>DRCS</label><label>EDIT</label></key>
+    <key code="c14ScrolEdit"><label>SCROL</label><label>EDIT</label></key>
+    <key code="Space" width="8"/>
     <space width="1"/>
-    <key><label>-</label></key>
-    <key><label>+</label></key>
-    <key><label>AUS</label><label>UNTSTR</label><label>EIN</label></key>
+    <key code="Subtract"><label>-</label></key>
+    <key code="Add"><label>+</label></key>
+    <key code="c14UntstrEinAus"><label>AUS</label><label>UNTSTR</label><label>EIN</label></key>
     <space width="0.25"/>
-    <key><label>AUS</label><label>CURSOR</label><label>EIN</label></key>
+    <key code="CursorEinAus"><label>AUS</label><label>CURSOR</label><label>EIN</label></key>
     <space width="1.0"/>
-    <key color="sys-key" logo="tv-sys-cursor"/>
+    <key code="c14Sys" color="sys-key" logo="tv-sys-cursor"/>
     <space width="0.5"/>
-    <key color="sys-key" logo="tv-star"/>
-    <key><label>0</label></key>
-    <key color="sys-key" logo="tv-hash"/>
+    <key code="c14Star" color="sys-key" logo="tv-star"/>
+    <key code="Keypad0"><label>0</label></key>
+    <key code="c14Hash" color="sys-key" logo="tv-hash"/>
   </row>
 </keyboard>

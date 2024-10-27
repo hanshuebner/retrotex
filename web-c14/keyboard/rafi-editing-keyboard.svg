@@ -10,10 +10,11 @@
         </style>
    </defs>
    <g class="key led-key standard-key "
-       data-group="page"
-       id="key-1"
-       data-keycode="1"
-       transform="translate(100,0)">
+       id="key-c14Page1"
+       data-key-number="1"
+       data-code="c14Page1"
+       transform="translate(100,0)"
+       data-group="page">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <circle cx="50" cy="50" r="35"/>
       <path class="led active" d="M 25,25 A 35,35 0 0 1 75,25 Z"/>
@@ -22,10 +23,11 @@
       <text x="50" y="70" font-size="18"/>
    </g>
    <g class="key led-key standard-key "
-       data-group="page"
-       id="key-2"
-       data-keycode="2"
-       transform="translate(200,0)">
+       id="key-c14Page2"
+       data-key-number="2"
+       data-code="c14Page2"
+       transform="translate(200,0)"
+       data-group="page">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <circle cx="50" cy="50" r="35"/>
       <path class="led" d="M 25,25 A 35,35 0 0 1 75,25 Z"/>
@@ -34,10 +36,11 @@
       <text x="50" y="70" font-size="18"/>
    </g>
    <g class="key led-key standard-key "
-       data-group="page"
-       id="key-3"
-       data-keycode="3"
-       transform="translate(300,0)">
+       id="key-c14Page3"
+       data-key-number="3"
+       data-code="c14Page3"
+       transform="translate(300,0)"
+       data-group="page">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <circle cx="50" cy="50" r="35"/>
       <path class="led" d="M 25,25 A 35,35 0 0 1 75,25 Z"/>
@@ -46,10 +49,11 @@
       <text x="50" y="70" font-size="18"/>
    </g>
    <g class="key led-key standard-key "
-       data-group="page"
-       id="key-4"
-       data-keycode="4"
-       transform="translate(400,0)">
+       id="key-c14Page4"
+       data-key-number="4"
+       data-code="c14Page4"
+       transform="translate(400,0)"
+       data-group="page">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <circle cx="50" cy="50" r="35"/>
       <path class="led" d="M 25,25 A 35,35 0 0 1 75,25 Z"/>
@@ -64,59 +68,64 @@
       <text x="50" y="50" font-size="14">BUSY</text>
    </g>
    <g class="key led-key standard-key dark-grey"
-       data-group="charset"
-       id="key-5"
-       data-keycode="5"
-       transform="translate(600,0)">
+       id="key-c14Alpha"
+       data-key-number="5"
+       data-code="c14Alpha"
+       transform="translate(600,0)"
+       data-group="charset">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <circle cx="50" cy="50" r="35"/>
       <path class="led active" d="M 25,25 A 35,35 0 0 1 75,25 Z"/>
       <text x="50" y="62" font-size="18">ALPHA</text>
    </g>
    <g class="key led-key standard-key dark-grey"
-       data-group="charset"
-       id="key-6"
-       data-keycode="6"
-       transform="translate(700,0)">
+       id="key-c14Graf1"
+       data-key-number="6"
+       data-code="c14Graf1"
+       transform="translate(700,0)"
+       data-group="charset">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <circle cx="50" cy="50" r="35"/>
       <path class="led" d="M 25,25 A 35,35 0 0 1 75,25 Z"/>
       <text x="50" y="62" font-size="18">GRAF1</text>
    </g>
    <g class="key led-key standard-key dark-grey"
-       data-group="charset"
-       id="key-7"
-       data-keycode="7"
-       transform="translate(800,0)">
+       id="key-c14Graf2"
+       data-key-number="7"
+       data-code="c14Graf2"
+       transform="translate(800,0)"
+       data-group="charset">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <circle cx="50" cy="50" r="35"/>
       <path class="led" d="M 25,25 A 35,35 0 0 1 75,25 Z"/>
       <text x="50" y="62" font-size="18">GRAF2</text>
    </g>
    <g class="key led-key standard-key dark-grey"
-       data-group="charset"
-       id="key-8"
-       data-keycode="8"
-       transform="translate(900,0)">
+       id="key-c14Graf3"
+       data-key-number="8"
+       data-code="c14Graf3"
+       transform="translate(900,0)"
+       data-group="charset">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <circle cx="50" cy="50" r="35"/>
       <path class="led" d="M 25,25 A 35,35 0 0 1 75,25 Z"/>
       <text x="50" y="62" font-size="18">GRAF3</text>
    </g>
    <g class="key led-key standard-key dark-grey"
-       data-group="charset"
-       id="key-9"
-       data-keycode="9"
-       transform="translate(1000,0)">
+       id="key-c14Drcs"
+       data-key-number="9"
+       data-code="c14Drcs"
+       transform="translate(1000,0)"
+       data-group="charset">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <circle cx="50" cy="50" r="35"/>
       <path class="led" d="M 25,25 A 35,35 0 0 1 75,25 Z"/>
       <text x="50" y="62" font-size="18">DRCS</text>
    </g>
    <g class="key led-key standard-key "
-       data-group=""
-       id="key-10"
-       data-keycode="10"
+       id="key-c14SerPar"
+       data-key-number="10"
+       data-code="c14SerPar"
        transform="translate(1100,0)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <circle cx="50" cy="50" r="35"/>
@@ -125,8 +134,9 @@
       <text x="50" y="70" font-size="18">PAR</text>
    </g>
    <g class="key standard-key mid-grey"
-       id="key-11"
-       data-keycode="11"
+       id="key-c14BlinkNormInv"
+       data-key-number="11"
+       data-code="c14BlinkNormInv"
        transform="translate(1200,0)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -135,8 +145,9 @@
       <text x="50" y="75" font-size="18">NORM</text>
    </g>
    <g class="key standard-key mid-grey"
-       id="key-12"
-       data-keycode="12"
+       id="key-c14BlinkDecInc"
+       data-key-number="12"
+       data-code="c14BlinkDecInc"
        transform="translate(1300,0)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -145,8 +156,9 @@
       <text x="50" y="75" font-size="18">INC</text>
    </g>
    <g class="key standard-key mid-grey"
-       id="key-13"
-       data-keycode="13"
+       id="key-c14BlinkFtab"
+       data-key-number="13"
+       data-code="c14BlinkFtab"
        transform="translate(1400,0)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -155,8 +167,9 @@
       <text x="50" y="75" font-size="18">FTAB</text>
    </g>
    <g class="key standard-key mid-grey"
-       id="key-14"
-       data-keycode="14"
+       id="key-c14BlinkPh1Ph2"
+       data-key-number="14"
+       data-code="c14BlinkPh1Ph2"
        transform="translate(1500,0)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -165,8 +178,9 @@
       <text x="50" y="75" font-size="18">PH1</text>
    </g>
    <g class="key standard-key mid-grey"
-       id="key-15"
-       data-keycode="15"
+       id="key-c14BlinkPh3Aus"
+       data-key-number="15"
+       data-code="c14BlinkPh3Aus"
        transform="translate(1600,0)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -175,24 +189,27 @@
       <text x="50" y="75" font-size="18">AUS</text>
    </g>
    <g class="key standard-key "
-       id="key-16"
-       data-keycode="16"
+       id="key-c14Reihe"
+       data-key-number="16"
+       data-code="c14Reihe"
        transform="translate(1700,0)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="62" font-size="18">REIHE</text>
    </g>
    <g class="key standard-key "
-       id="key-17"
-       data-keycode="17"
+       id="key-c14Schirm"
+       data-key-number="17"
+       data-code="c14Schirm"
        transform="translate(1800,0)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="62" font-size="18">SCHIRM</text>
    </g>
    <g class="key standard-key "
-       id="key-18"
-       data-keycode="18"
+       id="key-c14EbSb"
+       data-key-number="18"
+       data-code="c14EbSb"
        transform="translate(1900,0)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -200,16 +217,18 @@
       <text x="50" y="70" font-size="18">SB</text>
    </g>
    <g class="key standard-key "
-       id="key-19"
-       data-keycode="19"
+       id="key-c14Trsp"
+       data-key-number="19"
+       data-code="c14Trsp"
        transform="translate(2000,0)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="62" font-size="18">TRSP</text>
    </g>
    <g class="key standard-key "
-       id="key-20"
-       data-keycode="20"
+       id="key-c14RgHg"
+       data-key-number="20"
+       data-code="c14RgHg"
        transform="translate(2100,0)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -217,9 +236,9 @@
       <text x="50" y="70" font-size="18">HG</text>
    </g>
    <g class="key led-key standard-key "
-       data-group=""
-       id="key-21"
-       data-keycode="21"
+       id="key-c14GoOnline"
+       data-key-number="21"
+       data-code="c14GoOnline"
        transform="translate(2200,0)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <circle cx="50" cy="50" r="35"/>
@@ -235,8 +254,9 @@
       <text x="50" y="62" font-size="18"/>
    </g>
    <g class="key standard-key "
-       id="key-22"
-       data-keycode="22"
+       id="key-c14GoOffline"
+       data-key-number="22"
+       data-code="c14GoOffline"
        transform="translate(2300,0)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -252,152 +272,170 @@
       <text x="50" y="62" font-size="18"/>
    </g>
    <g class="key standard-key red-key"
-       id="key-23"
-       data-keycode="23"
+       id="key-c14C"
+       data-key-number="23"
+       data-code="c14C"
        transform="translate(0,100)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="65" font-size="40">C</text>
    </g>
    <g class="key standard-key red-key"
-       id="key-24"
-       data-keycode="24"
+       id="key-c14R"
+       data-key-number="24"
+       data-code="c14R"
        transform="translate(100,100)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="65" font-size="40">R</text>
    </g>
    <g class="key led-key standard-key "
-       data-group="palette"
-       id="key-25"
-       data-keycode="25"
-       transform="translate(200,100)">
+       id="key-c14Pal1"
+       data-key-number="25"
+       data-code="c14Pal1"
+       transform="translate(200,100)"
+       data-group="palette">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <circle cx="50" cy="50" r="35"/>
       <path class="led active" d="M 25,25 A 35,35 0 0 1 75,25 Z"/>
       <text x="50" y="62" font-size="18">PAL 1</text>
    </g>
    <g class="key led-key standard-key "
-       data-group="palette"
-       id="key-26"
-       data-keycode="26"
-       transform="translate(300,100)">
+       id="key-c14Pal2"
+       data-key-number="26"
+       data-code="c14Pal2"
+       transform="translate(300,100)"
+       data-group="palette">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <circle cx="50" cy="50" r="35"/>
       <path class="led" d="M 25,25 A 35,35 0 0 1 75,25 Z"/>
       <text x="50" y="62" font-size="18">PAL 2</text>
    </g>
    <g class="key led-key standard-key "
-       data-group="palette"
-       id="key-27"
-       data-keycode="27"
-       transform="translate(400,100)">
+       id="key-c14Pal3"
+       data-key-number="27"
+       data-code="c14Pal3"
+       transform="translate(400,100)"
+       data-group="palette">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <circle cx="50" cy="50" r="35"/>
       <path class="led" d="M 25,25 A 35,35 0 0 1 75,25 Z"/>
       <text x="50" y="62" font-size="18">PAL 3</text>
    </g>
    <g class="key led-key standard-key "
-       data-group="palette"
-       id="key-28"
-       data-keycode="28"
-       transform="translate(500,100)">
+       id="key-c14Pal4"
+       data-key-number="28"
+       data-code="c14Pal4"
+       transform="translate(500,100)"
+       data-group="palette">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <circle cx="50" cy="50" r="35"/>
       <path class="led" d="M 25,25 A 35,35 0 0 1 75,25 Z"/>
       <text x="50" y="62" font-size="18">PAL 4</text>
    </g>
    <g class="key standard-key black"
-       id="key-29"
-       data-keycode="29"
+       id="key-c14Black"
+       data-key-number="29"
+       data-code="c14Black"
        transform="translate(600,100)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="62" font-size="18">1</text>
    </g>
    <g class="key standard-key red"
-       id="key-30"
-       data-keycode="30"
+       id="key-c14Red"
+       data-key-number="30"
+       data-code="c14Red"
        transform="translate(700,100)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="62" font-size="18">2</text>
    </g>
    <g class="key standard-key green"
-       id="key-31"
-       data-keycode="31"
+       id="key-c14Green"
+       data-key-number="31"
+       data-code="c14Green"
        transform="translate(800,100)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="62" font-size="18">3</text>
    </g>
    <g class="key standard-key yellow"
-       id="key-32"
-       data-keycode="32"
+       id="key-c14Yellow"
+       data-key-number="32"
+       data-code="c14Yellow"
        transform="translate(900,100)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="62" font-size="18">4</text>
    </g>
    <g class="key standard-key blue"
-       id="key-33"
-       data-keycode="33"
+       id="key-c14Blue"
+       data-key-number="33"
+       data-code="c14Blue"
        transform="translate(1000,100)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="62" font-size="18">5</text>
    </g>
    <g class="key standard-key magenta"
-       id="key-34"
-       data-keycode="34"
+       id="key-c14Magenta"
+       data-key-number="34"
+       data-code="c14Magenta"
        transform="translate(1100,100)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="62" font-size="18">6</text>
    </g>
    <g class="key standard-key cyan"
-       id="key-35"
-       data-keycode="35"
+       id="key-c14Cyan"
+       data-key-number="35"
+       data-code="c14Cyan"
        transform="translate(1200,100)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="62" font-size="18">7</text>
    </g>
    <g class="key standard-key white"
-       id="key-36"
-       data-keycode="36"
+       id="key-c14White"
+       data-key-number="36"
+       data-code="c14White"
        transform="translate(1300,100)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="62" font-size="18">8</text>
    </g>
    <g class="key standard-key "
-       id="key-37"
-       data-keycode="37"
+       id="key-c14Zeile"
+       data-key-number="37"
+       data-code="c14Zeile"
        transform="translate(1400,100)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="62" font-size="18">ZEILE</text>
    </g>
    <g class="key standard-key "
-       id="key-38"
-       data-keycode="38"
+       id="key-c14Nb"
+       data-key-number="38"
+       data-code="c14Nb"
        transform="translate(1500,100)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="62" font-size="18">NB</text>
    </g>
    <g class="key standard-key "
-       id="key-39"
-       data-keycode="39"
+       id="key-c14Bb"
+       data-key-number="39"
+       data-code="c14Bb"
        transform="translate(1600,100)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="62" font-size="18">BB</text>
    </g>
    <g class="key standard-key "
-       id="key-40"
-       data-keycode="40"
+       id="key-c14Cg"
+       data-key-number="40"
+       data-code="c14Cg"
        transform="translate(1700,100)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -405,56 +443,63 @@
       <text x="50" y="70" font-size="18">SG</text>
    </g>
    <g class="key standard-key "
-       id="key-41"
-       data-keycode="41"
+       id="key-c14Inv"
+       data-key-number="41"
+       data-code="c14Inv"
        transform="translate(1800,100)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="62" font-size="18">INV</text>
    </g>
    <g class="key standard-key "
-       id="key-42"
-       data-keycode="42"
+       id="key-c14Norm"
+       data-key-number="42"
+       data-code="c14Norm"
        transform="translate(1900,100)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="62" font-size="18">NORM</text>
    </g>
    <g class="key standard-key mid-grey"
-       id="key-43"
-       data-keycode="43"
+       id="key-c14Nh"
+       data-key-number="43"
+       data-code="c14Nh"
        transform="translate(2000,100)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="62" font-size="18">NH</text>
    </g>
    <g class="key standard-key mid-grey"
-       id="key-44"
-       data-keycode="44"
+       id="key-c14Dh"
+       data-key-number="44"
+       data-code="c14Dh"
        transform="translate(2100,100)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="62" font-size="18">DH</text>
    </g>
    <g class="key standard-key mid-grey"
-       id="key-45"
-       data-keycode="45"
+       id="key-c14Db"
+       data-key-number="45"
+       data-code="c14Db"
        transform="translate(2200,100)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="62" font-size="18">DB</text>
    </g>
    <g class="key standard-key mid-grey"
-       id="key-46"
-       data-keycode="46"
+       id="key-c14Dg"
+       data-key-number="46"
+       data-code="c14Dg"
        transform="translate(2300,100)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="62" font-size="18">DG</text>
    </g>
    <g class="key standard-key "
-       id="key-47"
-       data-keycode="47"
+       id="key-c14ProtecEinAus"
+       data-key-number="47"
+       data-code="c14ProtecEinAus"
        transform="translate(0,200)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -463,8 +508,9 @@
       <text x="50" y="75" font-size="18">EIN</text>
    </g>
    <g class="key standard-key "
-       id="key-48"
-       data-keycode="48"
+       id="key-c14MarkedEinAus"
+       data-key-number="48"
+       data-code="c14MarkedEinAus"
        transform="translate(100,200)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -473,8 +519,9 @@
       <text x="50" y="75" font-size="18">EIN</text>
    </g>
    <g class="key standard-key "
-       id="key-49"
-       data-keycode="49"
+       id="key-c14Micro"
+       data-key-number="49"
+       data-code="c14Micro"
        transform="translate(225,200)">
       <rect x="5" y="5" width="115" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 0,0 50,80 L75,80 A35,35 0 0,0 100,25 Z"/>
@@ -484,8 +531,9 @@
       <text x="72.5" y="70" font-size="22">̑</text>
    </g>
    <g class="key standard-key "
-       id="key-50"
-       data-keycode="50"
+       id="key-Digit1"
+       data-key-number="50"
+       data-code="Digit1"
        transform="translate(350,200)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -495,8 +543,9 @@
       <text x="60" y="70" font-size="22">¡</text>
    </g>
    <g class="key standard-key "
-       id="key-51"
-       data-keycode="51"
+       id="key-Digit2"
+       data-key-number="51"
+       data-code="Digit2"
        transform="translate(450,200)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -506,8 +555,9 @@
       <text x="60" y="70" font-size="22">¥</text>
    </g>
    <g class="key standard-key "
-       id="key-52"
-       data-keycode="52"
+       id="key-Digit3"
+       data-key-number="52"
+       data-code="Digit3"
        transform="translate(550,200)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -517,8 +567,9 @@
       <text x="60" y="70" font-size="22">£</text>
    </g>
    <g class="key standard-key "
-       id="key-53"
-       data-keycode="53"
+       id="key-Digit4"
+       data-key-number="53"
+       data-code="Digit4"
        transform="translate(650,200)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -528,8 +579,9 @@
       <text x="60" y="70" font-size="22">¤</text>
    </g>
    <g class="key standard-key "
-       id="key-54"
-       data-keycode="54"
+       id="key-Digit5"
+       data-key-number="54"
+       data-code="Digit5"
        transform="translate(750,200)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -539,8 +591,9 @@
       <text x="60" y="70" font-size="22">¢</text>
    </g>
    <g class="key standard-key "
-       id="key-55"
-       data-keycode="55"
+       id="key-Digit6"
+       data-key-number="55"
+       data-code="Digit6"
        transform="translate(850,200)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -550,8 +603,9 @@
       <text x="60" y="70" font-size="22">@</text>
    </g>
    <g class="key standard-key "
-       id="key-56"
-       data-keycode="56"
+       id="key-Digit7"
+       data-key-number="56"
+       data-code="Digit7"
        transform="translate(950,200)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -561,8 +615,9 @@
       <text x="60" y="70" font-size="22">‘</text>
    </g>
    <g class="key standard-key "
-       id="key-57"
-       data-keycode="57"
+       id="key-Digit8"
+       data-key-number="57"
+       data-code="Digit8"
        transform="translate(1050,200)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -572,8 +627,9 @@
       <text x="60" y="70" font-size="22">[</text>
    </g>
    <g class="key standard-key "
-       id="key-58"
-       data-keycode="58"
+       id="key-Digit9"
+       data-key-number="58"
+       data-code="Digit9"
        transform="translate(1150,200)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -583,8 +639,9 @@
       <text x="60" y="70" font-size="22">]</text>
    </g>
    <g class="key standard-key "
-       id="key-59"
-       data-keycode="59"
+       id="key-Digit0"
+       data-key-number="59"
+       data-code="Digit0"
        transform="translate(1250,200)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -594,8 +651,9 @@
       <text x="60" y="70" font-size="22">|</text>
    </g>
    <g class="key standard-key "
-       id="key-60"
-       data-keycode="60"
+       id="key-c14esZet"
+       data-key-number="60"
+       data-code="c14esZet"
        transform="translate(1350,200)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -605,8 +663,9 @@
       <text x="60" y="70" font-size="22">¿</text>
    </g>
    <g class="key standard-key "
-       id="key-61"
-       data-keycode="61"
+       id="key-c14backTick"
+       data-key-number="61"
+       data-code="c14backTick"
        transform="translate(1450,200)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -616,16 +675,18 @@
       <text x="60" y="70" font-size="22">̌</text>
    </g>
    <g class="key standard-key "
-       id="key-62"
-       data-keycode="62"
+       id="key-Delete"
+       data-key-number="62"
+       data-code="Delete"
        transform="translate(1550,200)">
       <rect x="5" y="5" width="165" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 0,0 50,80 L125,80 A35,35 0 0,0 150,25 Z"/>
       <text x="87.5" y="65" font-size="40">⌫</text>
    </g>
    <g class="key standard-key "
-       id="key-63"
-       data-keycode="63"
+       id="key-c14Format2024"
+       data-key-number="63"
+       data-code="c14Format2024"
        transform="translate(1750,200)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -634,8 +695,9 @@
       <text x="50" y="75" font-size="18">20</text>
    </g>
    <g class="key standard-key "
-       id="key-64"
-       data-keycode="64"
+       id="key-c14VerdEinAus"
+       data-key-number="64"
+       data-code="c14VerdEinAus"
        transform="translate(1850,200)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -644,8 +706,9 @@
       <text x="50" y="75" font-size="18">EIN</text>
    </g>
    <g class="key standard-key "
-       id="key-65"
-       data-keycode="65"
+       id="key-c14ScrlEinAus"
+       data-key-number="65"
+       data-code="c14ScrlEinAus"
        transform="translate(1950,200)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -654,8 +717,9 @@
       <text x="50" y="75" font-size="18">EIN</text>
    </g>
    <g class="key standard-key "
-       id="key-66"
-       data-keycode="66"
+       id="key-c14ShowAttributes"
+       data-key-number="66"
+       data-code="c14ShowAttributes"
        transform="translate(2100,200)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -666,8 +730,9 @@
       <text x="50" y="62" font-size="18"/>
    </g>
    <g class="key standard-key "
-       id="key-67"
-       data-keycode="67"
+       id="key-c14Print"
+       data-key-number="67"
+       data-code="c14Print"
        transform="translate(2200,200)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -677,8 +742,9 @@
       <text x="50" y="62" font-size="18"/>
    </g>
    <g class="key standard-key "
-       id="key-68"
-       data-keycode="68"
+       id="key-c14Reveal"
+       data-key-number="68"
+       data-code="c14Reveal"
        transform="translate(2300,200)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -690,9 +756,9 @@
       <text x="50" y="62" font-size="18"/>
    </g>
    <g class="key led-key standard-key "
-       data-group=""
-       id="key-69"
-       data-keycode="69"
+       id="key-c14Prestel00"
+       data-key-number="69"
+       data-code="c14Prestel00"
        transform="translate(0,300)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <circle cx="50" cy="50" r="35"/>
@@ -705,9 +771,9 @@
       <text x="50" y="62" font-size="18"/>
    </g>
    <g class="key led-key standard-key "
-       data-group=""
-       id="key-70"
-       data-keycode="70"
+       id="key-c14Prestel01"
+       data-key-number="70"
+       data-code="c14Prestel01"
        transform="translate(100,300)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <circle cx="50" cy="50" r="35"/>
@@ -720,16 +786,18 @@
       <text x="50" y="62" font-size="18"/>
    </g>
    <g class="key standard-key dark-grey"
-       id="key-71"
-       data-keycode="71"
+       id="key-c14F"
+       data-key-number="71"
+       data-code="c14F"
        transform="translate(225,300)">
       <rect x="5" y="5" width="165" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 0,0 50,80 L125,80 A35,35 0 0,0 150,25 Z"/>
       <text x="87.5" y="65" font-size="40">F</text>
    </g>
    <g class="key standard-key "
-       id="key-72"
-       data-keycode="72"
+       id="key-KeyQ"
+       data-key-number="72"
+       data-code="KeyQ"
        transform="translate(400,300)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -738,8 +806,9 @@
       <text x="60" y="70" font-size="22"/>
    </g>
    <g class="key standard-key "
-       id="key-73"
-       data-keycode="73"
+       id="key-KeyW"
+       data-key-number="73"
+       data-code="KeyW"
        transform="translate(500,300)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -748,8 +817,9 @@
       <text x="60" y="70" font-size="22"/>
    </g>
    <g class="key standard-key "
-       id="key-74"
-       data-keycode="74"
+       id="key-KeyE"
+       data-key-number="74"
+       data-code="KeyE"
        transform="translate(600,300)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -758,8 +828,9 @@
       <text x="60" y="70" font-size="22"/>
    </g>
    <g class="key standard-key "
-       id="key-75"
-       data-keycode="75"
+       id="key-KeyR"
+       data-key-number="75"
+       data-code="KeyR"
        transform="translate(700,300)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -768,8 +839,9 @@
       <text x="60" y="70" font-size="22"/>
    </g>
    <g class="key standard-key "
-       id="key-76"
-       data-keycode="76"
+       id="key-KeyT"
+       data-key-number="76"
+       data-code="KeyT"
        transform="translate(800,300)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -778,8 +850,9 @@
       <text x="60" y="70" font-size="22"/>
    </g>
    <g class="key standard-key "
-       id="key-77"
-       data-keycode="77"
+       id="key-KeyY"
+       data-key-number="77"
+       data-code="KeyY"
        transform="translate(900,300)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -788,8 +861,9 @@
       <text x="60" y="70" font-size="22"/>
    </g>
    <g class="key standard-key "
-       id="key-78"
-       data-keycode="78"
+       id="key-KeyU"
+       data-key-number="78"
+       data-code="KeyU"
        transform="translate(1000,300)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -798,8 +872,9 @@
       <text x="60" y="70" font-size="22"/>
    </g>
    <g class="key standard-key "
-       id="key-79"
-       data-keycode="79"
+       id="key-KeyI"
+       data-key-number="79"
+       data-code="KeyI"
        transform="translate(1100,300)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -808,8 +883,9 @@
       <text x="60" y="70" font-size="22"/>
    </g>
    <g class="key standard-key "
-       id="key-80"
-       data-keycode="80"
+       id="key-KeyO"
+       data-key-number="80"
+       data-code="KeyO"
        transform="translate(1200,300)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -818,8 +894,9 @@
       <text x="60" y="70" font-size="22"/>
    </g>
    <g class="key standard-key "
-       id="key-81"
-       data-keycode="81"
+       id="key-KeyP"
+       data-key-number="81"
+       data-code="KeyP"
        transform="translate(1300,300)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -828,8 +905,9 @@
       <text x="60" y="70" font-size="22"/>
    </g>
    <g class="key standard-key "
-       id="key-82"
-       data-keycode="82"
+       id="key-BracketLeft"
+       data-key-number="82"
+       data-code="BracketLeft"
        transform="translate(1400,300)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -838,8 +916,9 @@
       <text x="60" y="70" font-size="22"/>
    </g>
    <g class="key standard-key "
-       id="key-83"
-       data-keycode="83"
+       id="key-BracketRight"
+       data-key-number="83"
+       data-code="BracketRight"
        transform="translate(1500,300)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -849,65 +928,72 @@
       <text x="60" y="70" font-size="22"/>
    </g>
    <g class="key standard-key "
-       id="key-84"
-       data-keycode="84"
+       id="key-Enter"
+       data-key-number="84"
+       data-code="Enter"
        transform="translate(1600,300)">
       <path d="M 15 5                H 110                A 10 10 0 0 1 120 15                V 185                A 10 10 0 0 1 110 195                H 40                A 10 10 0 0 1 30 185                V 105                A 10 10 0 0 0 20 95                H 15                A 10 10 0 0 1 5 85                V 15                A 10 10 0 0 1 15 5                Z"/>
       <path d="M25,25                A 35,35 0 0 0 50,80                V 155                A 19,19 0 0 0 110,155                V 45                A 19,19 0 0 0 100,25                Z"/>
       <text x="80" y="120" font-size="40">←</text>
    </g>
    <g class="key standard-key "
-       id="key-85"
-       data-keycode="85"
+       id="key-c14LeftUp"
+       data-key-number="85"
+       data-code="c14LeftUp"
        transform="translate(1750,300)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="65" font-size="40">⇖</text>
    </g>
    <g class="key standard-key mid-grey"
-       id="key-86"
-       data-keycode="86"
+       id="key-ArrowUp"
+       data-key-number="86"
+       data-code="ArrowUp"
        transform="translate(1850,300)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="65" font-size="40">↑</text>
    </g>
    <g class="key standard-key "
-       id="key-87"
-       data-keycode="87"
+       id="key-PageUp"
+       data-key-number="87"
+       data-code="PageUp"
        transform="translate(1950,300)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="65" font-size="40">⇈</text>
    </g>
    <g class="key standard-key "
-       id="key-88"
-       data-keycode="88"
+       id="key-Keypad7"
+       data-key-number="88"
+       data-code="Keypad7"
        transform="translate(2100,300)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="65" font-size="40">7</text>
    </g>
    <g class="key standard-key "
-       id="key-89"
-       data-keycode="89"
+       id="key-Keypad8"
+       data-key-number="89"
+       data-code="Keypad8"
        transform="translate(2200,300)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="65" font-size="40">8</text>
    </g>
    <g class="key standard-key "
-       id="key-90"
-       data-keycode="90"
+       id="key-Keypad9"
+       data-key-number="90"
+       data-code="Keypad9"
        transform="translate(2300,300)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="65" font-size="40">9</text>
    </g>
    <g class="key led-key standard-key "
-       data-group=""
-       id="key-91"
-       data-keycode="91"
+       id="key-c14Prestel10"
+       data-key-number="91"
+       data-code="c14Prestel10"
        transform="translate(0,400)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <circle cx="50" cy="50" r="35"/>
@@ -920,9 +1006,9 @@
       <text x="50" y="62" font-size="18"/>
    </g>
    <g class="key led-key standard-key "
-       data-group=""
-       id="key-92"
-       data-keycode="92"
+       id="key-c14Prestel11"
+       data-key-number="92"
+       data-code="c14Prestel11"
        transform="translate(100,400)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <circle cx="50" cy="50" r="35"/>
@@ -935,8 +1021,9 @@
       <text x="50" y="62" font-size="18"/>
    </g>
    <g class="key standard-key "
-       id="key-93"
-       data-keycode="93"
+       id="key-Control"
+       data-key-number="93"
+       data-code="Control"
        transform="translate(225,400)"
        data-modifier="true">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
@@ -944,9 +1031,9 @@
       <text x="50" y="62" font-size="18">CTRL</text>
    </g>
    <g class="key led-key standard-key "
-       data-group=""
-       id="key-94"
-       data-keycode="94"
+       id="key-CapsLock"
+       data-key-number="94"
+       data-code="CapsLock"
        transform="translate(325,400)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <circle cx="50" cy="50" r="35"/>
@@ -955,8 +1042,9 @@
       <text x="50" y="70" font-size="18">LOCK</text>
    </g>
    <g class="key standard-key "
-       id="key-95"
-       data-keycode="95"
+       id="key-KeyA"
+       data-key-number="95"
+       data-code="KeyA"
        transform="translate(425,400)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -965,8 +1053,9 @@
       <text x="60" y="70" font-size="22"/>
    </g>
    <g class="key standard-key "
-       id="key-96"
-       data-keycode="96"
+       id="key-KeyS"
+       data-key-number="96"
+       data-code="KeyS"
        transform="translate(525,400)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -975,8 +1064,9 @@
       <text x="60" y="70" font-size="22"/>
    </g>
    <g class="key standard-key "
-       id="key-97"
-       data-keycode="97"
+       id="key-KeyD"
+       data-key-number="97"
+       data-code="KeyD"
        transform="translate(625,400)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -985,8 +1075,9 @@
       <text x="60" y="70" font-size="22"/>
    </g>
    <g class="key standard-key "
-       id="key-98"
-       data-keycode="98"
+       id="key-KeyF"
+       data-key-number="98"
+       data-code="KeyF"
        transform="translate(725,400)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -995,8 +1086,9 @@
       <text x="60" y="70" font-size="22"/>
    </g>
    <g class="key standard-key "
-       id="key-99"
-       data-keycode="99"
+       id="key-KeyG"
+       data-key-number="99"
+       data-code="KeyG"
        transform="translate(825,400)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -1005,8 +1097,9 @@
       <text x="60" y="70" font-size="22"/>
    </g>
    <g class="key standard-key "
-       id="key-100"
-       data-keycode="100"
+       id="key-KeyH"
+       data-key-number="100"
+       data-code="KeyH"
        transform="translate(925,400)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -1015,8 +1108,9 @@
       <text x="60" y="70" font-size="22"/>
    </g>
    <g class="key standard-key "
-       id="key-101"
-       data-keycode="101"
+       id="key-KeyJ"
+       data-key-number="101"
+       data-code="KeyJ"
        transform="translate(1025,400)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -1025,8 +1119,9 @@
       <text x="60" y="70" font-size="22"/>
    </g>
    <g class="key standard-key "
-       id="key-102"
-       data-keycode="102"
+       id="key-KeyK"
+       data-key-number="102"
+       data-code="KeyK"
        transform="translate(1125,400)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -1035,8 +1130,9 @@
       <text x="60" y="70" font-size="22"/>
    </g>
    <g class="key standard-key "
-       id="key-103"
-       data-keycode="103"
+       id="key-KeyL"
+       data-key-number="103"
+       data-code="KeyL"
        transform="translate(1225,400)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -1045,8 +1141,9 @@
       <text x="60" y="70" font-size="22"/>
    </g>
    <g class="key standard-key "
-       id="key-104"
-       data-keycode="104"
+       id="key-Semicolon"
+       data-key-number="104"
+       data-code="Semicolon"
        transform="translate(1325,400)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -1055,8 +1152,9 @@
       <text x="60" y="70" font-size="22"/>
    </g>
    <g class="key standard-key "
-       id="key-105"
-       data-keycode="105"
+       id="key-Quote"
+       data-key-number="105"
+       data-code="Quote"
        transform="translate(1425,400)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -1065,8 +1163,9 @@
       <text x="60" y="70" font-size="22"/>
    </g>
    <g class="key standard-key "
-       id="key-106"
-       data-keycode="106"
+       id="key-Backslash"
+       data-key-number="106"
+       data-code="Backslash"
        transform="translate(1525,400)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -1076,57 +1175,63 @@
       <text x="60" y="70" font-size="22"/>
    </g>
    <g class="key standard-key mid-grey"
-       id="key-107"
-       data-keycode="107"
+       id="key-ArrowLeft"
+       data-key-number="107"
+       data-code="ArrowLeft"
        transform="translate(1750,400)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="65" font-size="40">←</text>
    </g>
    <g class="key standard-key mid-grey"
-       id="key-108"
-       data-keycode="108"
+       id="key-Home"
+       data-key-number="108"
+       data-code="Home"
        transform="translate(1850,400)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="65" font-size="40">↖</text>
    </g>
    <g class="key standard-key mid-grey"
-       id="key-109"
-       data-keycode="109"
+       id="key-ArrowRight"
+       data-key-number="109"
+       data-code="ArrowRight"
        transform="translate(1950,400)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="65" font-size="40">→</text>
    </g>
    <g class="key standard-key "
-       id="key-110"
-       data-keycode="110"
+       id="key-Keypad4"
+       data-key-number="110"
+       data-code="Keypad4"
        transform="translate(2100,400)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="65" font-size="40">4</text>
    </g>
    <g class="key standard-key "
-       id="key-111"
-       data-keycode="111"
+       id="key-Keypad5"
+       data-key-number="111"
+       data-code="Keypad5"
        transform="translate(2200,400)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="65" font-size="40">5</text>
    </g>
    <g class="key standard-key "
-       id="key-112"
-       data-keycode="112"
+       id="key-Keypad6"
+       data-key-number="112"
+       data-code="Keypad6"
        transform="translate(2300,400)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="65" font-size="40">6</text>
    </g>
    <g class="key led-key standard-key "
-       data-group=""
-       id="key-113"
-       data-keycode="113"
+       id="key-c14Prestel20"
+       data-key-number="113"
+       data-code="c14Prestel20"
        transform="translate(0,500)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <circle cx="50" cy="50" r="35"/>
@@ -1139,9 +1244,9 @@
       <text x="50" y="62" font-size="18"/>
    </g>
    <g class="key led-key standard-key "
-       data-group=""
-       id="key-114"
-       data-keycode="114"
+       id="key-c14Prestel21"
+       data-key-number="114"
+       data-code="c14Prestel21"
        transform="translate(100,500)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <circle cx="50" cy="50" r="35"/>
@@ -1154,8 +1259,9 @@
       <text x="50" y="62" font-size="18"/>
    </g>
    <g class="key standard-key "
-       id="key-115"
-       data-keycode="115"
+       id="key-Shift"
+       data-key-number="115"
+       data-code="Shift"
        transform="translate(225,500)"
        data-modifier="true">
       <rect x="5" y="5" width="140" height="90" rx="10" ry="10"/>
@@ -1163,8 +1269,9 @@
       <text x="75" y="62" font-size="18">SHIFT</text>
    </g>
    <g class="key standard-key "
-       id="key-116"
-       data-keycode="116"
+       id="key-Backquote"
+       data-key-number="116"
+       data-code="Backquote"
        transform="translate(375,500)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -1174,8 +1281,9 @@
       <text x="60" y="70" font-size="22">²</text>
    </g>
    <g class="key standard-key "
-       id="key-117"
-       data-keycode="117"
+       id="key-KeyZ"
+       data-key-number="117"
+       data-code="KeyZ"
        transform="translate(475,500)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -1184,8 +1292,9 @@
       <text x="60" y="70" font-size="22"/>
    </g>
    <g class="key standard-key "
-       id="key-118"
-       data-keycode="118"
+       id="key-KeyX"
+       data-key-number="118"
+       data-code="KeyX"
        transform="translate(575,500)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -1194,8 +1303,9 @@
       <text x="60" y="70" font-size="22"/>
    </g>
    <g class="key standard-key "
-       id="key-119"
-       data-keycode="119"
+       id="key-KeyC"
+       data-key-number="119"
+       data-code="KeyC"
        transform="translate(675,500)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -1204,8 +1314,9 @@
       <text x="60" y="70" font-size="22"/>
    </g>
    <g class="key standard-key "
-       id="key-120"
-       data-keycode="120"
+       id="key-KeyV"
+       data-key-number="120"
+       data-code="KeyV"
        transform="translate(775,500)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -1214,8 +1325,9 @@
       <text x="60" y="70" font-size="22"/>
    </g>
    <g class="key standard-key "
-       id="key-121"
-       data-keycode="121"
+       id="key-KeyB"
+       data-key-number="121"
+       data-code="KeyB"
        transform="translate(875,500)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -1224,8 +1336,9 @@
       <text x="60" y="70" font-size="22"/>
    </g>
    <g class="key standard-key "
-       id="key-122"
-       data-keycode="122"
+       id="key-KeyN"
+       data-key-number="122"
+       data-code="KeyN"
        transform="translate(975,500)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -1234,8 +1347,9 @@
       <text x="60" y="70" font-size="22"/>
    </g>
    <g class="key standard-key "
-       id="key-123"
-       data-keycode="123"
+       id="key-KeyM"
+       data-key-number="123"
+       data-code="KeyM"
        transform="translate(1075,500)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -1244,8 +1358,9 @@
       <text x="60" y="70" font-size="22"/>
    </g>
    <g class="key standard-key "
-       id="key-124"
-       data-keycode="124"
+       id="key-Comma"
+       data-key-number="124"
+       data-code="Comma"
        transform="translate(1175,500)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -1255,8 +1370,9 @@
       <text x="60" y="70" font-size="22"/>
    </g>
    <g class="key standard-key "
-       id="key-125"
-       data-keycode="125"
+       id="key-Period"
+       data-key-number="125"
+       data-code="Period"
        transform="translate(1275,500)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -1266,8 +1382,9 @@
       <text x="60" y="70" font-size="22"/>
    </g>
    <g class="key standard-key "
-       id="key-126"
-       data-keycode="126"
+       id="key-Slash"
+       data-key-number="126"
+       data-code="Slash"
        transform="translate(1375,500)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -1277,8 +1394,9 @@
       <text x="60" y="70" font-size="22"/>
    </g>
    <g class="key standard-key "
-       id="key-127"
-       data-keycode="127"
+       id="key-Shift"
+       data-key-number="127"
+       data-code="Shift"
        transform="translate(1475,500)"
        data-modifier="true">
       <rect x="5" y="5" width="140" height="90" rx="10" ry="10"/>
@@ -1286,64 +1404,72 @@
       <text x="75" y="62" font-size="18">SHIFT</text>
    </g>
    <g class="key standard-key "
-       id="key-128"
-       data-keycode="128"
+       id="key-c14Return"
+       data-key-number="128"
+       data-code="c14Return"
        transform="translate(1625,500)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="65" font-size="40">↵</text>
    </g>
    <g class="key standard-key "
-       id="key-129"
-       data-keycode="129"
+       id="key-c14LeftDown"
+       data-key-number="129"
+       data-code="c14LeftDown"
        transform="translate(1750,500)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="65" font-size="40">⇙</text>
    </g>
    <g class="key standard-key mid-grey"
-       id="key-130"
-       data-keycode="130"
+       id="key-ArrowDown"
+       data-key-number="130"
+       data-code="ArrowDown"
        transform="translate(1850,500)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="65" font-size="40">↓</text>
    </g>
    <g class="key standard-key "
-       id="key-131"
-       data-keycode="131"
+       id="key-PageDown"
+       data-key-number="131"
+       data-code="PageDown"
        transform="translate(1950,500)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="65" font-size="40">⇊</text>
    </g>
    <g class="key standard-key "
-       id="key-132"
-       data-keycode="132"
+       id="key-Keypad1"
+       data-key-number="132"
+       data-code="Keypad1"
        transform="translate(2100,500)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="65" font-size="40">1</text>
    </g>
    <g class="key standard-key "
-       id="key-133"
-       data-keycode="133"
+       id="key-Keypad2"
+       data-key-number="133"
+       data-code="Keypad2"
        transform="translate(2200,500)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="65" font-size="40">2</text>
    </g>
    <g class="key standard-key "
-       id="key-134"
-       data-keycode="134"
+       id="key-Keypad3"
+       data-key-number="134"
+       data-code="Keypad3"
        transform="translate(2300,500)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="65" font-size="40">3</text>
    </g>
    <g class="key standard-key "
-       id="key-135"
-       data-keycode="135"
+       id="key-c14Prestel"
+       data-key-number="135"
+       data-code="c14Prestel"
        transform="translate(50,600)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -1352,8 +1478,9 @@
       <text x="50" y="62" font-size="18"/>
    </g>
    <g class="key standard-key "
-       id="key-136"
-       data-keycode="136"
+       id="key-c14FarbEdit"
+       data-key-number="136"
+       data-code="c14FarbEdit"
        transform="translate(225,600)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -1361,8 +1488,9 @@
       <text x="50" y="70" font-size="18">EDIT</text>
    </g>
    <g class="key standard-key "
-       id="key-137"
-       data-keycode="137"
+       id="key-c14DrcsEdit"
+       data-key-number="137"
+       data-code="c14DrcsEdit"
        transform="translate(325,600)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -1370,8 +1498,9 @@
       <text x="50" y="70" font-size="18">EDIT</text>
    </g>
    <g class="key standard-key "
-       id="key-138"
-       data-keycode="138"
+       id="key-c14ScrolEdit"
+       data-key-number="138"
+       data-code="c14ScrolEdit"
        transform="translate(425,600)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -1379,32 +1508,36 @@
       <text x="50" y="70" font-size="18">EDIT</text>
    </g>
    <g class="key standard-key "
-       id="key-139"
-       data-keycode="139"
+       id="key-Space"
+       data-key-number="139"
+       data-code="Space"
        transform="translate(525,600)">
       <rect x="5" y="5" width="790" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 0,0 50,80 L750,80 A35,35 0 0,0 775,25 Z"/>
       <text x="400" y="62" font-size="18"/>
    </g>
    <g class="key standard-key "
-       id="key-140"
-       data-keycode="140"
+       id="key-Subtract"
+       data-key-number="140"
+       data-code="Subtract"
        transform="translate(1425,600)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="65" font-size="40">-</text>
    </g>
    <g class="key standard-key "
-       id="key-141"
-       data-keycode="141"
+       id="key-Add"
+       data-key-number="141"
+       data-code="Add"
        transform="translate(1525,600)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="65" font-size="40">+</text>
    </g>
    <g class="key standard-key "
-       id="key-142"
-       data-keycode="142"
+       id="key-c14UntstrEinAus"
+       data-key-number="142"
+       data-code="c14UntstrEinAus"
        transform="translate(1625,600)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -1413,8 +1546,9 @@
       <text x="50" y="75" font-size="18">EIN</text>
    </g>
    <g class="key standard-key "
-       id="key-143"
-       data-keycode="143"
+       id="key-CursorEinAus"
+       data-key-number="143"
+       data-code="CursorEinAus"
        transform="translate(1750,600)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -1423,8 +1557,9 @@
       <text x="50" y="75" font-size="18">EIN</text>
    </g>
    <g class="key standard-key sys-key"
-       id="key-144"
-       data-keycode="144"
+       id="key-c14Sys"
+       data-key-number="144"
+       data-code="c14Sys"
        transform="translate(1950,600)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -1436,8 +1571,9 @@
       <text x="50" y="62" font-size="18"/>
    </g>
    <g class="key standard-key sys-key"
-       id="key-145"
-       data-keycode="145"
+       id="key-c14Star"
+       data-key-number="145"
+       data-code="c14Star"
        transform="translate(2100,600)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
@@ -1448,16 +1584,18 @@
       <text x="50" y="62" font-size="18"/>
    </g>
    <g class="key standard-key "
-       id="key-146"
-       data-keycode="146"
+       id="key-Keypad0"
+       data-key-number="146"
+       data-code="Keypad0"
        transform="translate(2200,600)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
       <text x="50" y="65" font-size="40">0</text>
    </g>
    <g class="key standard-key sys-key"
-       id="key-147"
-       data-keycode="147"
+       id="key-c14Hash"
+       data-key-number="147"
+       data-code="c14Hash"
        transform="translate(2300,600)">
       <rect x="5" y="5" width="90" height="90" rx="10" ry="10"/>
       <path d="M25,25 A35,35 0 1,0 75,25 Z"/>
