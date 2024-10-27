@@ -1,47 +1,53 @@
 const initKeyboard = (send: (code: number) => void) => {
   const modifiersPressed: Element[] = []
-  // Function to handle clicks on SVG elements
-  const handleSvgClick = (event: MouseEvent) => {
-    const target = (event.target as Element).closest('[id]')
-    if (!target) {
-      return
-    }
-    const keyCode = parseInt(target?.getAttribute('data-keycode') as string)
-    console.log('keycode', keyCode)
-    send(keyCode)
-    target.classList.toggle('black')
-    if (target.getAttribute('data-modifier')) {
-      if (modifiersPressed.includes(target)) {
-        modifiersPressed.splice(modifiersPressed.indexOf(target), 1)
+
+  // Flash a typed key
+  const flashKey = (element: Element) => {
+    element.classList.toggle('black')
+    if (element.getAttribute('data-modifier')) {
+      if (modifiersPressed.includes(element)) {
+        modifiersPressed.splice(modifiersPressed.indexOf(element), 1)
       } else {
-        modifiersPressed.push(target)
+        modifiersPressed.push(element)
       }
     } else {
       setTimeout(() => {
-        target.classList.toggle('black')
+        element.classList.toggle('black')
         modifiersPressed.forEach((modifier) =>
           modifier.classList.toggle('black'),
         )
         modifiersPressed.length = 0
       }, 100)
-      if (target.classList.contains('led-key')) {
-        const dataGroup = target.getAttribute('data-group')
+      if (element.classList.contains('led-key')) {
+        const dataGroup = element.getAttribute('data-group')
 
         if (dataGroup) {
-          if (!target.querySelector('.led')?.classList.contains('active')) {
-            const groupElements = target.ownerDocument.querySelectorAll(
+          if (!element.querySelector('.led')?.classList.contains('active')) {
+            const groupElements = element.ownerDocument.querySelectorAll(
               `.led-key[data-group="${dataGroup}"]`,
             )
             groupElements.forEach((element) => {
               element.querySelector('.led')?.classList.remove('active')
             })
-            target.querySelector('.led')?.classList.toggle('active', true)
+            element.querySelector('.led')?.classList.toggle('active', true)
           }
         } else {
-          target.querySelector('.led')?.classList.toggle('active')
+          element.querySelector('.led')?.classList.toggle('active')
         }
       }
     }
+  }
+
+  // Handle clicks on SVG elements
+  const handleSvgClick = (event: MouseEvent) => {
+    const target = (event.target as Element).closest('[id]')
+    if (!target) {
+      return
+    }
+    const code = target?.getAttribute('data-code') as string
+    console.log('key', code)
+    send(code)
+    flashKey(target)
   }
 
   // Add event listener to the embedded SVG once it's loaded
@@ -98,11 +104,38 @@ const initKeyboard = (send: (code: number) => void) => {
     window.addEventListener('resize', resizeKeyboard)
     resizeKeyboard()
   }
-  container.addEventListener('keypress', (event: KeyboardEvent) => {
-    console.log(event)
-    send(event.key.charCodeAt(0))
+  document.addEventListener('keydown', (event: KeyboardEvent) => {
+    console.log('event.code', event.code)
+    let keyElement = svgDoc.getElementById(`key-${event.code}`)
+    switch (event.key) {
+      case 'F1': // '*'
+        send(0x13)
+        keyElement = svgDoc.getElementById(`key-c14Star`)
+        break
+      case 'F2': // '#'
+        send(0x1c)
+        keyElement = svgDoc.getElementById(`key-c14Hash`)
+        break
+      case 'Delete':
+      case 'Backspace':
+        send(0x7f)
+        keyElement = svgDoc.getElementById(`key-Delete`)
+        break
+      default:
+        if (event.key.length === 1) {
+          console.log(`sending ${event.key.charCodeAt(0)}`)
+          send(event.key.charCodeAt(0))
+        } else {
+          console.log(`ignored key ${event.key}`)
+        }
+    }
+    if (keyElement) {
+      flashKey(keyElement)
+    }
     event.preventDefault()
   })
+
+  document.addEventListener('keyup', (event: KeyboardEvent) => {})
 
   return { setLed }
 }
