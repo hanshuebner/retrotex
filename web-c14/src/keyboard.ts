@@ -1,4 +1,4 @@
-const initKeyboard = (send: (code: number) => void) => {
+const initKeyboard = (send: (ceptCodes: number[]) => void) => {
   const modifiersPressed: Element[] = []
 
   const keyToCept = {
@@ -54,7 +54,7 @@ const initKeyboard = (send: (code: number) => void) => {
     }
     const code = target?.getAttribute('data-code') as string
     console.log('key', code)
-    const sequence = keyToCept[code]
+    const sequence = keyToCept[code as keyof typeof keyToCept]
     if (sequence) {
       send(sequence)
     }
@@ -120,35 +120,40 @@ const initKeyboard = (send: (code: number) => void) => {
     let keyElement = svgDoc.getElementById(`key-${event.code}`)
     switch (event.key) {
       case 'F1': // '*'
-        send(0x13)
+        send([0x13])
         keyElement = svgDoc.getElementById(`key-c14Star`)
         break
       case 'F2': // '#'
-        send(0x1c)
+        send([0x1c])
         keyElement = svgDoc.getElementById(`key-c14Hash`)
         break
       case 'Delete':
       case 'Backspace':
-        send(0x7f)
+        send([0x7f])
         keyElement = svgDoc.getElementById(`key-Delete`)
         break
+      case 'F12':
+        // fixme what do we need to send?
+        keyElement = svgDoc.getElementById('key-c14Reveal')
+        break
       default:
-        if (event.key.length === 1) {
+        if (event.key.length === 1 && !event.altKey && !event.metaKey) {
           console.log(`sending ${event.key.charCodeAt(0)}`)
-          send(event.key.charCodeAt(0))
+          send([event.key.charCodeAt(0)])
         } else {
           console.log(`ignored key ${event.key}`)
+          keyElement = null
         }
     }
     if (keyElement) {
+      event.preventDefault()
       flashKey(keyElement)
     }
-    event.preventDefault()
   }
   document.addEventListener('keydown', handleKeyDownEvent)
   svgDoc.addEventListener('keydown', handleKeyDownEvent)
 
-  document.addEventListener('keyup', (event: KeyboardEvent) => {})
+  document.addEventListener('keyup', (_event: KeyboardEvent) => {})
 
   return { setLed }
 }

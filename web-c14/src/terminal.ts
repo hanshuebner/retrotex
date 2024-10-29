@@ -27,13 +27,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     display,
   )
   const websocket = initWebsocket()
-  const keyPressed = (keyCode: number) => {
-    if (keyCode == 23) {
-      debuggerStatus(true)
-    } else {
-      websocket.send(new Uint8Array([keyCode]))
-    }
-  }
+  const keyPressed = (ceptCodes: number[]) =>
+    websocket.send(new Uint8Array(ceptCodes))
   initKeyboard(keyPressed)
 
   // debugger functionality
