@@ -356,6 +356,7 @@ export default (
     if (isDiacritical) {
       // diacritical marks don't move the cursor
       attributes.diacritical = charCode & 0x0f
+      currentRow += rowAdjust
       return
     }
 
