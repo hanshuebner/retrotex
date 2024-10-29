@@ -27,12 +27,34 @@ document.addEventListener('DOMContentLoaded', async () => {
     display,
   )
   const websocket = initWebsocket()
-  const keyPressed = (ceptCodes: number[]) =>
-    websocket.send(new Uint8Array(ceptCodes))
+  const keyPressed = (ceptCodes: number[]) => {
+    if (ceptCodes[0] === 0xff && ceptCodes[1] === 0xff) {
+      switch (ceptCodes[2]) {
+        case 0x01:
+          debuggerStatus(true)
+          break
+        default:
+          console.error(`unknown private cept code ${ceptCodes[2]}`)
+      }
+    } else {
+      websocket.send(new Uint8Array(ceptCodes))
+    }
+  }
   initKeyboard(keyPressed)
 
   // debugger functionality
   let runTo: number | undefined = undefined
+
+  const debuggerStatus = (enabled: boolean) => {
+    document.getElementById('keyboard-container')!.style.display = enabled
+      ? 'none'
+      : 'flex'
+    document.getElementById('cept-debugger')!.style.display = enabled
+      ? 'block'
+      : 'none'
+  }
+
+  debuggerStatus(false)
 
   const updateRunTo = () => {
     if (runTo) {
@@ -43,6 +65,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   document.location.search.replace(/\WrunTo=(\d+)/, (match, runToString) => {
     runTo = parseInt(runToString)
+    debuggerStatus(true)
     updateRunTo()
     return match
   })
@@ -68,17 +91,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   } else {
     document.getElementById('next-step')!.style.display = 'none'
   }
-
-  const debuggerStatus = (enabled: boolean) => {
-    document.getElementById('keyboard-container')!.style.display = enabled
-      ? 'none'
-      : 'flex'
-    document.getElementById('cept-debugger')!.style.display = enabled
-      ? 'block'
-      : 'none'
-  }
-
-  debuggerStatus(false)
 
   document
     .getElementById('previous-page')!

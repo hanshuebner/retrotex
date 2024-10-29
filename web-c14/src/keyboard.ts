@@ -7,6 +7,7 @@ const initKeyboard = (send: (ceptCodes: number[]) => void) => {
     Enter: [0x0a],
     Space: [0x20],
     Delete: [0x7f],
+    c14C: [0xff, 0xff, 0x01],
   }
 
   // Flash a typed key
@@ -150,10 +151,7 @@ const initKeyboard = (send: (ceptCodes: number[]) => void) => {
       flashKey(keyElement)
     }
   }
-  document.addEventListener('keydown', handleKeyDownEvent)
   svgDoc.addEventListener('keydown', handleKeyDownEvent)
-
-  document.addEventListener('keyup', (_event: KeyboardEvent) => {})
 
   return { setLed }
 }

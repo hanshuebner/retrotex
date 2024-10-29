@@ -214,8 +214,8 @@ export default (
 
   const redraw = () => {
     for (let row = 0; row < screenRows; row++) {
-      let attributes = { ...defaultAttributes }
       for (let column = 0; column < screenColumns; column++) {
+        let attributes = { ...defaultAttributes }
         const glyphIndex = glyphs[row][column]
         if (tia) {
           attributes = {
@@ -245,7 +245,7 @@ export default (
           : getBgColor(attributes, currentRow)
         display.drawGlyph(
           glyphIndex,
-          row - (currentMode === 'parallel' ? 1 : 0),
+          row,
           column,
           attributes.font || display.fonts[0],
           colors[fgColor],
@@ -256,7 +256,7 @@ export default (
         if (attributes.diacritical) {
           display.drawGlyph(
             attributes.diacritical,
-            row - (currentMode === 'parallel' ? 1 : 0),
+            row,
             column,
             display.fontDiacritical,
             colors[fgColor],
@@ -325,22 +325,21 @@ export default (
       // fixme in parallel mode: need to delete double height attribute in second row (?)
     }
     glyphs[currentRow][currentColumn] = (charCode & 0x7f) - 0x20
-    if (currentMode == 'parallel') {
+    if (currentMode === 'parallel') {
       const diacritical = attrs[currentRow][currentColumn].diacritical
       attrs[currentRow][currentColumn] = { ...parallelAttributes }
       if (diacritical !== undefined) {
         attrs[currentRow][currentColumn].diacritical = diacritical
       }
+      delete parallelAttributes.diacritical
     }
     const attributes = attrs[currentRow][currentColumn] || {}
-    const font =
-      charCode >= 0x80
-        ? display.fonts[
-            charsetFont[attributes.rightCharset || (rightCharset as number)]
-          ]
-        : display.fonts[
-            charsetFont[attributes.leftCharset || (leftCharset as number)]
-          ]
+    const charset =
+      charsetForOneCharacter ||
+      (charCode >= 0x80
+        ? attributes.rightCharset || (rightCharset as number)
+        : attributes.leftCharset || (leftCharset as number))
+    const font = display.fonts[charsetFont[charset]]
     attributes.font = font
     if (doubleWidth !== undefined) {
       attributes.doubleWidth = doubleWidth
