@@ -484,6 +484,7 @@ export default (
     for (let row = 0; row < screenRows; row++) {
       for (let column = 0; column < screenColumns; column++) {
         glyphs[row][column] = 0
+        delete attrs[row][column].diacritical
         if (!keepAttributes) {
           attrs[row][column] = {}
         }
