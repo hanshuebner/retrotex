@@ -1,7 +1,7 @@
 const initKeyboard = (send: (ceptCodes: number[]) => void) => {
   const modifiersPressed: Element[] = []
 
-  const keyToCept = {
+  const keyToCept: { [key: string]: number[] } = {
     c14Star: [0x13],
     c14Hash: [0x1c],
     Enter: [0x0a],
@@ -55,9 +55,8 @@ const initKeyboard = (send: (ceptCodes: number[]) => void) => {
     }
     const code = target?.getAttribute('data-code') as string
     console.log('key', code)
-    const sequence = keyToCept[code as keyof typeof keyToCept]
-    if (sequence) {
-      send(sequence)
+    if (code in keyToCept) {
+      send(keyToCept[code])
     }
     flashKey(target)
   }
