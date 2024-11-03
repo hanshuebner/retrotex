@@ -25,9 +25,10 @@
       (format stream "~A~A~:[~; (more)~]" number sub-page next-page))))
 
 (defun parse-page-number (s)
-  (multiple-value-bind (match regs) (ppcre:scan-to-strings "(.*)(.)$" s)
-    (when match
-      (coerce regs 'list))))
+  (multiple-value-bind (match regs) (ppcre:scan-to-strings "(.*)([a-z])$" s)
+    (if match
+        (coerce regs 'list)
+        (list s "a"))))
 
 (defmethod make-shortcuts ((page page))
   (with-slots (next-page metadata shortcuts) page
@@ -200,7 +201,7 @@
                  (return page))
                (when (= (length input) 2)
                  ;; two digits entered, no shortcut found
-                 (format t "; no shortcut found, returning ~A~%" page)
+                 (format t "; no shortcut ~S found, returning ~A~%" input page)
                  (return page))))))
     (cept:service-jump-return)))
 
