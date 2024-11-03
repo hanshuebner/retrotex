@@ -225,13 +225,15 @@ export default (
         } else {
           attributes = { ...attributes, ...attrs[row][column] }
         }
+        const dhRowOffset = currentMode == 'serial' ? 1 : -1
         if (
-          (row > 0 && attrs[row - 1][column].doubleHeight) ||
+          (row + dhRowOffset >= 0 &&
+            attrs[row + dhRowOffset][column].doubleHeight) ||
           (column > 0 && attrs[row][column - 1].doubleWidth) ||
-          (row > 0 &&
+          (row + dhRowOffset >= 0 &&
             column > 0 &&
-            attrs[row - 1][column - 1].doubleWidth &&
-            attrs[row - 1][column - 1].doubleHeight)
+            attrs[row + dhRowOffset][column - 1].doubleWidth &&
+            attrs[row + dhRowOffset][column - 1].doubleHeight)
         ) {
           if (!tia) {
             continue
@@ -684,6 +686,9 @@ export default (
     },
     mosaicOrTransparent: () => {
       log('mosaicOrTransparent')
+      if (currentMode === 'parallel') {
+        delete parallelAttributes.backgroundColor
+      }
     },
     reset: (parallel: boolean, limited: boolean) => {
       log('reset', { parallel, limited })

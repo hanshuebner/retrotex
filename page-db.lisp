@@ -202,15 +202,18 @@
                  (return page))))))
     (cept:service-jump-return)))
 
+(defvar *last-page* nil)
+
 (defun handle-client ()
-  (let ((page (find-page "0")))
+  (let ((page (or *last-page* (find-page "0"))))
     (loop
       (show-page page)
       (when-let ((new-page (handle-input page)))
         (unless (equal (pathname-directory (page-basename page))
                        (pathname-directory (page-basename new-page)))
           (cept:reset-page))
-        (setf page new-page)))))
+        (setf page new-page
+              *last-page* new-page)))))
 
 (retrotex:define-cept-client-handler ()
   (handle-client))
