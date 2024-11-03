@@ -178,75 +178,50 @@ export default (
     colorDepth: 1,
   }
 
-  const getFgColor = (attributes: Attributes): number => {
-    if (attributes.inverted) {
-      if (attributes.backgroundColor !== undefined) {
-        return attributes.backgroundColor as number
-      } else {
-        return 0
-      }
-    } else {
-      if (attributes.foregroundColor !== undefined) {
-        return attributes.foregroundColor as number
-      } else {
-        return 7
-      }
-    }
-  }
-
-  const getBgColor = (attributes: Attributes, row: number): number => {
-    if (attributes.inverted) {
-      if (attributes.foregroundColor !== undefined) {
-        return attributes.foregroundColor as number
-      } else {
-        return screenColor
-      }
-    } else {
-      if (attributes.backgroundColor !== undefined) {
-        return attributes.backgroundColor as number
-      } else if (rowColors[row] !== undefined) {
-        return rowColors[row]
-      } else {
-        return screenColor
-      }
-    }
-  }
-
   const redraw = () => {
     for (let row = 0; row < screenRows; row++) {
       for (let column = 0; column < screenColumns; column++) {
-        let attributes = { ...defaultAttributes }
+        let attributes = {
+          ...defaultAttributes,
+          ...(currentMode === 'serial' ? attrs[row][0] : {}),
+        }
         const glyphIndex = glyphs[row][column]
         if (tia) {
-          attributes = {
-            ...attributes,
-            font: attrs[row][column].font || display.fonts[0],
-          }
+          attributes = defaultAttributes
         } else {
           attributes = { ...attributes, ...attrs[row][column] }
-        }
-        const dhBlindRowOffset = currentMode == 'serial' ? -1 : 1
-        if (
-          (row + dhBlindRowOffset >= 0 &&
-            row + dhBlindRowOffset < screenRows &&
-            attrs[row + dhBlindRowOffset][column].doubleHeight) ||
-          (column > 0 && attrs[row][column - 1].doubleWidth) ||
-          (row + dhBlindRowOffset >= 0 &&
-            row + dhBlindRowOffset < screenRows &&
-            column > 0 &&
-            attrs[row + dhBlindRowOffset][column - 1].doubleWidth &&
-            attrs[row + dhBlindRowOffset][column - 1].doubleHeight)
-        ) {
-          if (!tia) {
+          // skip over cells that are concealed by dh/db chars
+          const dhBlindRowOffset = currentMode == 'serial' ? -1 : 1
+          if (
+            (row + dhBlindRowOffset >= 0 &&
+              row + dhBlindRowOffset < screenRows &&
+              attrs[row + dhBlindRowOffset][column].doubleHeight) ||
+            (column > 0 && attrs[row][column - 1].doubleWidth) ||
+            (row + dhBlindRowOffset >= 0 &&
+              row + dhBlindRowOffset < screenRows &&
+              column > 0 &&
+              attrs[row + dhBlindRowOffset][column - 1].doubleWidth &&
+              attrs[row + dhBlindRowOffset][column - 1].doubleHeight)
+          ) {
             continue
           }
         }
-        const fgColor = tia
-          ? (defaultAttributes.foregroundColor as number)
-          : getFgColor(attributes)
-        const bgColor = tia
-          ? (defaultAttributes.backgroundColor as number)
-          : getBgColor(attributes, currentRow)
+        let foregroundColor = attributes.inverted
+          ? attributes.backgroundColor
+          : attributes.foregroundColor
+        if (foregroundColor === undefined) {
+          foregroundColor = defaultAttributes.foregroundColor as number
+        }
+        let backgroundColor = attributes.inverted
+          ? attributes.foregroundColor
+          : attributes.backgroundColor
+        if (backgroundColor === undefined) {
+          if (rowColors[row] !== undefined) {
+            backgroundColor = rowColors[row]
+          } else {
+            backgroundColor = screenColor
+          }
+        }
         const dhDrawRowOffset =
           currentMode == 'parallel' && attributes.doubleHeight && row > 0
             ? -1
@@ -256,8 +231,8 @@ export default (
           row + dhDrawRowOffset,
           column,
           attributes.font || display.fonts[0],
-          colors[fgColor],
-          colors[bgColor],
+          colors[foregroundColor],
+          colors[backgroundColor],
           attributes.doubleWidth,
           attributes.doubleHeight,
         )
@@ -267,8 +242,8 @@ export default (
             row + dhDrawRowOffset,
             column,
             display.fontDiacritical,
-            colors[fgColor],
-            colors[bgColor],
+            colors[foregroundColor],
+            colors[backgroundColor],
             attributes.doubleWidth,
             attributes.doubleHeight,
             true,
