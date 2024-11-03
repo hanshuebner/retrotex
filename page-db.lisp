@@ -1,7 +1,9 @@
 ;; -*- Lisp -*-
 
 (defpackage :page-db
-  (:use :cl :alexandria))
+  (:use :cl :alexandria)
+  (:export
+   #:handle-client))
 
 (in-package :page-db)
 

@@ -275,7 +275,7 @@
       (destructuring-bind (title text) article
         (show-article title text :sleep sleep)))))
 
-(defun emulate-modem-dialer (stream)
+(defmethod emulate-modem-dialer ((type (eql :hayes)) stream)
   (loop with character-stream = (flex:make-flexi-stream stream :external-format (flex:make-external-format :latin-1 :eol-style :cr))
         for line = (read-line character-stream)
         do (format t "; got modem command ~A~%" line)
@@ -283,6 +283,16 @@
         finally (format character-stream "CONNECT~%")
                 (finish-output character-stream))
   (format t "; dial command detected, continuing~%"))
+
+(defmethod emulate-modem-dialer ((type (eql :teletool)) stream)
+  (loop for c = (read-byte stream)
+        do (format t "; Modem dialer received #x~2,'0X ~A~%" c (code-char c))
+           ;(write-byte (char-code #\enq) stream)
+           (sleep .2)
+           (finish-output stream)
+        until (= c 3))
+  (write-byte (char-code #\ack) stream)
+  (finish-output stream))
 
 (defvar *tcp-server* nil)
 
@@ -292,7 +302,7 @@
     (bt:interrupt-thread *tcp-server* (lambda () (throw 'exit nil)))
     (setf *tcp-server* nil)))
 
-(defun start-tcp-server (&key (port 20000) emulate-modem-dialer-p)
+(defun start-tcp-server (&key (port 20000) modem-type)
   (stop-tcp-server)
   (setf *tcp-server*
        (bt:make-thread
@@ -307,8 +317,8 @@
                            (let ((stream (usocket:socket-stream client-socket)))
                              #+sbcl
                              (setf (sb-impl::fd-stream-buffering stream) :none)
-                             (when emulate-modem-dialer-p
-                               (emulate-modem-dialer stream))
+                             (when modem-type
+                               (emulate-modem-dialer modem-type stream))
                              (unwind-protect
                                   (handle-client stream)
                                (ignore-errors (close stream))))
