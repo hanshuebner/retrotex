@@ -225,15 +225,17 @@ export default (
         } else {
           attributes = { ...attributes, ...attrs[row][column] }
         }
-        const dhRowOffset = currentMode == 'serial' ? 1 : -1
+        const dhBlindRowOffset = currentMode == 'serial' ? -1 : 1
         if (
-          (row + dhRowOffset >= 0 &&
-            attrs[row + dhRowOffset][column].doubleHeight) ||
+          (row + dhBlindRowOffset >= 0 &&
+            row + dhBlindRowOffset < screenRows &&
+            attrs[row + dhBlindRowOffset][column].doubleHeight) ||
           (column > 0 && attrs[row][column - 1].doubleWidth) ||
-          (row + dhRowOffset >= 0 &&
+          (row + dhBlindRowOffset >= 0 &&
+            row + dhBlindRowOffset < screenRows &&
             column > 0 &&
-            attrs[row + dhRowOffset][column - 1].doubleWidth &&
-            attrs[row + dhRowOffset][column - 1].doubleHeight)
+            attrs[row + dhBlindRowOffset][column - 1].doubleWidth &&
+            attrs[row + dhBlindRowOffset][column - 1].doubleHeight)
         ) {
           if (!tia) {
             continue
@@ -245,9 +247,13 @@ export default (
         const bgColor = tia
           ? (defaultAttributes.backgroundColor as number)
           : getBgColor(attributes, currentRow)
+        const dhDrawRowOffset =
+          currentMode == 'parallel' && attributes.doubleHeight && row > 0
+            ? -1
+            : 0
         display.drawGlyph(
           glyphIndex,
-          row,
+          row + dhDrawRowOffset,
           column,
           attributes.font || display.fonts[0],
           colors[fgColor],
@@ -258,7 +264,7 @@ export default (
         if (attributes.diacritical) {
           display.drawGlyph(
             attributes.diacritical,
-            row,
+            row + dhDrawRowOffset,
             column,
             display.fontDiacritical,
             colors[fgColor],
@@ -322,7 +328,6 @@ export default (
     if (currentMode == 'parallel' && doubleHeight) {
       if (currentRow > 0) {
         rowAdjust = 1
-        currentRow -= 1
       }
       // fixme in parallel mode: need to delete double height attribute in second row (?)
     }
@@ -358,7 +363,6 @@ export default (
     if (isDiacritical) {
       // diacritical marks don't move the cursor
       attributes.diacritical = charCode & 0x0f
-      currentRow += rowAdjust
       return
     }
 
@@ -373,7 +377,7 @@ export default (
         currentRow = 0
       }
     }
-    currentRow += rowAdjust
+    // fixme next row in serial mode?
     if (currentMode === 'serial') {
       // wrap around some attributes
       attrs[currentRow][currentColumn] = {
