@@ -290,6 +290,7 @@ export default (
   }
 
   let lastCharCode = 0
+  let diacritical: number | undefined
   const putChar = (charCode: number) => {
     if (charCode < 0x80) {
       log(`putChar '${String.fromCharCode(charCode)}'`)
@@ -308,12 +309,7 @@ export default (
     }
     glyphs[currentRow][currentColumn] = (charCode & 0x7f) - 0x20
     if (currentMode === 'parallel') {
-      const diacritical = attrs[currentRow][currentColumn].diacritical
       attrs[currentRow][currentColumn] = { ...parallelAttributes }
-      if (diacritical !== undefined) {
-        attrs[currentRow][currentColumn].diacritical = diacritical
-      }
-      delete parallelAttributes.diacritical
     }
     const attributes = attrs[currentRow][currentColumn] || {}
     const charset =
@@ -337,9 +333,12 @@ export default (
 
     if (isDiacritical) {
       // diacritical marks don't move the cursor
-      attributes.diacritical = charCode & 0x0f
+      diacritical = charCode & 0x0f
       return
     }
+
+    attrs[currentRow][currentColumn].diacritical = diacritical
+    diacritical = undefined
 
     const columnIncrement = doubleWidth ? 2 : 1
     if (currentColumn + columnIncrement < screenColumns) {
