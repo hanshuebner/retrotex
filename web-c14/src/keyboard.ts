@@ -114,6 +114,8 @@ const initKeyboard = (send: (ceptCodes: number[]) => void) => {
     svgDoc.addEventListener('mousedown', handleSvgClick)
     window.addEventListener('resize', resizeKeyboard)
     resizeKeyboard()
+    svgDoc.documentElement.setAttribute('tabindex', '0')
+    svgDoc.documentElement.focus()
   }
   const handleKeyDownEvent = (event: KeyboardEvent) => {
     console.log('event.code', event.code)
