@@ -112,7 +112,7 @@
       (cept:with-cept-stream (s)
         (cept:reset-colors)
         (destructuring-bind (&key clear-screen &allow-other-keys) metadata
-          (when clear-screen
+          (when (not clear-screen)
             (cept:clear-page)))
         (destructuring-bind (&key palette (start-color 16)) (read-page-file page "pal")
           (when palette
