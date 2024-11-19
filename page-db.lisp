@@ -134,6 +134,7 @@
     page-database))
 
 (defun show-page (page)
+  (format t "; showing page ~A~%" page)
   (cept:write-cept (make-cept page)))
 
 (defun find-page (page-or-page-number &optional (sub-page "a"))
