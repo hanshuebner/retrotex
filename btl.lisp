@@ -54,31 +54,63 @@
                              bd:*btl-definitions*)))
     `(progn
        (defclass btl ()
-         (,@(mapcar (lambda (name)
+         ((buffer :initarg :buffer :reader buffer)
+          ,@(mapcar (lambda (name)
                       (list name :reader name))
                     field-names)))
        (defmethod initialize-instance ((btl btl) &key buffer)
+         (call-next-method)
          (setf ,@(mapcan (lambda (name field)
                            `((slot-value btl ',name) (get-btl-field buffer
-                                                    ',(bd:field-type field)
-                                                    ,(bd:field-length field)
-                                                    ,(bd:field-offset field)
-                                                    ,(bd:field-bit-number field))))
+                                                                    ',(bd:field-type field)
+                                                                    ,(bd:field-length field)
+                                                                    ,(bd:field-offset field)
+                                                                    ,(bd:field-bit-number field))))
                          field-names bd:*btl-definitions*))))))
 
+(defmacro define-range-reader (name)
+  (let ((ptr (find-symbol (format nil "~APTR" name)))
+        (len (find-symbol (format nil "~ALEN" name))))
+    `(defmethod ,name ((btl btl))
+       (unless (zerop (,ptr btl))
+         (subseq (buffer btl) (,ptr btl) (+ (,ptr btl) (,len btl)))))))
+
 (define-btl-class)
+
+(define-range-reader SKOAM)
+(define-range-reader SKODR)
+(define-range-reader SKOAC)
+(define-range-reader SKOAS)
+(define-range-reader SKOFB)
+(define-range-reader SKOPM)
+(define-range-reader SKOBV)
+(define-range-reader SKOTD)
 
 (defmethod btl-page-number ((btl btl))
   (format nil "~A~C" (SKOSNRBP btl) (code-char (+ #.(char-code #\a) (1- (SKOBLAKZ btl))))))
 
 (defun print-btl (buffer)
   (let ((btl (make-instance 'btl :buffer buffer)))
-    (format t "~&~A~%" (btl-page-number btl))))
+    (format t "~&~A
+SKOWM2ST 2-stellige Wahlmöglichkeit: ~A
+SKOAWMDA Auswahlmöglichkeit: ~A
+SKOQSAM2 Auswahlmöglichkeit mit BKZ und Bl.: ~A
+SKOAM Auswahlmöglichkeit: ~A
+SKODR Dekoder-Daten: ~A
+SKOAC Aufbaucode: ~A
+"
+            (btl-page-number btl)
+            (SKOWM2ST btl)
+            (SKOAWMDA btl)
+            (SKOQSAM2 btl)
+            (SKOAM btl)
+            (SKODR btl)
+            (SKOAC btl))))
 
 (defun print-btl-directory (pathname)
   (with-input-from-file (f pathname :element-type '(unsigned-byte 8))
-    (loop with buffer = (make-array bd:+btl-size+)
-          for i from #x2000 below (file-length f) by #x0800
+    (loop with buffer = (make-array #x800)
+          for i from #x4000 below (file-length f) by #x0800
           do (file-position f i)
              (read-sequence buffer f)
              (print-btl buffer))))
