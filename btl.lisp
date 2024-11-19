@@ -16,7 +16,7 @@
 
 (defmethod get-btl-field (buf (type (eql 'bd:bit)) length offset bit-number)
   (assert (= length 1/8) () "bit field must have length 1/8")
-  (plusp (ldb (byte 1 bit-number) (aref buf offset))))
+  (plusp (ldb (byte 1 (- 7 bit-number)) (aref buf offset))))
 
 (defmethod get-btl-field (buf (type (eql 'bd:bcd)) length offset bit-number)
   (with-output-to-string (*standard-output*)
@@ -89,29 +89,77 @@
 (defmethod btl-page-number ((btl btl))
   (format nil "~A~C" (SKOSNRBP btl) (code-char (+ #.(char-code #\a) (1- (SKOBLAKZ btl))))))
 
-(defun print-btl (buffer)
-  (let ((btl (make-instance 'btl :buffer buffer)))
-    (format t "~&~A
+(defmethod btl-page-type ((btl btl))
+  (cond
+    ((SKOISEIT btl) "information")
+    ((SKODSEIT btl) "dialog")
+    ((SKOMSEIN btl) "message")
+    ((SKOGWSEI btl) "transfer")
+    ((SKOFSSER btl) "format service")
+    ((SKOBBSEI btl) "billboard")
+    (t (format nil "unknown ~2,'0X" (aref (buffer btl) 34)))))
+
+(defmethod print-object ((btl btl) stream)
+  (print-unreadable-object (btl stream :type t :identity t)
+    (format stream "~A (~A)" (btl-page-number btl) (btl-page-type btl))))
+
+(defmethod btl-choice-mapping ((btl btl))
+  (append (list "#" "0")
+          (if (SKOISEIT btl)
+              (if (SKOWM2ST btl)
+                  (loop for i from 10 upto 99 collect (princ-to-string i))
+                  (loop for i from 1 upto 9 collect (princ-to-string i)))
+              (list "2" "19"))))
+
+(defmethod decode-bdhqsam2 ((btl btl))
+  )
+
+(defmethod decode-bdhqsam ((btl btl))
+  (loop with buffer = (SKOAM btl)
+        with mapping = (btl-choice-mapping btl)
+        with SAMHWAMO = (aref buffer 0)
+        with SAMAWAMO = (aref buffer 1)
+        for i from 0 below SAMHWAMO
+        unless (zerop (aref buffer i))
+          collect (list (nth i mapping)
+                        (let* ((slot (aref buffer (+ i 2)))
+                               (base (+ 3 SAMAWAMO (* slot 8))))
+                          (ignore-errors (get-btl-field (subseq buffer base (+ base 8))
+                                                        'bd:bcd+ 8 0 0))))))
+
+(defmethod btl-choices ((btl btl))
+  (when (SKOAM btl)
+    (if (SKOQSAM2 btl)
+        (decode-bdhqsam2 btl)
+        (decode-bdhqsam btl))))
+
+(defun print-btl (btl)
+  (format t "~&~A
 SKOWM2ST 2-stellige Wahlmöglichkeit: ~A
 SKOAWMDA Auswahlmöglichkeit: ~A
 SKOQSAM2 Auswahlmöglichkeit mit BKZ und Bl.: ~A
 SKOAM Auswahlmöglichkeit: ~A
 SKODR Dekoder-Daten: ~A
 SKOAC Aufbaucode: ~A
+Auswahlmöglichkeiten: ~A
 "
-            (btl-page-number btl)
-            (SKOWM2ST btl)
-            (SKOAWMDA btl)
-            (SKOQSAM2 btl)
-            (SKOAM btl)
-            (SKODR btl)
-            (SKOAC btl))))
+          btl
+          (SKOWM2ST btl)
+          (SKOAWMDA btl)
+          (SKOQSAM2 btl)
+          (SKOAM btl)
+          (SKODR btl)
+          (SKOAC btl)
+          (btl-choices btl)))
 
-(defun print-btl-directory (pathname)
+(defun print-btl-directory (pathname &optional page)
   (with-input-from-file (f pathname :element-type '(unsigned-byte 8))
     (loop with buffer = (make-array #x800)
           for i from #x4000 below (file-length f) by #x0800
           do (file-position f i)
              (read-sequence buffer f)
-             (print-btl buffer))))
+             (let ((btl (make-instance 'btl :buffer buffer)))
+               (when (or (not page)
+                         (equal page (btl-page-number btl)))
+                 (print-btl btl))))))
 
