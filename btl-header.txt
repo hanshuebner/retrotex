@@ -1,0 +1,168 @@
+KOSEKEY 1 11 0 Key der Seite/Blatt
+SKOBERKZ 2 BCD 1 0 Bereichskennzeichen m
+SKOSNRBP 2 BCD+ 8 1 Seitennummer m
+SKOBLAKZ 2 BIN 1 9 Blatt (a-z: 01 bis 1A) m
+SKOCONCO 2 1 10 spätere Realisierung
+SKOALIGO 1 1 11 spätere Realisierung 
+SKOHEADR 1 4 12 interne Verwendung
+SKOLANGE 1 BIN 2 16 Länge der Seite/Blatt m
+SKOANZBZ 1 BIN 2 18 Anzahl Bildschirmzeilen m
+SKOANZSP 1 1 19 spätere Realisierung
+SKOBKZV1 1 1 20 interne Verwendung
+SKOBALLL 1 1 21 spätere Realisierung
+SKOPREPR 1 2 22 interne Verwendung
+SKOPOSTP 1 2 24 interne Verwendung
+SKOSTATI 1 8 26 Status der Seite/Blatt
+SKOIZSPE 2 BIT 1 Bit 26(0) Zugriff gesperrt m
+SKOBZSPE 2 BIT 1 Bit 26(1) interne Verwendung
+SKOPERSO 2 BIT 1 Bit 26(2) Seite enthält pers. Dat o
+SKOQUIBS 2 BIT 1 Bit 26(3) interne Verwendung
+SKOSMACD 2 BIT 1 Bit 26(4) Seite mit Autor'gscode o
+SKOBERSE 2 BIT 1 Bit 26(5) interne Verwendung
+SKOENQIN 2 BIT 1 Bit 26(6) interne Verwendung
+SKOABRST 2 BIT 1 Bit 26(7) Abrufstatistik führen m
+SKOWM2ST 2 BIT 1 Bit 27(0) 2-st'ge Wahlmöglichk. 2.
+SKOSDRVR 2 BIT 1 Bit 27(1) interne Verwendung
+SKOVBLAT 2 BIT 1 Bit 27(2) Verkettetes Blatt folgt m
+SKOCSEIT 2 BIT 1 Bit 27(3) Kz für Combinedseite m
+SKOESEIT 2 BIT 1 Bit 27(4) Kz für Eintrittseite o
+SKOSUNTB 2 BIT 1 Bit 27(5) Seite nicht unterbrb. o
+SKOLBLAT 2 BIT 1 Bit 27(6) letztes Blatt d. Seite o
+SKODRCSV 2 BIT 1 Bit 27(7) Dekoder-Def. Element v. o
+SKOACODV 2 BIT 1 Bit 28(0) Aufbaucode vorhanden o
+SKODACDV 2 BIT 1 Bit 28(1) Dekoder-Definitionen im Aufbaucode vorhanden m
+SKOFBEDA 2 BIT 1 Bit 28(2) Feldbeschreibung vorh. o
+SKOAWMDA 2 BIT 1 Bit 28(3) Auswahlmögl'keit vorh. fo)
+SKOPMTDA 2 BIT 1 Bit 28(4) Prompting Message vorh. 0.
+SKOTRANS 2 BIT 1 Bit 28(5) Transparente Daten sind vorhanden m
+SKOSVANG 2 BIT 1 Bit 28(6) Schlagw'ber. vorhanden o
+SKOSVEIN 2 BIT 1 Bit 28(7) Schlagw'verz. einarbei. o
+SKOHLOES 2 BIT 1 Bit 29(0) interne Verwendung wi
+SKOZMDSE 2 BIT 1 Bit 29(1)  Interne Verwendung
+SKONMWST 2 BIT 1 Bit 29(2) interne Verwendung
+SKOHMWST 2 BIT 1 Bit 29(3) interne Verwendung
+SKOVMWST 2 BIT 1 Bit 29(4) 100 % von MWST-Satz m
+SKOROCHE 2 BIT 1 Bit 29(5) Interne Verwendung w
+SKOZEILN 2 BIT 1 Bit 29(6) interne Verwendung 2
+SKOWERBG 2 BIT 1 Bit 29(7) Seite enthält Werbung m
+SKOCOTIN 2 BIT 1 Bit 30(0) spätere Realisierung
+SKOBIBIZ 2 BIT 1 Bit 30(1) interne Verwendung
+SKOWRAPA 2 BIT 1 Bit 30(2) wrap around Bit (spätere Realisierung)
+SKOFSBGH 2 BIT 1 Bit 30(3) Bit=1 —> Hintergrund halten b. Seitenausgabe m
+SKOMZGES 2 BIT 1 Bit 30(4) Interne Verwendung
+SKOMABUL 2 BIT 1 Bit 30(5) interne Verwendung
+SKOMASBV 2 BIT 1 Bit 30(6) interne Verwendung
+SKOQSAM2 2 BIT 1 Bit 30(7) Auswahlmöglichkeit mit Bereichskennzahl und Blattkennzeichen vorh. m
+SKOKSTV 2 BIT 1 Bit 31(0) Interne Verwendung
+SKOMAONL 2 BIT 1 Bit 31(1) Interne Verwendung
+SKOKSTA 2 BIT 1 Bit 31(2) interne Verwendung
+SKONOOPT 2 BIT 1 Bit 31(3) interne Verwendung
+SKOASPEV 2 BIT 1 Bit 31(4) individuelle Abrufsperre vorhanden (siehe auch SKOASTLN) m
+SKOASTLN 2 BIT 1 Bit 31(5) Teilnehmerliste für die Seitenabrufsperre vorhanden, wenn Bit = 1 od.: Referenz zu Seiten mit Teilnehmer-Sperrliste, wenn Bit = O m
+SKOU219 2 BIT 1 Bit 31(6) interne Verwendung
+SKOOEFT 2 BIT 1 Bit 31(7) interne Verwendung
+SKOFLAG7 2 1 32 spätere Realisierung
+SKOVGKL 2 1 33 nutzungszeitabhängige Anbietervergütung
+SKOVGKLE 3 BIN 4 Bit 33(0) Vergütungsklasse für ER o
+SKOVGKLD 3 BIN 4 Bit 33(4) Vergütungsklasse, 0-15 o
+SKOTYPSB 1 4 34 Typ der Seite/Blatt
+SKOISEIT 2 BIT 1 Bit 34(0) Informationsseite m
+SKODSEIT 2 BIT 1 Bit 34(1) Dialogseite m
+SKOMSEIN 2 BIT 1 Bit 34(2) jMitteilungss. (Eingabe) m
+SKOGWSEI 2 BIT 1 Bit 34(3) Übergabeseite m
+SKOSSEIT 2 BIT 1 Bit 34(4) interne Verwendung
+SKOFSSER 2 BIT 1 Bit 34(5) Formatserviceseite (ER) m
+SKOBBSEI 2 BIT 1 Bit 34(6) Billboard-Seite m
+SKODUMMY 2 BIT 1 Bit 34(7) interne Verwendung
+SKOFERTA 2 BIT 1 Bit 35(0) interne Verwendung
+SKOFFSEI 2 BIT 1 Bit 35(1) interne Verwendung
+SKOZVSEI 2 BIT 1 Bit 35(2) interne Verwendung
+SKOFFZVS 2 BIT 1 Bit 35(3) interne Verwendung
+SKOZVSE 2 BIT 1 Bit 35(4) interne Verwendung
+SKOZVSL 2 BIT 1 Bit 35(5) interne Verwendung
+SKOUZVSE 2 BIT 1 Bit 35(6) interne Verwendung
+SKOMEB 2 BIT 1 Bit 35(7) interne Verwendung fen
+SKOTFI1 2 8 Bits 36 TFI-Kennzeichen der  (Seiten-TFI)
+SKOTFGE1 3 BIT 1 Bit 36(0) Geometrie Profile 1.Bit m
+SKOTFGE2 3 BIT 1 Bit 36(1) Geometrie Profile 2.Bit m
+SKOTFPHO 3 BIT 1 Bit 36(2) Photografic m
+SKOTFTSW 3 BIT 1 Bit 36(3) Telesoftware m
+SKOTFTPM 3 BIT 1 Bit 36(4) Transparent Mode m
+SKOTFCHM 3 BIT 1 Bit 36(5) 80-Zeichen-Mode m
+SKOTFCHI 3 BIT 1 Bit 36(6) Chipkarte m
+SKOTFRES 3 BIT 1 Bit 36(7) spätere Realisierung
+SKOTFI2 2 1 37 spätere Realisierung
+SKOINUMR 1 8 38 Überarbeiter der Seite oder Absender der Seite
+SKOITLNR 2 BCD+ 6 38 Teilnehmer-Nummer m
+SKOIMBSU 2 BCD 2 44 Mitbenutzer-Suffix m
+SKOEASEI 1 8 46 Empfänger der Dialogse.
+SKOETLNR 2 BCD+ 6 46 Teilnehmer-Nummer o
+SKOEMBSU 2 BCD 2 52 Mitbenutzer-Suffix o
+SKOZEINA 1 BCD 6 54 Zeitpunkt der Einarbeit Bei Mitteilung. + Antw. Zeitstempel des Absend. Form YY DD MM HH MM SS o
+SKOZEIFU 1 6 60 interne Verwendung
+SKOACIGB 1 BCD 2 66 Autorisierungscode (GBG) m
+SKOEBETR 1 BIN 2 68 Entgelt in Pfennigen m
+SKOSCROL 1 1 70 spätere Realisierung
+SKOERNUM 1 BCD 3 71 Externe-Rechner-Refer. m
+SKOGWNUM 1 CEPT 6 74 Gateway-Nummer m
+SKOSZEST 1 BIN 1 80 Stellenzahl Leitseite o
+SKOLKEYO 1 BIN 1 81 Länge des sign. Keys der Seite incl. BRZ o
+SKOSNMUT 1 11 82 Mutterseite von Combined-Seiten
+SKOMTBKZ 2 1 82 interne Verwendung u
+SKOSNRMT 2 BCD+ 8 83 Seiten-Nr d Mutterseite m
+SKOMTCON 2 1 92 spätere Realisierung
+SKOZEILA 1 BIN 1 93 Zeile, Fensteranfang m
+SKOZEILE 1 BIN 1 94 Zeile Fensterende m
+SKOSDRQ1 1 BCD+ 10 95 Dekoder-Def. 1 m
+SKOSDRQ2 1 BCD+ 10 105 Dekoder-Def. 2 m
+SKOSDRQ3 1 BCD+ 10 115 Dekoder-Def. 3 m
+SKOLVERZ 1 1 125 interne Verwendung im
+SKOHQSAM 1 8 126 Auswahlmöglichkeiten
+SKOAMPTR 2 BIN 2 126 Auswahlmögl. Offset m
+SKOAMLEN 2 BIN 2 128 Länge der Auswahlmögl. m
+SKOSYSTI 2 4 130 interne Verwendung
+SKOHQSZE 1 12 134 Bereich Zeile 1 und 24
+SKOTYPZ1 2 BIN 1 134 interne Verwendung ji
+SKOFAZE1 2 BITS 1 135 Farbe Zeile ersten vier Bit Vordergrundfarbe/letzten vier Bit Hintergrundfarbe 1 m
+SKOHQPTI 2 BIN 2 136 Offset zum Bereich der Zeile 1 m
+SKOHQLE1 2 BIN 2 138 Länge Bereich Zeile 1 m
+SKOTYPZ4 2 BIN 1 140 interne Verwendung
+SKOFAZE4 2 BITS 1 141 Farbe Zeile 24 ersten vier Bit Vordergrundfarbe/letzten vier Bit Hintergrundfarbe m
+SKOHQPT4 2 BIN 2 142 Offset zum Bereich der Zeile 20/24 m
+SKOHQLE4 2 BIN 2 144 Länge Bereich Zeile 24 m
+SKOHQSDR 1 8 146 Dekoder-Def. Bereich
+SKODRPTR 2 BIN 2 146 Dekoder-Def. (Offset vom Seitenanfang zum Anfang des Bereiches BDHQSDR) m
+SKODRLEN 2 BIN 2 148 Länge des Bereichs m
+SKOSYSTA 2 4 150 interne Verwendung u.
+SKOHQSAC 1 4 154 Bereich für Aufbaucode
+SKOACPTR 2 BIN 2 154 Aufbaucode (Offset vom Seitenkopf-Anfang zum Beginn des Aufbaucode) m
+SKOACLEN 2 BIN 2 156 Länge des Bereichs Aufbaucode m
+SKOHQIAS 1 4 158 Bereich für individuell Seitenabrufsperre
+SKOASPTR 2 BIN 2 158 Offset zum Bereich individ. Abrufsperre m
+SKOASLEN 2 BIN 2 160 Länge des Bereichs individ. Abrufsperre m
+SKOHQSFB 1 12 162 Definitionen für Felder
+SKOFBPTR 2 BIN 2 162 Offset zum Bereich TV-Defaultdaten (BDHQSFE) m
+SKOFBLEN 2 BIN 2 164 Länge der Bereiche TV-Defaultdaten + Feldbeschreibungen (BDHQSFE +BDHOQSFB) m
+SKOFBOF1 2 BIN 2 166 Offset zur 1-ten Feldbeschreibung (BDHQSFB) vom Beginn des Bereichs BDHQSFE her berechnet m
+SKOFBANZ 2 BIN 1 168 Anzahl Feldbeschreibung m
+SKOFBFD1 2 BIN 1 169 Erstes Feld für die Eingaben m
+SKOCHIKA 2 2 170 interne Verwendung
+SKOCHFLG 2 1 172 interne Verwendung
+SKOCHIND 2 1 173 Chipkarten-Kommunikat. m
+SKOHQSPM 1 4 174 Bereich Prompting-Mess.
+SKOPMPTR 2 BIN 2 174 Offset zum Bereich Prompting Messages m
+SKOPMLEN 2 BIN 2 176 Länge des Bereichs Prompting Messages m
+SKONAMAS 1 4 178 interne Verwendung
+SKONAPTR 2 2 178 interne Verwendung
+SKONALEN 2 2 180 interne Verwendung
+SKOHQSBV 1 8 182 Bereich Suchbaumeintragungen bzw. Schlagworteintragungen
+SKOBVPTR 2 BIN 2 182 Offset zum Bereich der Schlagworteintragungen m
+SKOBVLEN 2 BIN 2 184 Länge des Bereichs Schlagworteintragungen m
+SKOKSPTR 2 2 186 interne Verwendung
+SKOKSLEN 2 2 188 interne Verwendung
+SKOHQSTD 1 8 190 Bereich 'Transp. Daten’ oder "Durchlaufende Seiten"
+SKOTDPTR 2 BIN 2 190 Offset zum Beginn des Bereichs 'Transp. Daten' oder Bereichs 'Liste der durchlaufenden Seiten' m
+SKOTDLEN 2 BIN 2 192 Länge des Bereichs 'Transparente Daten' oder 'Liste der durchlaufenden Seiten’ m
+SKOBBFCT 2 BIN 1 194 Anzahl der Wiederholungen bei Billboard-Seiten m
+SKOBTDBP 2 3 195 spätere Realisierung
+SKOHQSHE 1 8 198 interne Verwendung
