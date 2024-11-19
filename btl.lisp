@@ -120,12 +120,12 @@
         with SAMHWAMO = (aref buffer 0)
         with SAMAWAMO = (aref buffer 1)
         for i from 0 below SAMHWAMO
-        unless (zerop (aref buffer i))
+        for slot = (1- (aref buffer (+ i 2)))
+        for base = (+ 2 SAMHWAMO (* slot 8))
+        unless (minusp slot)
           collect (list (nth i mapping)
-                        (let* ((slot (aref buffer (+ i 2)))
-                               (base (+ 3 SAMAWAMO (* slot 8))))
-                          (ignore-errors (get-btl-field (subseq buffer base (+ base 8))
-                                                        'bd:bcd+ 8 0 0))))))
+                        (format nil "~Aa" (get-btl-field (subseq buffer base (+ base 8))
+                                                         'bd:bcd+ 8 0 0)))))
 
 (defmethod btl-choices ((btl btl))
   (when (SKOAM btl)
