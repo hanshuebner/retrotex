@@ -80,4 +80,4 @@
                                  :usage (parse-usage usage))))))
           (uiop:read-file-lines input-file)))
 
-(defvar *btl-definitions* (remove-if 'null (parse-btl-definitions) :key #'field-type))
+(defparameter *btl-definitions* (remove-if 'null (parse-btl-definitions) :key #'field-type))

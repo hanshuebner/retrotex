@@ -5,20 +5,23 @@
 
 (in-package :btl)
 
-(defgeneric get-btl-field (buf type length offset bit-number))
+(defun decode-blatt-kennzeichen (n)
+  (code-char (+ #.(char-code #\a) -1 n)))
 
-(defmethod get-btl-field (buf (type (eql 'bd:bin)) length offset bit-number)
+(defgeneric decode-field (buf type length offset bit-number))
+
+(defmethod decode-field (buf (type (eql 'bd:bin)) length offset bit-number)
   (if (< length 1)
       (ldb (byte (floor (* 8 length)) bit-number) (aref buf offset))
       (let ((result 0))
         (dotimes (i length result)
           (setf result (logior result (ash (aref buf (+ offset i)) (* i 8))))))))
 
-(defmethod get-btl-field (buf (type (eql 'bd:bit)) length offset bit-number)
+(defmethod decode-field (buf (type (eql 'bd:bit)) length offset bit-number)
   (assert (= length 1/8) () "bit field must have length 1/8")
   (plusp (ldb (byte 1 (- 7 bit-number)) (aref buf offset))))
 
-(defmethod get-btl-field (buf (type (eql 'bd:bcd)) length offset bit-number)
+(defmethod decode-field (buf (type (eql 'bd:bcd)) length offset bit-number)
   (with-output-to-string (*standard-output*)
     (dotimes (i length)
       (let* ((byte (aref buf (+ offset i)))
@@ -27,26 +30,34 @@
         (write-char (code-char (+ #.(char-code #\0) nibble-1)))
         (write-char (code-char (+ #.(char-code #\0) nibble-2)))))))
 
-(defmethod get-btl-field (buf (type (eql 'bd:bcd+)) length offset bit-number)
-  (with-output-to-string (*standard-output*)
-    (dotimes (i length)
-      (let* ((byte (aref buf (+ offset i)))
-             (nibble-1 (ldb (byte 4 4) byte))
-             (nibble-2 (ldb (byte 4 0) byte)))
-        (when (zerop nibble-1)
-          (return))
-        (write-char (code-char (+ #.(char-code #\0) (1- nibble-1))))
-        (when (zerop nibble-2)
-          (return))
-        (write-char (code-char (+ #.(char-code #\0) (1- nibble-2))))))))
+(defmethod decode-field (buf (type (eql 'bd:bcd+)) length offset bit-number)
+  (let ((result (with-output-to-string (*standard-output*)
+                  (dotimes (i (min length 8))
+                    (let* ((byte (aref buf (+ offset i)))
+                           (nibble-1 (ldb (byte 4 4) byte))
+                           (nibble-2 (ldb (byte 4 0) byte)))
+                      (when (zerop nibble-1)
+                        (return))
+                      (write-char (code-char (+ #.(char-code #\0) (1- nibble-1))))
+                      (when (zerop nibble-2)
+                        (return))
+                      (write-char (code-char (+ #.(char-code #\0) (1- nibble-2))))))
+                  (when (> length 8)
+                    (write-char (decode-blatt-kennzeichen (aref buf (+ offset 8))))))))
+    (unless (= 1 (length result))
+      result)))
 
-(defmethod get-btl-field (buf (type (eql 'bd:cept)) length offset bit-number)
+(defmethod decode-field (buf (type (eql 'bd:cept)) length offset bit-number)
   (flex:octets-to-string buf :start offset :end (+ offset length)))
 
-(defmethod get-btl-field (buf (type (eql 'bd:bits)) length offset bit-number)
+(defmethod decode-field (buf (type (eql 'bd:bits)) length offset bit-number)
   ;; BITS wird nur verwendet, um Vorder- und Hintergrundfarben zu definieren (SKOFAZE1 und SKOFAZE4)
   (let ((byte (aref buf offset)))
     (list (ldb (byte 4 4) byte) (ldb (byte 4 0) byte))))
+
+(defun decode-bcd+ (buffer &optional (offset 0))
+  (decode-field buffer
+                'bd:bcd+ 8 offset 0))
 
 (defmacro define-btl-class ()
   (let ((field-names (mapcar (lambda (field)
@@ -61,7 +72,7 @@
        (defmethod initialize-instance ((btl btl) &key buffer)
          (call-next-method)
          (setf ,@(mapcan (lambda (name field)
-                           `((slot-value btl ',name) (get-btl-field buffer
+                           `((slot-value btl ',name) (decode-field buffer
                                                                     ',(bd:field-type field)
                                                                     ,(bd:field-length field)
                                                                     ,(bd:field-offset field)
@@ -86,9 +97,6 @@
 (define-range-reader SKOBV)
 (define-range-reader SKOTD)
 
-(defmethod btl-page-number ((btl btl))
-  (format nil "~A~C" (SKOSNRBP btl) (code-char (+ #.(char-code #\a) (1- (SKOBLAKZ btl))))))
-
 (defmethod btl-page-type ((btl btl))
   (cond
     ((SKOISEIT btl) "information")
@@ -101,7 +109,7 @@
 
 (defmethod print-object ((btl btl) stream)
   (print-unreadable-object (btl stream :type t :identity t)
-    (format stream "~A (~A)" (btl-page-number btl) (btl-page-type btl))))
+    (format stream "~A (~A)" (SKOSNRBP btl) (btl-page-type btl))))
 
 (defmethod btl-choice-mapping ((btl btl))
   (append (list "#" "0")
@@ -124,28 +132,33 @@
           unless (minusp slot)
             collect (list (nth i mapping)
                           (if (SKOQSAM2 btl)
-                              (format nil "~A ~A~C"
+                              (format nil "~A ~A ~A"
                                       (aref buffer base)
-                                      (get-btl-field (subseq buffer (1+ base) (+ base 9)) 'bd:bcd+ 8 0 0)
-                                      (code-char (+ #.(char-code #\a) -1 (aref buffer (+ base 9)))))
-                              (format nil "~Aa" (get-btl-field (subseq buffer base (+ base 8))
-                                                               'bd:bcd+ 8 0 0)))))))
+                                      (decode-bcd+ buffer (1+ base))
+                                      (decode-blatt-kennzeichen (aref buffer (+ base 9))))
+                              (format nil "~Aa" (decode-bcd+ buffer base)))))))
 
 (defun print-btl (btl)
   (format t "~&~A
-SKOWM2ST 2-stellige Wahlmöglichkeit: ~A
-SKOAWMDA Auswahlmöglichkeit: ~A
-SKOQSAM2 Auswahlmöglichkeit mit BKZ und Bl.: ~A
-SKOAM Auswahlmöglichkeit: ~A
-SKODR Dekoder-Daten: ~A
-SKOAC Aufbaucode: ~A
-Auswahlmöglichkeiten: ~A
-"
+~:[~;SKOWM2ST 2-stellige Wahlmöglichkeit
+~]~:[~;SKOAWMDA Auswahlmöglichkeit
+~]~:[~;SKOQSAM2 Auswahlmöglichkeit mit BKZ und Bl.
+~]~@[SKOSNRMT Mutterseite ~A
+~]~@[SKOSDRQ1 Decoder-Definition 1: ~A
+~]~@[SKOSDRQ2 Decoder-Definition 2: ~A
+~]~@[SKOSDRQ3 Decoder-Definition 3: ~A
+~]~@[SKODR Dekoder-Daten: ~A
+~]~@[SKOAC Aufbaucode: ~A
+~]~@[Auswahlmöglichkeiten: ~A
+~]"
           btl
           (SKOWM2ST btl)
           (SKOAWMDA btl)
           (SKOQSAM2 btl)
-          (SKOAM btl)
+          (SKOSNRMT btl)
+          (SKOSDRQ1 btl)
+          (SKOSDRQ2 btl)
+          (SKOSDRQ3 btl)
           (SKODR btl)
           (SKOAC btl)
           (btl-choices btl)))
@@ -158,6 +171,6 @@ Auswahlmöglichkeiten: ~A
              (read-sequence buffer f)
              (let ((btl (make-instance 'btl :buffer buffer)))
                (when (or (not page)
-                         (equal page (btl-page-number btl)))
+                         (equal page (SKOSNRBP btl)))
                  (print-btl btl))))))
 

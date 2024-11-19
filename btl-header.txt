@@ -1,7 +1,6 @@
 KOSEKEY 1 11 0 Key der Seite/Blatt
 SKOBERKZ 2 BCD 1 0 Bereichskennzeichen m
-SKOSNRBP 2 BCD+ 8 1 Seitennummer m
-SKOBLAKZ 2 BIN 1 9 Blatt (a-z: 01 bis 1A) m
+SKOSNRBP 2 BCD+ 9 1 Seitennummer m
 SKOCONCO 2 1 10 spätere Realisierung
 SKOALIGO 1 1 11 spätere Realisierung 
 SKOHEADR 1 4 12 interne Verwendung
@@ -109,13 +108,13 @@ SKOSZEST 1 BIN 1 80 Stellenzahl Leitseite o
 SKOLKEYO 1 BIN 1 81 Länge des sign. Keys der Seite incl. BRZ o
 SKOSNMUT 1 11 82 Mutterseite von Combined-Seiten
 SKOMTBKZ 2 1 82 interne Verwendung u
-SKOSNRMT 2 BCD+ 8 83 Seiten-Nr d Mutterseite m
+SKOSNRMT 2 BCD+ 9 83 Seiten-Nr d Mutterseite m
 SKOMTCON 2 1 92 spätere Realisierung
 SKOZEILA 1 BIN 1 93 Zeile, Fensteranfang m
 SKOZEILE 1 BIN 1 94 Zeile Fensterende m
-SKOSDRQ1 1 BCD+ 10 95 Dekoder-Def. 1 m
-SKOSDRQ2 1 BCD+ 10 105 Dekoder-Def. 2 m
-SKOSDRQ3 1 BCD+ 10 115 Dekoder-Def. 3 m
+SKOSDRQ1 1 BCD+ 9 95 Dekoder-Def. 1 m
+SKOSDRQ2 1 BCD+ 9 105 Dekoder-Def. 2 m
+SKOSDRQ3 1 BCD+ 9 115 Dekoder-Def. 3 m
 SKOLVERZ 1 1 125 interne Verwendung im
 SKOHQSAM 1 8 126 Auswahlmöglichkeiten
 SKOAMPTR 2 BIN 2 126 Auswahlmögl. Offset m
