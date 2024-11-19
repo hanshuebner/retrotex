@@ -132,11 +132,13 @@
           unless (minusp slot)
             collect (list (nth i mapping)
                           (if (SKOQSAM2 btl)
-                              (format nil "~A ~A ~A"
-                                      (aref buffer base)
-                                      (decode-bcd+ buffer (1+ base))
-                                      (decode-blatt-kennzeichen (aref buffer (+ base 9))))
-                              (format nil "~Aa" (decode-bcd+ buffer base)))))))
+                              (unless (zerop (aref buffer (1+ base)))
+                                (format nil "~A ~A ~A"
+                                        (aref buffer base)
+                                        (decode-bcd+ buffer (1+ base))
+                                        (decode-blatt-kennzeichen (aref buffer (+ base 9)))))
+                              (unless (zerop (aref buffer base))
+                                (decode-bcd+ buffer base)))))))
 
 (defun print-btl (btl)
   (format t "~&~A
