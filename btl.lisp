@@ -111,27 +111,25 @@
                   (loop for i from 1 upto 9 collect (princ-to-string i)))
               (list "2" "19"))))
 
-(defmethod decode-bdhqsam2 ((btl btl))
-  )
-
-(defmethod decode-bdhqsam ((btl btl))
-  (loop with buffer = (SKOAM btl)
-        with mapping = (btl-choice-mapping btl)
-        with SAMHWAMO = (aref buffer 0)
-        with SAMAWAMO = (aref buffer 1)
-        for i from 0 below SAMHWAMO
-        for slot = (1- (aref buffer (+ i 2)))
-        for base = (+ 2 SAMHWAMO (* slot 8))
-        unless (minusp slot)
-          collect (list (nth i mapping)
-                        (format nil "~Aa" (get-btl-field (subseq buffer base (+ base 8))
-                                                         'bd:bcd+ 8 0 0)))))
-
 (defmethod btl-choices ((btl btl))
-  (when (SKOAM btl)
-    (if (SKOQSAM2 btl)
-        (decode-bdhqsam2 btl)
-        (decode-bdhqsam btl))))
+  (when (SKOAWMDA btl)
+    (loop with buffer = (SKOAM btl)
+          with mapping = (btl-choice-mapping btl)
+          with SAMHWAMO = (aref buffer 0)
+          with SAMAWAMO = (aref buffer 1)
+          with slot-length = (if (SKOQSAM2 btl) 10 8)
+          for i from 0 below SAMHWAMO
+          for slot = (1- (aref buffer (+ i 2)))
+          for base = (+ 2 SAMHWAMO (* slot slot-length))
+          unless (minusp slot)
+            collect (list (nth i mapping)
+                          (if (SKOQSAM2 btl)
+                              (format nil "~A ~A~C"
+                                      (aref buffer base)
+                                      (get-btl-field (subseq buffer (1+ base) (+ base 9)) 'bd:bcd+ 8 0 0)
+                                      (code-char (+ #.(char-code #\a) -1 (aref buffer (+ base 9)))))
+                              (format nil "~Aa" (get-btl-field (subseq buffer base (+ base 8))
+                                                               'bd:bcd+ 8 0 0)))))))
 
 (defun print-btl (btl)
   (format t "~&~A
