@@ -50,7 +50,8 @@
           result))))
 
 (defmethod decode-field (buf (type (eql 'bd:cept)) length offset bit-number)
-  (flex:octets-to-string buf :start offset :end (+ offset length)))
+  (unless (every #'zerop (subseq buf offset (+ offset length)))
+    (flex:octets-to-string buf :start offset :end (+ offset length))))
 
 (defmethod decode-field (buf (type (eql 'bd:bits)) length offset bit-number)
   ;; BITS wird nur verwendet, um Vorder- und Hintergrundfarben zu definieren (SKOFAZE1 und SKOFAZE4)
@@ -165,7 +166,12 @@
                       ,@(when (SFBATTR2 sf) '(:alphabetic))
                       ,@(when (SFBATTR3 sf) '(:no-echo))
                       ,@(when (SFBATTR4 sf) '(:no-cursor))
-                      ,@(when (SFBATTR5 sf) '(:protected)))))
+                      ,@(when (SFBATTR5 sf) '(:protected)))
+        :SFBFOFFS (SFBFOFFS sf)
+        :SFPPOFFS (SFBPOFFS sf)
+        :SFBLPRPT (SFBLPRPT sf)
+        :SFBSYSVA (SFBSYSVA sf)
+        :SFBBLEER (SFBBLEER sf)))
 
 (defmethod print-object ((sf sf) stream)
   (print-unreadable-object (sf stream :type t :identity t)
