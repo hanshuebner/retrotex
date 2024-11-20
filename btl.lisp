@@ -72,14 +72,14 @@
           ,@(mapcar (lambda (name)
                       (list name :reader name))
                     field-names)))
-       (defmethod initialize-instance ((sk sk) &key buffer)
+       (defmethod initialize-instance ((,name ,name) &key buffer)
          (call-next-method)
-         (setf ,@(mapcan (lambda (name field)
-                           `((slot-value sk ',name) (decode-field buffer
-                                                                    ',(bd:field-type field)
-                                                                    ,(bd:field-length field)
-                                                                    ,(bd:field-offset field)
-                                                                    ,(bd:field-bit-number field))))
+         (setf ,@(mapcan (lambda (slot-name field)
+                           `((slot-value ,name ',slot-name) (decode-field buffer
+                                                                          ',(bd:field-type field)
+                                                                          ,(bd:field-length field)
+                                                                          ,(bd:field-offset field)
+                                                                          ,(bd:field-bit-number field))))
                          field-names definitions))))))
 
 (eval-when (:compile-toplevel)
@@ -155,13 +155,27 @@
           for offset from 1 below (1+ (* count 3)) by 3
           collect (decode-field (SKOBV sk) 'bd:bcd 3 offset 0))))
 
+(define-btl-class sf "sf-layout.txt")
+
+(defmethod feld-definition-list ((sf sf))
+  (list :data-len (SFBFDLTH sf)
+        :row (SFBBROWS sf)
+        :column (SFBBCOLM sf)
+        :attributes `(,@(when (SFBATTR1 sf) '(:numeric))
+                      ,@(when (SFBATTR2 sf) '(:alphabetic))
+                      ,@(when (SFBATTR3 sf) '(:no-echo))
+                      ,@(when (SFBATTR4 sf) '(:no-cursor))
+                      ,@(when (SFBATTR5 sf) '(:protected)))))
+
+(defmethod print-object ((sf sf) stream)
+  (print-unreadable-object (sf stream :type t :identity t)
+    (format stream "~{~S~^ ~}" (feld-definition-list sf))))
+
 (defmethod sk-feld-definitionen ((sk sk))
   (when (SKOFB sk)
     (loop for feld from 0 below (SKOFBANZ sk)
           for start = (+ (SKOFBOF1 sk) (* feld 20))
-          collect (subseq (SKOFB sk) start (+ start 20)))))
-
-(define-btl-class sf "sf-layout.txt")
+          collect (make-instance 'sf :buffer (subseq (SKOFB sk) start (+ start 20))))))
 
 (defun print-if-defined (format value)
   (when value
