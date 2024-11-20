@@ -21,4 +21,7 @@
                (:file "drcs")
                (:file "retrotex")
                (:file "webserver")
-               (:file "page-db")))
+               (:file "page-db")
+               (:file "btx-index")
+               (:file "btl-definitions")
+               (:file "btl")))

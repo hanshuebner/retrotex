@@ -123,7 +123,7 @@ SKOSYSTI 2 4 130 interne Verwendung
 SKOHQSZE 1 12 134 Bereich Zeile 1 und 24
 SKOTYPZ1 2 BIN 1 134 interne Verwendung ji
 SKOFAZE1 2 BITS 1 135 Farbe Zeile ersten vier Bit Vordergrundfarbe/letzten vier Bit Hintergrundfarbe 1 m
-SKOHQPTI 2 BIN 2 136 Offset zum Bereich der Zeile 1 m
+SKOHQPT1 2 BIN 2 136 Offset zum Bereich der Zeile 1 m
 SKOHQLE1 2 BIN 2 138 Länge Bereich Zeile 1 m
 SKOTYPZ4 2 BIN 1 140 interne Verwendung
 SKOFAZE4 2 BITS 1 141 Farbe Zeile 24 ersten vier Bit Vordergrundfarbe/letzten vier Bit Hintergrundfarbe m

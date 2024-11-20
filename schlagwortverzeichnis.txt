@@ -1,0 +1,1818 @@
+Informationsdienste NEIN 11245
+Informationsdienstleistungen JA 10575
+Investitionsförderung JA 10591
+Investmentkurse JA 10594
+Aachen JA 25100
+Aalen JA 27080
+Abbuchungsvertahren JA 10001
+Abdichtungen JA 11281
+Abenteuerreisen JA 10002
+Abfallbeseitigung JA 10003
+Abfallbörse JA 10004
+Abflußreinigung * Rohrreinigung JA 11378
+Abflußreinigung NEIN 11378
+Abgaben JA 10005
+Abgeordnete JA 10006
+Abonnements (Zeitschr., Zeitung) JA 10007
+Abrüstung JA 10008
+Absatz- und Verkaufsförderung JA 10009
+Absatzförderung NEIN 10009
+Absatzmärkte JA 10010
+Abschleppdienste JA 10011
+Abschreibungen JA 10012
+Abwasser, -beseitigung JA 10013
+Accessoires JA 10014
+Adoption JA 10015
+Adressen NEIN 10017
+Adressen* Anschriften JA 10017
+Adressenverlage JA 10018
+Adreßbücher JA 10016
+Afrika JA 20002
+Agrarpolitik JA 10023
+Agrarprodukte JA 10024
+Agrartechnik NEIN 10700
+Agrarwirtschaft NEIN 10025
+Agrarwirtschaft* Landwirtschaft JA 10025
+Aktien NEIN 10026
+Aktien, -kurse JA 10026
+Aktienkurse NEIN 10026
+Akustik JA 10028
+Alarmanlagen JA 11326
+Alkoholfreie Getränke JA 11362
+Alkoholische Getränke JA 11361
+Alkoholismus JA 10030
+Allergien JA 10031
+Allgäu JA 20138
+Allgemeine Geschäftsbedingungen JA 10032
+Alpen JA 20003
+Alpinismus NEIN 10157
+Altbausanierung JA 10034
+Altenarbeit NEIN 10037
+Altenheime JA 10036
+Altenhilfe JA 10037
+Altersruhegeld JA 10038
+Altersversorgung JA 10039
+Amateurtunk * CB-Funk * Sprechfunk JA 10041
+Amateurtunk NEIN 10041
+Amberg JA 28450
+Amerika JA 20004
+Amsterdam JA 20005
+Amter NEIN 10020
+Ämter* Behörden JA 10020
+Amtliche Bekanntmachungen JA 10042
+Angelgeräte NEIN 10043
+Angelgeräte* Angeln JA 10043
+Angeln NEIN 10043
+Angestellte JA 10044
+Angestelltenversicherung JA 11257
+Ankauf JA 10045
+Anlageberatung JA 10046
+Anlagenbau JA 11283
+Anleihen NEIN 11194
+Annoncen NEIN 10053
+Anschaffungsda~ehen JA 10047
+Anschriften NEIN 10017
+Anstreichen JA 10048
+Antennen JA 10049
+Antiquariate JA 10050
+Antiquitäten JA 10051
+Antriebstechnik JA 10052
+Anzeigen NEIN 10053
+Anzeigen* Inserate JA 10053
+Apotheken JA 10054
+Apotheken-Notdienst JA 10055
+Aquarien JA 10056
+Arbeiter JA 10057
+Arbeitgeberverbände JA 10058
+Arbeitnehmer JA 10059
+Arbeitsämter JA 11284
+Arbeitsförderung JA 10060
+Arbeitslosengeld NEIN 10062
+Arbeitslosengeld und -hilfe JA 10062
+Arbeitslosenhilfe NEIN 10062
+Arbeitslosigkeit JA 10063
+Arbeitsmarkt JA 10064
+Arbeitsplätze JA 11240
+Arbeitsrecht JA 10065
+Arbeitsschutz JA 10066
+Arbeitsunfähigkeit JA 10068
+Arbeitszeit JA 10069
+Architekten JA 10070
+Architektur JA 10071
+Archive JA 10072
+Argentinien JA 20114
+Armaturen JA 10073
+Arnsberg JA 25760
+Arzneimittel NEIN 10074
+Arzneimittel* Medikamente JA 10074
+Ärzte JA 10021
+Ärztebedart JA 11282
+Ärztlicher Notdienst JA 10022
+Aschaffenburg JA 28750
+Asien JA 20006
+Astrologie NEIN 10555
+Astronomie JA 11285
+Atomenergie NEIN 11357
+Atomenergie, Kernenergie JA 11357
+Audio JA 10075
+Audiovisuelle Medien JA 10076
+Aufzüge JA 11327
+Augenkrankheiten JA 10077
+Augenoptik NEIN 10078
+Augenoptik* Brillen JA 10078
+Augsburg JA 28900
+Auktionen NEIN 11149
+Ausbau JA 10583
+Ausbildung JA 10079
+Ausbildungsberufe JA 10080
+Ausbildungsförderung JA 10081
+Ausbildungsplätze JA 10082
+Ausflüge JA 10083
+Ausfuhr NEIN 10330
+Ausgehtips JA 10084
+Auskunfteien JA 10085
+Ausländer JA 10086
+Ausländerprogramme JA 10087
+Auslandsgeschäfte NEIN 10088
+Auslandsmeldungen JA 10089
+Auslandsreisen JA 10090
+Ausreisebestimmungen NEIN 10883
+Ausstellungs- und Messebau JA 10093
+Austeilungen JA 10092
+Australien JA 20007
+Ausverkäufe NEIN 10094
+Ausverkäufe* Schlußverkäufe JA 10094
+Auszubildende NEIN 10096
+Auszubildende* Lehrling JA 10096
+Autobahnen JA 10097
+Autoelektrik JA 10098
+Autofähren NEIN 10341
+Autogenes Training JA 10099
+Autolackierungen NEIN 10696
+Automarkt NEIN 10100
+Automarkt* KFZ-Markt JA 10100
+Automaten JA 10101
+Automation JA 10102
+Automobilclubs JA 10103
+Automobile NEIN 10104
+Automobile* Kraftfahrzeuge JA 10104
+Automobilsport NEIN 10799
+Autopflege JA 10105
+Autoradios JA 10106
+Autoreisen NEIN 10107
+Autoreisen* PKW-Reisen JA 10107
+Autoreisezüge JA 10108
+Autoreparaturen JA 10109
+Autotests * KFZ-Tests JA 10110
+Autotests NEIN 10110
+Autovermietung JA 10111
+Autozubehör NEIN 10112
+Autozubehör* KFZ-Zubehör JA 10112
+Außenhandel JA 10113
+Außenpolitik JA 10114
+Außenwerbung JA 11379
+Babyartikel JA 10115
+Backen, Backrezepte JA 10116
+Backwaren JA 10117
+Bad Kissingen JA 28730
+Bad Reichenhall JA 28230
+Bademoden JA 10118
+Baden (Schwimmen) NEIN 10956
+Baden JA 20008
+Baden-Baden JA 27570
+Baden-Württemberg JA 20008
+Bäder und Kurorte JA 10120
+Badezimmereinrichtung JA 10119
+Badminton NEIN 10354
+Bahamas JA 20009
+Bahnreisen JA 10122
+Bahnverbindungen JA 10123
+Balearen JA 20134
+Balkon JA 10124
+Ballett (Sport) JA 10125
+Ballett (Veranstaltungen) JA 10126
+Ballspiele JA 10127
+Bamberg JA 28600
+Banken JA 10129
+Bankgebühren JA 10130
+Bankleitzahlen JA 10131
+Bargeldloser Zahlungsverkehr JA 10132
+Bars JA 10133
+Basteln* Bastelartikel JA 10134
+Batterien JA 10135
+Bauämter JA 10136
+Baubedarf NEIN 10137
+Baubedarf* Baustoffe JA 10137
+Bauernhöfe (Urlaub) NEIN 11118
+Baufinanzierung JA 10138
+Baugewerbe JA 10139
+Bauindustrie JA 10140
+Bauingenieure JA 10141
+Baumärkte JA 11241
+Baumaschinen JA 11286
+Bäume JA 10121
+Bauplanung JA 11287
+Bauplätze JA 10142
+Baurecht JA 10143
+Bauschutt JA 11352
+Bausparen JA 10144
+Bausparkassen JA 10145
+Baustoffe NEIN 10137
+Bauunternehmen JA 10146
+Bauwirtschaft JA 10147
+Bayerischer Wald JA 20155
+Bayern JA 20010
+Bayreuth JA 28580
+Beamte JA 10148
+Beerdigung NEIN 11288
+Behinderte JA 10149
+Behörden NEIN 10020
+Bekleidung NEIN 10642
+Bekleidungs-, Textilgewebe JA 10151
+Bekleidungsgewerbe NEIN 10151
+Beleuchtung NEIN 10716
+Belgien JA 20011
+Belletristik NEIN 10957
+Benzin NEIN 10152
+Benzingutscheine JA 10153
+Beratungsdienste NEIN 10154
+Beratungsdienste* Hilfsdienste JA 10154
+Bergbau JA 10156
+Bergisches Land JA 20012
+Bergsteigen NEIN 10157
+Bergsteigen* Alpinismus JA 10157
+Berlin JA 21000
+Berlin-Förderung JA 10158
+Berufe , Kaufmännische NEIN 11365
+Berufe JA 10159
+Berufe, technische NEIN 11364
+Berufsausbildung JA 10160
+Berufsberatung JA 10161
+Berufsschulen JA 10162
+Berufsunfähigkeit NEIN 10068
+Bestattungen NEIN 11288
+Bestellungen JA 10163
+Betonarbeiten JA 11380
+Betriebsberatung NEIN 11113
+Betriebsrat JA 10164
+Betriebswirtschaft JA 10165
+Betten JA 10166
+Bevölkerungsstatistik JA 10167
+Bibel JA 10168
+Bibliographien JA 10169
+Bibliotheken JA 10170
+Bielefeld JA 24800
+Bier JA 10171
+Bilanzen JA 10172
+Bildaufzeichnungsgeräte JA 10173
+Bilder, -rahmen JA 10174
+Bildplatten JA 10175
+Bildstellen JA 11353
+Bildungseinrichtungen JA 10183
+Bildungsreisen NEIN 11042
+Billard JA 10185
+Binnenhandel JA 10186
+Biographien NEIN 10187
+Biographien* Persönlichkeiten JA 10187
+Biologie NEIN 10799
+Biotechnik JA 11358
+Blitzschutzanlagen JA 11397
+Blumen JA 10188
+Böblingen JA 27030
+Bochum JA 24630
+Bodenbeläge NEIN 10189
+Bodenbeläge* Teppichböden JA 10189
+Bodenschießen JA 10194
+Bodensee JA 20013
+Bonn JA 25300
+Boote JA 10195
+Börsen NEIN 10191
+Börsen berichte NEIN 10191
+Börsen, -berichte JA 10191
+Börsenkurse JA 10193
+Botanische Gärten JA 10196
+Botendienste* Kurierdienste JA 11424
+Botschaften NEIN 10197
+Botschaften* Konsulate JA 10197
+Bottrop JA 24250
+Boutiquen JA 10198
+Bowling NEIN 10620
+Boxsport JA 10200
+Branchen-Fernsprechbücher JA 10201
+Brandschutz JA 10202
+Brasilien JA 10115
+Braunschweig JA 13300
+Breitbandkommunikation JA 10203
+Bremen JA 22800
+Bremerhaven JA 22850
+Briefmarken NEIN 10204
+Briefmarken* Philatelie JA 10204
+Brillen NEIN 10078
+Brot JA 10205
+Bruchsal JA 27520
+Brühl JA 25040
+Bruttosozialprodukt NEIN 11350
+Btx-Anbieter- u. Teilnehmerclubs JA 10177
+Btx-Anbieterclubs NEIN 10177
+Btx-Dienstleistungen JA 11363
+Btx-Technik JA 10181
+Btx-Teilnehmerclubs NEIN 10177
+Buchbesprechungen NEIN 10676
+Buchbindereien JA 10207
+Bücher JA 10212
+Buchführung JA 10208
+Buchgemeinschaften JA 10209
+Buchhandel JA 10210
+Buchversand* Datentechnik JA 10249
+Bühnen NEIN 11080
+Bulgarien JA 20142
+Bundesländer JA 10221
+Bundesrepublik Deutschland JA 20014
+Bundestag NEIN 10817
+Bundeswehr JA 10223
+Bürgerinitiativen JA 10213
+Bürgerliches Recht JA 10214
+Bürobedarf JA 10215
+Büroberufe JA 10216
+Büromaschinen JA 10218
+Büromöbel JA 10219
+Büroservice JA 11396
+Bürotechnik JA 10220
+Busreisen JA 10224
+Busverbindungen JA 10226
+Bußgeld JA 10225
+CB-Funk NEIN 10041
+Cabarets JA 11279
+Cafes JA 10228
+Calw JA 27560
+Camping JA 10229
+Campingartikel JA 10230
+Campingplätze JA 10231
+Canada JA 20043
+Caritative Dienste NEIN 10263
+Cassettenrecorder JA 10232
+Ceylon JA 20015
+Cham JA 28490
+Charterflüge JA 10233
+Charterreisen JA 10234
+Chemie JA 10235
+Chemikalien JA 10236
+Chemische Erzeignisse JA 10237
+Chemische Industrie JA 10238
+Chemische Reinigung NEIN 10882
+Chiemgau JA 20154
+Chile JA 20116
+China JA 20016
+Christentum JA 10239
+Cluburlaub JA 11359
+Coburg JA 28630
+Comics JA 10240
+Compact Disc JA 11328
+Computer NEIN 10252
+Computergrafik JA 11398
+Computerspiele JA 10241
+Computertechnik JA 10242
+Container JA 11381
+Cuxhaven JA 22190
+DDR JA 20018
+Dach JA 11329
+Damenoberbekleidung JA 10243
+Damenwäsche JA 10244
+Dänemark JA 20017
+Darlehen NEIN 10245
+Darlehen* Kredite JA 10245
+Darmstadt JA 26100
+Datenbanken JA 10246
+Datenerfassung JA 10247
+Datenschutz JA 10248
+Datenträger JA 10250
+Datenverarbeitung NEIN 10251
+Datenverarbeitung* EDV JA 10251
+Datenverarbeitungsanlagen JA 10252
+Datenverarbeitungszubehör JA 10253
+Daueraufträge JA 10254
+Dekoration (Inneneinrichtung) NEIN 10864
+Delikatesse NEIN 10355
+Delmenhorst JA 22870
+Denkmalschutz und -pflege JA 11354
+Dentaltechnik NEIN 11223
+Design JA 10256
+Detekteien NEIN 10085
+Deutschland JA 20019
+Devisen und Sorten NEIN 10258
+Devisen und Sorten* Währungen JA 10258
+Devisenbestimmungen JA 10259
+Diabetes JA 10260
+Diabetikerartikel JA 10261
+Diakonische Dienste NEIN 10263
+Diakonische, karitative Dienste JA 10263
+Dialekt NEIN 11324
+Diät JA 10262
+Dichtungssysteme JA 11331
+Diebstahl-, Einbruchsicherung JA 10266
+Diebstahlsicherung NEIN 10266
+Dienstl. (Banken, Geld, Versicherungen) JA 11371
+Dienstl. (Bauen, Wohnen, Haushalt) JA 11372
+Dienstl. (Büro, Datenverarbeitung) JA 11373
+Dienstl. (Handw~rk, Reparaturen) JA 11374
+Dienstl. (Recht, Amter, Steuern) JA 11370
+Dienstl. (Reisen, Gastronomie) JA 11375
+Dienstl. (Soziale Dienst, Kirchen) JA 11376
+Dienstl. aus anderen Bereichen JA 11377
+Diesel NEIN 10152
+Digitaltechnik JA 10268
+Diktiergeräte JA 10269
+Dillenburg JA 16340
+Diplomatische Vertretungen NEIN 10197
+Direktwerbung JA 10270
+Diskontsätze JA 10271
+Diskotheken JA 10272
+Dispositionskredit NEIN 11101
+Dividenden JA 10273
+Do-it-yourself Artikel NEIN 10527
+Do-it-yourself NEIN 10526
+Dokumentationsdienste NEIN 11245
+Dolmetscher NEIN 11098
+Donau JA 20148
+Dortmund JA 24600
+Drachenfliegen JA 10275
+Drehereien JA 11409
+Dritte Welt JA 10276
+Drogen JA 10277
+Drogenberatung NEIN 11044
+Drogerien JA 10278
+Drucken JA 10279
+Druckereien JA 10280
+Druckgewerbe JA 10281
+Drucktechnik JA 10282
+Duisburg JA 24100
+Düngemittel JA 10283
+Düren JA 25160
+Düsseldorf JA 24000
+EDV NEIN 10251
+EDV-Anlagen NEIN 10252
+EDV-Zubehör NEIN 10253
+Ebbe und Flut NEIN 11181
+Edelmetalle JA 10284
+Edelsteine JA 10285
+Eheberatung JA 10286
+Eier JA 10287
+Eifel JA 20020
+Eigenheime JA 10288
+Eigentumswohnungen JA 10289
+Einbauküchen NEIN 10677
+Einbruchsicherung NEIN 10266
+Einfuhr NEIN 10330
+Einkaufen JA 10291
+Einkommen NEIN 10292
+Einkommen* Gehälter* Löhne JA 10292
+Einkommensteuer JA 10293
+Einreisebestimmungen NEIN 10883
+Einrichtungsgegenstände NEIN 10328
+Einrichtungshäuser JA 24300
+Einwohnerzahlen JA 10730
+Einzelhandel JA 20022
+Einzelhandelsverbände JA 10329
+Eis (Speiseeis) NEIN 10384
+Eisenwaren JA 10330
+Eishockey JA 10330
+Eislaufen * Schlittschuhlaufen JA 10332
+Eislaufen NEIN 10331
+Elbsandsteingebirge JA 10334
+Elektrizität NEIN 10333
+Elektroakust ik JA 11410
+Elektroartikel NEIN 10335
+Elektroartikel* Elektrogeräte JA 10336
+Elektrogeräte NEIN 10337
+Elektrohandwerk JA 11242
+Elektroindustrie JA 10339
+Elektrokundendienst JA 10340
+Elektromaschinen JA 10420
+Elektronik JA 10342
+Elektronische Bauelemente JA 10343
+Elektronische Geräte JA 10345
+Elektrotechnik JA 10344
+Elektrowerkzeuge JA 10346
+Elternberatung NEIN 10341
+Emden JA 10341
+Emmerich JA 24240
+Empfängnisregelung NEIN 10348
+Emsland JA 10349
+Energie JA 10350
+Energiesparen JA 10351
+Energietechnik JA 10352
+Energieversorgung JA 10353
+England JA 10612
+Entwicklungshilfe JA 11351
+Enzyklopädien NEIN 10354
+Erbschaft JA 10354
+Erdgas NEIN 10355
+Erdöl JA 10355
+Erfindungen NEIN 11291
+Erholungsreisen JA 10357
+Erkältung JA 11260
+Erlangen JA 28520
+Ernährung, -informationen JA 11260
+Ernährungswirtschaft JA 11118
+Erste Hilfe JA 10358
+Erwachsenenbildung JA 10359
+Erwerbsunfähigkeit NEIN 20023
+Erzgebirge JA 10360
+Erziehung NEIN 10360
+Erziehung* Kindererziehung JA 10362
+Erziehungs- , Elternberatung JA 10363
+Erziehungsberatung NEIN 10364
+Erziehungswissenschaften JA 10328
+Essen JA 24300
+Europa JA 20022
+Euroschecks JA 10329
+Export* Import JA 10330
+Exportberatung JA 10331
+Externe Rechner JA 10332
+FKK JA 10388
+Facharbeite r JA 10334
+Fachärzte JA 10333
+Fachbücher JA 10335
+Fachgeschäfte JA 10336
+Fachhochschulen JA 10337
+Fachinformationsstellen JA 11242
+Fachschulen JA 10339
+Fachzeitschriften JA 10340
+Fahrpläne JA 10342
+Fahrpreise JA 10343
+Fahrräder JA 10345
+Fahrradtouren JA 10344
+Fahrschulen JA 10346
+Fährverbindungen* Autofähren JA 10341
+Familie JA 10348
+Familienhilfe JA 10349
+Familienplanung JA 10350
+Familienurlaub JA 10351
+Farben JA 10352
+Farbfernsehgeräte JA 10353
+Federball* Badminton JA 10354
+Feinkost* Delikatessen JA 10355
+Fenster JA 10357
+Ferienhäuser JA 10358
+Ferienwohnungen JA 10359
+Fernkopieren * Telefax JA 10360
+Fernmeldetechnik JA 10362
+Fernreisen JA 10363
+Fernschreiben* Telex JA 10364
+Fernsehgeräte JA 10365
+Fernsehgeräte reparaturen JA 10366
+Fernsehprogramme JA 10368
+Fernsehspiele NEIN 10369
+Fernsehtechnik NEIN 11307
+Fernsprechbücher JA 10370
+Fernsprechtechnik NEIN 10371
+Fernstudium JA 10372
+Fernwärme JA 10373
+Fertigbau JA 10374
+Fertiggerichte JA 11343
+Fertighäuser JA 10375
+Fertigungsverfahren JA 11292
+Festgeld JA 10376
+Feuerversicherung JA 10377
+Feuerwehren JA 10378
+Feuilleton NEIN 10682
+Fichtelgebirge JA 20024
+Fidji-lnseln JA 20117
+Film (Kino) NEIN 10634
+Film- und Fernsehproduktionen JA 11411
+Filmen JA 10379
+Filmkameras JA 10380
+Finanzämter JA 10381
+Finanzierung JA 10382
+Finnland JA 20025
+Firmen- , Existenzgründung JA 10384
+Firmenauskünfte JA 10383
+Firmengründung NEIN 10384
+Fisch JA 10385
+Fischerei JA 10386
+Fitness NEIN 10387
+Fitness* Trimm-Dich JA 10387
+Fleischwaren NEIN 11219
+Fliesen JA 10389
+Floristen JA 11412
+Fluggesellschaften JA 10390
+Flughäfen JA 10391
+Fluginformationen JA 10392
+Flugpläne JA 10393
+Flugplätze NEIN 10394
+Flugplätze* Landeplätze JA 10394
+Flugpreise JA 11243
+Flugreisen JA 10395
+Flugsport NEIN 10396
+Flugsport* Luftsport JA 10396
+Flugtechnik NEIN 10397
+Flugtechnik* Luftfahrttechnik JA 10397
+Flugverbindungen JA 11280
+Flugwetter JA 10398
+Flugzeuge JA 10399
+Folklore JA 10401
+Förder- und Hebetechnik JA 11293
+Förderanlagen JA 10400
+Fördertechnik NEIN 11293
+Forschungseinrichtungen JA 10403
+Forstwirtschaft JA 10404
+Fortbildung NEIN 10405
+Fortbildung* Weiterbildung JA 10405
+Fotoapparate NEIN 10506
+Fotoapparate, -zubehör JA 10406
+Fotoarbeiten JA 10407
+Fotografieren JA 10409
+Fotokopieren JA 10410
+Fotozubehör NEIN 10406
+Frachtverkehr NEIN 10411
+Frachtverkehr* Güterverkehr JA 10411
+Fragespiele NEIN 10857
+Franken JA 20026
+Frankenwald JA 20127
+Frankfurt JA 26000
+Fränkische Schweiz JA 20126
+Frankreich JA 20027
+Freiburg JA 27800
+Freie Berufe NEIN 10965
+Freizeitbeschäftigungen JA 10415
+Freizeitparks NEIN 11261
+Freizeitparks* Vergnügungsparks JA 11261
+Fremdenverkehr NEIN 10416
+Fremdenverkehr* Tourismus JA 10416
+Fremdenverkehrsbüros NEIN 11135
+Fremdsprachen JA 10417
+Friedensforschung JA 10418
+Friesland JA 20128
+Friseursalons JA 10419
+Früchte NEIN 10807
+Fuhr- und Transportunternehmen JA 10421
+Führerschein NEIN 10420
+Führerschein* Fahrerlaubnis JA 10420
+Fuhrunternehmen NEIN 10421
+Fulda JA 26400
+Funktechnik JA 10422
+Futtermittel JA 10424
+Fußball JA 10423
+Fußböden NEIN 10189
+Galerien NEIN 10686
+Garagen JA 10425
+Garmisch-Partenkirchen JA 28100
+Garten JA 10426
+Gartenbau JA 10427
+Gartenbedarf, Gartengeräte JA 10428
+Gartenpflege JA 10429
+Gärtnereien JA 11414
+Gas NEIN 10430
+Gas* Erdgas JA 10430
+Gas- und Sanitärinstallation JA 10431
+Gastarbeiter JA 10432
+Gästehäuser NEIN 10433
+Gasthäuser NEIN 10435
+Gasthöfe NEIN 10433
+Gasthöfe* Pensionen JA 10433
+Gastronomie NEIN 10556
+Gastronomiebedarf JA 11332
+Gastspiele JA 10434
+Gaststätte NEIN 10435
+Gaststätten* Restaurants JA 10435
+Gebäck NEIN 10436
+Gebäck* Kuchen* Torten JA 10436
+Gebäudereinigung JA 11344
+Gebet JA 10437
+Gebrauchtwagen JA 10438
+Gebrauchtwaren JA 11426
+Gebühren (Btx) NEIN 10439
+Gebühren JA 10439
+Geburten JA 10440
+Geburtshilfe JA 10441
+Gedenktage JA 11333
+Gedichte NEIN 10442
+Gedichte* Lyrik JA 10442
+Gefäßerkrankungen NEIN 10535
+Geflügel JA 10443
+Gefriergeräte JA 10444
+Gehälter NEIN 10292
+Gehaltskonten NEIN 10721
+Gehörlose JA 11427
+Geisteswissenschaften JA 10445
+Geländefahrzeuge JA 10446
+Geldanlage NEIN 10447
+Geldanlage* Kapitalanlage JA 10447
+Geldausgabe-Automaten JA 10448
+Geldmarkt JA 10449
+Geldverkehr * Zahlungsverkehr JA 10451
+Geldverkehr NEIN 10451
+Geldwechsel JA 10452
+Gelsenkirchen JA 24650
+Gemeinden JA 10453
+Gemüse JA 10454
+Genossenschaftsbanken JA 10455
+Genußmittel JA 10456
+Gerichte (Rechtsprechung) NEIN 10872
+Gerüst bau JA 11382
+Geschenkartikel NEIN 10458
+Geschenke * Geschenkartikel JA 10458
+Geschenke NEIN 10458
+Geschichtswissenschaften JA 10459
+Geschirr JA 10460
+Geschirrspülmaschinen JA 10461
+Geschirrspülmittel JA 10462
+Geschlossene Benutzergruppen JA 10463
+Gesellschaftsrecht JA 10464
+Gesellschaftswissenschaft NEIN 10988
+Gesetze JA 10465
+Gesetzgebung JA 10466
+Gesundheitsberatung JA 10467
+Gesundheitspflege JA 10468
+Gesundheitswesen JA 10469
+Getränke , Alkoholfreie NEIN 11362
+Getränke , Alkoholische NEIN 11361
+Getränke JA 10470
+Getränkeindustrie JA 10471
+Gewerbe JA 11244
+Gewerberecht JA 10472
+Gewerkschaften JA 10473
+Gewinnspiele NEIN 10474
+Gewinnspiele* Preisausschreiben JA 10474
+Gewinnzahlen JA 10475
+Gewürze JA 10476
+Gießen JA 26300
+Gifhorn JA 23170
+Gifte JA 10477
+Girokonten JA 10478
+Glas JA 10479
+Glaserei JA 10480
+Glaswaren JA 10481
+Glaubensgemeinschaften NEIN 10637
+Goch JA 24180
+Gold JA 10483
+Golf JA 10484
+Goslar JA 23380
+Gottesdienste JA 10485
+Grafik JA 10486
+Griechenland JA 20028
+Grillgeräte JA 10487
+Grippe JA 10488
+Großbritannien JA 20029
+Großhandel JA 10489
+Großhandelsverbände JA 11334
+Großverpflegung JA 11335
+Grubenentleerung JA 11383
+Grundgesetz JA 10491
+Grundstücke JA 10492
+Gruppenreisen JA 10493
+Grußseiten JA 11406
+Gütersloh JA 24830
+Güterverkehr NEIN 10411
+Gymnasien JA 10494
+Gymnastik JA 10495
+Haarpflege JA 10496
+Häfen JA 10497
+Haftpflichtversicherungen JA 10499
+Hagen JA 25800
+Halbleiter JA 11294
+Hallenbäder NEIN 10955
+Hamburg JA 22000
+Hameln JA 23250
+Hamm JA 24700
+Handarbeiten JA 10500
+Handball JA 10501
+Handel JA 10502
+Handelskammern NEIN 10570
+Handelsrecht JA 10503
+Handelsvertretungen JA 10504
+Handwerk JA 10505
+Handwerksberufe JA 10506
+Handwerksbetriebe JA 10507
+Handwerkskammern JA 10508
+Hannover JA 23000
+Hardware JA 10509
+Harz JA 20030
+Haulshaltswaren JA 10515
+Hauptschulen JA 10510
+Hausbau JA 10511
+Hausbesitzer JA 10512
+Häuser JA 10498
+Hausgeräte NEIN 10513
+Hausgeräte* Haushaltsgeräte JA 10513
+Haushaltsfilter JA 11345
+Haushaltsgeräte NEIN 10513
+Haushaltstips JA 10514
+Hausrat JA 10516
+Hausratversicherungen JA 10517
+Haustiere JA 11336
+Hausverwaltungen JA 11428
+Hautkrankheiten JA 10518
+Hebammen JA 10519
+Hebetechnik NEIN 11293
+Heidelberg JA 26900
+Heilbäder NEIN 10120
+Heilbronn JA 27100
+Heilpflanzen JA 10520
+Heilpraktiker JA 10521
+Heilverfahren * Therapien JA 10522
+Heilverfahren NEIN 10522
+Heimarbeit JA 10523
+Heimatliteratur JA 10524
+Heimcomputer JA 10525
+Heimwerken NEIN 10526
+Heimwerker * Do-it -yourself JA 10526
+Heimwerkerbedarf JA 10527
+Heiratsmarkt JA 10528
+Heizkosten JA 10529
+Heizöl JA 10530
+Heizung JA 10531
+Herde JA 10532
+Herne JA 24690
+Herrenoberbekleidung JA 10533
+Herrenwäsche JA 10533
+Herz- und Gefäßerkrankungen JA 10535
+Herzerkrankungen NEIN 10535
+Herzogenrath JA 25120
+Hessen JA 20031
+Hifi-Geräte (Händler) JA 11367
+Hifi-Geräte (Hersteller) JA 11366
+Hifi-Geräte (gebrauchte) JA 11368
+Hifi-Geräte (sonstige lnfo.-Angeb.) JA 11369
+Hifi-Reparaturen JA 10539
+Hifi-Zubehör JA 10540
+Hilden JA 24010
+Hildesheim JA 23200
+Hilfsdienste NEIN 10154
+Hinterbliebenenversorgung JA 10541
+Hitlisten JA 10542
+Hobbies JA 10543
+Hobbyartikel JA 10544
+Hobbyferien JA 10545
+Hoch- und Niedrigwasser NEIN 11181
+Hochbau JA 10546
+Hochschulen * Universitäten JA 10547
+Hochschulen NEIN 10547
+Holland JA 20061
+Holographie JA 11399
+Holstein JA 20087
+Holz JA 10551
+Holzverarbeitung JA 10552
+Holzwaren JA 10553
+Homosexualität JA 10554
+Hongkong JA 20032
+Hörfunkprogramme JA 10548
+Hörgeräte JA 10549
+Horoskope JA 10555
+Hörspiele JA 10550
+Hotel- und Gaststättengewerbe JA 10556
+Hotels JA 10557
+Humanmedizin NEIN 10748
+Humor * Witze JA 10558
+Humor NEIN 10558
+Hunsrück JA 20033
+Husum JA 22250
+Hydrokultur JA 10561
+Hygieneartikel JA 10562
+Hypotheken JA 105
+Hypothekenbanken JA 10564
+Ibiza JA 20034
+Immobilien JA 10565
+Immobilienfonds JA 10566
+Impfungen JA 10567
+Import NEIN 10330
+Indien JA 20035
+Individualreisen JA 10568
+Indonesien JA 20036
+Industrie JA 10569
+Industrie- und Handelskammer JA 10570
+Industrieanlagen JA 11295
+Industrieansiedlungen JA 11429
+Industriebedarf JA 10571
+Industriereinigung JA 11384
+Industrieverbände JA 10572
+Inflation NEIN 10847
+Informatik JA 10574
+Informations- /Dokumentationsdienste JA 11245
+Ingenieurbüros JA 10577
+Ingenieure JA 10578
+Ingenieurwissenschaften NEIN 10579
+Inkassounternehmen JA 10580
+Inlandsmeldungen JA 10581
+Innenarchitektur JA 10582
+Innenausbau NEIN 10583
+Innenpolitik JA 10584
+Innovationen JA 10585
+Innungen JA 10586
+Inserate NEIN 10053
+Internate JA 10589
+Investitionen JA 10590
+Investmentfonds JA 10593
+Irland JA 20037
+Islam JA 10595
+Island JA 20145
+Isolierungen JA 10596
+Israel JA 20038
+Italien JA 20039
+Jagd JA 10597
+Jalousien* Rolläden JA 11425
+Jamaica JA 20040
+Japan JA 20041
+Jazz JA 10598
+Jogging JA 10599
+Journalisten JA 10600
+Jubiläen NEIN 11333
+Jugendarbeit JA 10601
+Jugendbücher NEIN 10627
+Jugendherbergen JA 10602
+Jugendliche JA 10603
+Jugendorganisationen JA 10604
+Jugendreisen JA 10605
+Jugoslawien JA 20042
+Jura NEIN 10874
+Kabaretts NEIN 10227
+Kabaretts* Kleinkunstbühnen JA 10227
+Kabelanschluß JA 11385
+Kabelfernsehen JA 10606
+Kaffee JA 10608
+Kaiserslautern JA 26750
+Kalorientabellen JA 10610
+Kältetechnik JA 11346
+Kaminkehrer NEIN 11391
+Kampfsport JA 11430
+Kanada JA 20043
+Kanalisation JA 11386
+Kanarische Inseln JA 20044
+Kapitalanlage NEIN 10447
+Kapitalmarkt JA 10611
+Karibik JA 20045
+Karitative Dienste NEIN 10263
+Karlsruhe JA 27500
+Karneval * Fasching JA 10612
+Karneval NEIN 10612
+Karosseriebau JA 11387
+Kartenvorverkauf JA 10613
+Kartoffeln JA 10614
+Käse JA 10607
+Kaskoversicherungen JA 10615
+Kassel JA 23500
+Kassettenreko rder NEIN 10232
+Kataloge JA 10616
+Katastrophenschutz JA 10617
+Kaufhäuser NEIN 10618
+Kaufhäuser* Warenhäuser JA 10618
+Kaufkraft JA 10619
+Kaufmännische Berufe JA 11365
+Kegeln JA 10620
+Kenia JA 20046
+Keramik NEIN 10621
+Keramik* Steingut JA 10621
+Kernenergie NEIN 11357
+Kerntechnik JA 10622
+Kfz NEIN 10104
+Kfz- Markt NEIN 10100
+Kfz-Handwerk JA 10623
+Kfz-Überwachung JA 10624
+Kfz-Versicherungen JA 10625
+Kfz-Zubehör NEIN 10112
+Kiel JA 22300
+Kinder JA 10626
+Kinder- und Jugendbücher JA 10627
+Kinderbekleidung JA 10628
+Kinderbücher NEIN 10627
+Kindererziehung NEIN 10326
+Kindergärten und -horte JA 10629
+Kindergeld JA 10630
+Kinderheime JA 10631
+Kinderkrankheiten JA 10632
+Kindertagesstätten NEIN 10629
+Kino NEIN 10634
+Kino*Film JA 10634
+Kinoprogramme JA 10635
+Kirchen (Gebäude) JA 10636
+Kirchen NEIN 10637
+Kirchen* Glaubensgemeinschaften JA 10637
+Kirchengemeinden * Pfarreien JA 10638
+Kirchengemeinden NEIN 10638
+Kirchliche Veranstaltungen JA 10639
+Klassische Musik JA 10640
+Klebstoffe JA 11296
+Kleidung JA 10642
+Kleinanzeigen JA 10643
+Kleingewerbe JA 10644
+Kleinkunstbühnen NEIN 10227
+Klima JA 10645
+Klimaanlagen NEIN 10646
+Klimatechnik * Lüftung JA 10646
+Klimatechnik NEIN 10646
+Kliniken NEIN 10665
+Klöster * Ordensgemeinschaften JA 10647
+Klöster NEIN 10647
+Kneippkuren JA 10648
+Koblenz JA 25400
+Kochbücher JA 10649
+Kochen* Kochrezepte JA 10650
+Kohle JA 10652
+Köln JA 25000
+Kommunale Einrichtungen JA 10653
+Kommunalpolitik JA 10654
+Kommunikationssysteme JA 10655
+Kommunikationstechnik JA 10656
+Kompressoren JA 11297
+Konferenzen NEIN 11049
+Konferenzräume JA 10657
+Kongresse NEIN 11049
+Konjunktur JA 11265
+Konkurse NEIN 10587
+Konserven JA 10658
+Konstanz JA 27750
+Konsulate NEIN 10197
+Kontoauskünfte JA 10659
+Konzertagenturen JA 10660
+Konzerte JA 10661
+Kopieren NEIN 10410
+Körperpflege JA 10651
+Korrosion JA 10662
+Kosmetik JA 10663
+Kosmetische Chirurgie JA 11401
+Kraftfahrzeuge NEIN 10104
+Kraftstoffe JA 10152
+Kraftwerke JA 11320
+Kräne JA 11321
+Krankengymnastik JA 11338
+Krankenhäuser NEIN 10665
+Krankenhäuser* Kliniken JA 10665
+Krankenkassen JA 10666
+Krankenpflege JA 10667
+Krankentransporte JA 10668
+Krankenversicherungen JA 10669
+Krankheiten JA 10670
+Kräuter JA 10664
+Krebsinformationen JA 10671
+Kredite NEIN 10245
+Kreditinstitute JA 10672
+Kreditkarten JA 10673
+Krefeld JA 24150
+Kreuzfahrten NEIN 10932
+Kreuzworträtsel JA 10674
+Kriminalpolizei JA 10675
+Kritiken * Rezensionen JA 10676
+Kritiken NEIN 10676
+Kuba JA 20143
+Küchen * Einbauküchen JA 10677
+Kuchen NEIN 10436
+Küchen NEIN 10677
+Küchengeräte JA 10678
+Küchenmöbel JA 10679
+Kühlschränke JA 10680
+Kulturnachrichten JA 10682
+Kundendienste JA 10683
+Kunst JA 10684
+Kunstausstellungen NEIN 10686
+Kunstausstellungen* Galerien JA 10686
+Kunsthandel JA 10687
+Künstler JA 10681
+Kunststoffe JA 11360
+Kunststoffverarbeitung JA 10689
+Kurbäder NEIN 10120
+Kuren JA 10690
+Kurheime * Sanatorien JA 10691
+Kurheime NEIN 10691
+Kurorte NEIN 10120
+Kurse * Lehrgänge JA 10692
+Kurse und Lehrgänge NEIN 10692
+Kururlaub JA 10693
+Kurzreisen JA 10694
+LKW NEIN 10701
+Laborbedarf* Laboratorien JA 11415
+Lacke JA 10695
+Lackierungen JA 10696
+Ladenbau und -einrichtungen JA 11267
+Lagertechnik JA 11298
+Lampen * Leuchten JA 10698
+Lampen NEIN 10698
+Landeplätze NEIN 10394
+Landkarten NEIN 10699
+Landkarten* Straßenkarten JA 10699
+Landmaschinen JA 11299
+Landtechnik * Agrartechnik JA 10700
+Landtechnik NEIN 10700
+Landwirtschaft NEIN 10025
+Langlauf (Ski) NEIN 10973
+Lärmschutz JA 10697
+Laser JA 11300
+Lastkraftwagen JA 10701
+Lastschriftverfahren JA 10702
+Lauf an der Pegnitz JA 28560
+Lautsprecher JA 10703
+Leasing NEIN 10762
+Lebenshaltungskosten JA 10704
+Lebensmittel JA 10705
+Lebensmittelhandel JA 10706
+Lebensversicherungen JA 10707
+Lederwaren JA 10708
+Lehr- und Lernmittel JA 10709
+Lehrer JA 10710
+Lehrgänge NEIN 10692
+Lehrlinge NEIN 10096
+Lehrlingsausbildung JA 10711
+Lehrstellen JA 10712
+Leichtathletik JA 11268
+Leihwagen NEIN 10111
+Leinfelden-Echterdingen JA 27022
+Lernmittel NEIN 10709
+Lernspiele JA 10714
+Leuchten NEIN 10698
+Leverkusen JA 25090
+Lexika NEIN 10715
+Lexika* Enzyklopädien JA 10715
+Lichttechnik NEIN 10716
+Lichttechnik* Beleuchtung JA 10716
+Liechtenstein JA 20123
+Linienflüge JA 10717
+Linienflugreisen JA 10718
+Literatur JA 10729
+Literaturinformationsdienste JA 10720
+Literaturwissenschaften NEIN 11013
+Logistik JA 11301
+Lohn- und Gehaltskonten JA 10721
+Löhne NEIN 10292
+Lohnsteuer NEIN 10293
+Lokalnachrichten JA 10724
+London JA 20047
+Lotterien JA 10725
+Lotto JA 10726
+Luftfahrt NEIN 10728
+Luftfahrt* Luftverkehr JA 10728
+Luftfahrttechnik NEIN 10397
+Luftfracht JA 10729
+Luftsport NEIN 10396
+Lüftung NEIN 10646
+Luftverkehr NEIN 10728
+Lüneburger Heide JA 20048
+Lunsthandwerk JA 10688
+Luxemburg JA 20049
+Lyrik NEIN 10442
+M ittei Iungsseiten JA 11340
+Madrid JA 20144
+Mahlzeiten NEIN 11251
+Mahlzeitendienste JA 10730
+Mainz JA 26500
+Makler JA 10731
+Malaysia JA 20050
+Malediven JA 20051
+Malen JA 10732
+Maler JA 10733
+Malerbedarf JA 10734
+Mallorca JA 20052
+Malta JA 20135
+Mannequins* Fotomodelle JA 11413
+Mannheim JA 26800
+Marburg JA 23550
+Marionettentheater JA 10735
+Marketing JA 10736
+Marktanalysen JA 10737
+Marktforschung JA 10738
+Marktübersichten JA 10739
+Marokko JA 20053
+Maschenwaren NEIN 11039
+Maschinen JA 10740
+Maschinenbau JA 10741
+Massage JA 10742
+Mathemathik JA 10743
+Mauritius JA 20054
+Medien JA 10744
+Medientechnik JA 10745
+Medienverbund JA 10746
+Medikamente NEIN 10074
+Meditation JA 10747
+Medizin NEIN 10748
+Medizin* Humanmedizin JA 10748
+Medizinische Einrichtungen JA 10749
+Medizintechnik JA 10750
+Mehrfamilienhäuser JA 10751
+Meinungsumfragen JA 10752
+Meisterprüfungen JA 10753
+Messe- und Ausstellungsbau JA 10093
+Messen (Ausstellungen) JA 10755
+Metalle JA 10758
+Metallindustrie JA 10759
+Metallverarbeitung JA 10760
+Mettmann JA 24020
+Mexiko JA 20055
+Meßgeräte JA 10756
+Meßtechnik JA 10757
+Mfz-Tests NEIN 10110
+Miederwaren JA 10761
+Mietangebote NEIN 11214
+Mietgesuche NEIN 11216
+Mietkauf NEIN 10762
+Mietkauf* Leasing JA 10762
+Mietrecht JA 10763
+Mietwagen NEIN 10111
+Mikrocomputer JA 10764
+Mikroelektronik JA 10765
+Mikrofilm JA 11302
+Mikroprozessoren JA 10766
+Mikrowellentechnik JA 11246
+Milch und Milchprodukte JA 10767
+Minden JA 24950
+Mineralien JA 11303
+Ministerien JA 10768
+Mitfahrgelegenheiten JA 11388
+Mitgliederverzeichnis JA 10770
+Mittelamerika JA 20056
+Mittelfranken JA 20118
+Mittelmeer JA 20057
+Möbel NEIN 10775
+Möbel* Einrichtungsgegenstände JA 10775
+Mode JA 10771
+Modehäuser JA 10772
+Modellbau JA 10774
+Modelleisenbahnen JA 10773
+Moers JA 24130
+Mofas , Mopeds, Mokicks JA 10776
+Mönchengladbach JA 24050
+Mosel JA 20136
+Motoren JA 10777
+Motorräder * Motorrad-Zubehör JA 10779
+Motorräder NEIN 10778
+Motorradzubehör NEIN 10778
+Motorsport NEIN 10779
+Motorsport* Automobilsport JA 10779
+Mühlheim/R JA 24330
+Müllabfuhr JA 10781
+Müllverwertung NEIN 10782
+Müllverwertung* Recycling JA 10782
+Multiple Sklerose JA 11432
+München JA 28000
+Mundart NEIN 11324
+Mundart* Dialekt JA 11324
+Mundhygiene NEIN 11222
+Münster JA 24400
+Münzen * Numismatik JA 10783
+Münzen NEIN 10783
+Museen JA 10784
+Musik JA 10785
+Musikalien JA 10786
+Musikinstrumente JA 10788
+Musikkassetten JA 10789
+Mutterschutz JA 10790
+Nachhilfeunterricht JA 10791
+Nachrichten JA 10792
+Nachrichtenagenturen JA 10793
+Nachrichtentechnik JA 10794
+Nachschlagewerke JA 10795
+Nähmaschinen JA 10796
+Nahrungsmittel NEIN 10705
+Nahverkehr JA 10797
+Naturheilkunde JA 10798
+Naturkunde NEIN 10799
+Naturkunde* Biologie JA 10799
+Naturparks JA 10800
+Naturschutz JA 10801
+Naturschutzgebiete JA 10802
+Naturwissenschaften JA 10803
+Nepal JA 20058
+Neu-Ulm JA 27910
+Neumünster JA 22350
+Neuseeland JA 20059
+Neuss JA 24040
+Neustadt am Rübenberge JA 23057
+Niederbayern JA 20060
+Niederlande JA 20061
+Niedersachsen JA 20062
+Nordfriesland und nordfries. Inseln JA 20063
+Nordrhein-Westfalen JA 20064
+Nordsee JA 20065
+Normen JA 10804
+Norwegen JA 20066
+Notdienste * Rettungsdienste JA 10805
+Notdienste NEIN 10805
+Notrufe JA 10806
+Numismatik NEIN 10783
+Nürnberg JA 28500
+Nutzfahrzeuge JA 11304
+Oberbayern JA 20067
+Oberflächenbehandlung JA 11347
+Oberfranken JA 20068
+Oberhausen JA 24200
+Oberpfalz JA 20069
+Obst * Früchte JA 10807
+Obst NEIN 10807
+Odenwald JA 20070
+Öfen JA 11400
+Ofertas em portugues JA 11419
+Offenbach JA 26050
+Offenburg JA 27600
+Offene Stelle NEIN 11027
+Offentliche Haushalte JA 10808
+Öffentliche Verkehrsmittel JA 10809
+Öffentlicher Dienst JA 10810
+Öffentlichkeitsarbeit JA 10811
+Offerte in italiano JA 11423
+Oldenburg JA 22900
+Oldtimer JA 10813
+Olympische Spiele JA 11247
+Oper , Operette JA 10814
+Optik JA 10815
+Ordensgemeinschaften NEIN 10647
+Orthopädietechnik JA 11389
+Oslo JA 20140
+Osnabrück JA 24500
+Ostbayern JA 20149
+Osterreich JA 20071
+Ostfriesland und ostrfies.lnseln JA 20072
+Ostsee JA 20073
+Pädagogik NEIN 10328
+Paderborn JA 24790
+Pannendienste JA 10816
+Papier, Pappe JA 11348
+Papua-Neuguinea JA 20074
+Parfums JA 11248
+Paris JA 20075
+Parlamente * Bundestag JA 10817
+Parlamente NEIN 10817
+Parteien JA 10818
+Partnervermittlung NEIN 10528
+Party-Service JA 10819
+Passau JA 28390
+Patente JA 10820
+Pauschalreisen JA 10821
+Pelze JA 10822
+Pensionen NEIN 10433
+Personalberatung JA 10823
+Personalcomputer NEIN 10764
+Personalrat NEIN 10164
+Personalvermittlung JA 10824
+Personalwesen JA 10825
+Persönlichkeiten NEIN 10187
+Peru JA 20119
+Pfalz JA 20076
+Pfarreien NEIN 10638
+Pferde JA 10826
+Pferdesport NEIN 10897
+Pflanzen JA 10827
+Pflanzenschutz * Schädlingsbek . JA 10829
+Pflanzenschutz NEIN 10829
+Pharmazie JA 10830
+Philatelie NEIN 10204
+Philippinen JA 20120
+Philosophie JA 10831
+Phonogeräte JA 10832
+Physik JA 10833
+Pkw-Reisen NEIN 10107
+Plakate JA 10834
+Planen (Zelte) NEIN 11394
+Planetarien * Sternwarten JA 10835
+Planetarien NEIN 10835
+Plastische Chirurgie NEIN 11401
+Plattenspieler JA 10836
+Polen JA 20077
+Politik JA 10837
+Politische Bildung JA 11402
+Politische Veranstaltungen JA 10838
+Politische Wissenschaften JA 10839
+Polizei JA 10840
+Polstereien JA 11434
+Portugal JA 20078
+Porzellan JA 10841
+Post JA 10842
+Postbankdienste JA 10843
+Postgebühren JA 10844
+Praktische Arzte JA 10846
+Prämiensp'?:ren JA 10845
+Preisausschreiben NEIN 10474
+Preissteigerungen * Inflation JA 10847
+Preissteigerungen NEIN 10847
+Preisvergleiche JA 10848
+Presse JA 10849
+Presseagenturen NEIN 10793
+Pressedienste JA 11249
+Priem am Chiemsee JA 28210
+Privatbanken JA 10850
+Privatschulen JA 10851
+Privatunte rkünfte JA 10852
+Programmiersprachen JA 11341
+Programmierter Unterricht JA 10853
+Programmierung JA 11305
+Prüfungen JA 10855
+Psychologie JA 10856
+Public Relations NEIN 10811
+Puerto Rico JA 20079
+Pumpen JA 11306
+Qberweisungen JA 11100
+Qffentliche Bekanntmachungen NEIN 10042
+Qkologie JA 10812
+Quiz * Rätsel * Fragespiele JA 10857
+Quiz NEIN 10857
+Radio- und Fernsehtechnik JA 11307
+Radiogeräte * Rundfunkgeräte JA 10858
+Radiogeräte NEIN 10858
+Radioprogramme NEIN 10548
+Radiotechnik NEIN 11307
+Radsport JA 10859
+Radwandern NEIN 10344
+Ratenkauf NEIN 10860
+Ratenkauf* Ratenzahlung JA 10860
+Ratenzahlung NEIN 10860
+Ratespiele NEIN 10857
+Ratingen JA 24030
+Rationalisie rung JA 10861
+Rätsel NEIN 10857
+Rauchen JA 10862
+Raucherentwöhnung JA 10863
+Raumausstattung * Dekoration JA 10864
+Raumausstattung NEIN 10864
+Raumfahrt JA 10727
+Räumungsverkäufe NEIN 10094
+Realschulen JA 10865
+Rechenzentren JA 10866
+Rechnerverbund JA 10867
+Rechnungswesen JA 10868
+Recht JA 10869
+Rechtsanwälte JA 10870
+Rechtsberatung JA 10871
+Rechtsprechung NEIN 10872
+Rechtsprechung* Gerichte JA 10872
+Rechtsschutzversicherungen JA 10873
+Rechtswissenschaften JA 10874
+Recklinhausen JA 24350
+Spielwaren JA 11004
+Spirituosen JA 10029
+Sport JA 11005
+Sportartikel JA 11006
+Sportbekleidung JA 11007
+Sportnachrichten JA 11008
+Sportreisen JA 11009
+Sportveranstaltungen JA 11010
+Sprachkurse JA 11011
+Sprachreisen JA 11012
+Sprachwissenschaften JA 11013
+Sprechfunk NEIN 10041
+Spülmaschinen NEIN 10461
+Spülmittel NEIN 10462
+Squash JA 11252
+Sraßenkarten NEIN 10699
+Sri Lanka JA 20015
+Staatliche Einrichtungen JA 11014
+Städtereisen JA 11023
+Stadtpläne JA 11017
+Stadtplanung JA 11018
+Stadtverkehr JA 11020
+Stadtwerke JA 11315
+Stahl JA 11024
+Stahlbau JA 11313
+Starnberg JA 28130
+Starnberger See JA 20152
+Statistik JA 11025
+Staubsauger JA 11026
+Steigerwald JA 20130
+Steingut NEIN 10621
+Stellenangebote JA 11027
+Stellengesuche JA 11028
+Stellenmarkt JA 11029
+Stempel und Schilder JA 11392
+Sternwarten NEIN 10835
+Steuerberater JA 11316
+Steuerberatung JA 11030
+Steuern JA 11031
+Steuerrecht JA 11032
+Steuertips JA 11033
+Steuerungstechnik JA 11349
+Stiftungen JA 11034
+Strafrecht JA 11035
+Straßenhilfsdienste NEIN 10011
+Straßenverkehr JA 11036
+Straßenzustandsbericht JA 11037
+Streß JA 11038
+Strick-, Wirk-, Maschenwaren JA 11039
+Strickwaren NEIN 11039
+Strom * Elektrizität JA 11040
+Strom NEIN 11040
+Studenten JA 11041
+Studentenvereinigungen JA 11355
+Studienreisen NEIN 11042
+Studienreisen* Bildungsreisen JA 11042
+Studium JA 11043
+Stuttgart JA 27000
+Suchtberatung NEIN 11044
+Suchtberatung* Drogenberatung JA 11044
+Südafrika JA 20098
+Südamerika JA 20099
+Südkorea JA 20122
+Südsee JA 20100
+Supermärkte JA 11046
+Surfen NEIN 11047
+Surfen* Windsurfen JA 11047
+Süßwaren JA 11045
+T,ypographie JA 11097
+Tabakwaren JA 11048
+Tagungen NEIN 11049
+Tagungen* Kongresse JA 11049
+Tahiti JA 20101
+Taiwan JA 20102
+Tankreinigung JA 11417
+Tankschutz JA 11418
+Tankstellen JA 11051
+Tanzen JA 11052
+Tanzsport JA 11053
+Tapeten JA 11054
+Tapezieren JA 11055
+Tarifverträge JA 11058
+Taschenrechner JA 11059
+Tauschmarkt JA 11253
+Taxi JA 11404
+Technik JA 11060
+Technische Berufe JA 11364
+Technische Überwachung JA 11061
+Technische Wiss. * Ingenieurwiss. JA 10579
+Technische Wissenschaften NEIN 10579
+Technischer Kundendienst JA 11062
+Technologietransfer JA 11063
+Tee JA 11064
+Tegernsee JA 20153
+Teilkaskoversicherung NEIN 10615
+Teilzahlung NEIN 10860
+Teilzeitarbeit JA 11065
+Teledialoge JA 11433
+Telefax NEIN 10360
+Telefonanlagen JA 11066
+Telefonseelsorge JA 11067
+Telekommunikation JA 11068
+Telesoftware JA 11356
+Telespiele NEIN 11153
+Telex NEIN 10364
+Tennis JA 11070
+Teppichböden NEIN 10189
+Teppiche JA 11072
+Terminals JA 11073
+Termingeld JA 10376
+Testament JA 11074
+Tests (Psychologie) JA 10588
+Tests (Warentests) NEIN 11075
+Tests* Warentests JA 11075
+Teutoburger Wald JA 20103
+Textgestaltung JA 11254
+Textilgewerbe NEIN 10151
+Textilien JA 11076
+Textkommunikation JA 11077
+Textverarbeitung JA 11078
+Textverarbeitungssysteme JA 11079
+Thailand JA 20104
+Theater NEIN 11080
+Theater* Bühnen JA 11080
+Theaterkassen NEIN 10613
+Theologie NEIN 10899
+Therapien NEIN 10522
+Thermalbäder NEIN 10120
+Thüringer Wald JA 20131
+Tiefbau JA 11081
+Tiefkü h Ikost JA 11082
+Tierärzte JA 11083
+Tiere JA 11084
+Tiergärten NEIN 11085
+Tiergärten* Zoologische Gärten JA 11085
+Tierhaltung JA 11086
+Tierhandlungen * Zoologische Handl. JA 11087
+Tierhandlungen NEIN 11087
+Tierparks NEIN 11085
+Tierzucht NEIN 11088
+Tierzucht* Viehzucht JA 11088
+Tischlereien NEIN 10944
+Tischtennis JA 11393
+Todesfälle NEIN 11288
+Todesfälle* Bestattungen JA 11288
+Tonbandgeräte JA 11090
+Tonstudios JA 11442
+Töpfern JA 11089
+Torten NEIN 10436
+Toto JA 11091
+Tourismus NEIN 10416
+Touristeninformationen JA 11092
+Traben-Trarbach JA 25580
+Transporttechnik JA 11317
+Transportunternehmen NEIN 10421
+Transportversicherungen JA 11093
+Travellerschecks NEIN 10890
+Treppen JA 11094
+Tresore JA 11095
+Triberg im Schwarzwald JA 27740
+Trier JA 2550
+Trimm-Dich NEIN 10387
+Trockner NEIN 11168
+Tschechoslowakei JA 20105
+Tübingen JA 27400
+Tunesien JA 20107
+Türen und Tore JA 11096
+Türkei JA 20106
+Tuttlingen JA 27200
+USA JA 20109
+Ubersetzer NEIN 11098
+Übersetzer* Dolmetscher JA 11098
+Übertragungstechnik JA 11099
+Uberzieh u ngskred it JA 11101
+UdSSR NEIN 20095
+Uhren NEIN 11102
+Uhren* Uhrenreparaturen JA 11102
+Uhrenreparaturen NEIN 11102
+Ulm JA 27900
+Umsätze JA 11103
+Umsatzsteuer JA 11104
+Umschuldung JA 11105
+Umschulung JA 11106
+Umweltschutz JA 11107
+Umzüge JA 11108
+Unfallversicherungen JA 11109
+Ungarn JA 20108
+Universitäten NEIN 10547
+Unna JA 24750
+Unterfranken JA 20132
+Unterhaltungselektronik JA 11110
+Unterhaltungsmusik JA 11111
+Unterkünfte JA 11112
+Unternehmens-, Betriebsberatung JA 11113
+Unternehmensberatung NEIN 11113
+Unternehmensführung JA 11114
+Unterricht JA 11115
+Unterrichtstechnik JA 11116
+Unterwäsche JA 11117
+Urlaub NEIN 11260
+Urlaub auf dem Bauernhof JA 11118
+Urlaubsorte JA 11119
+Urlaubstips JA 11120
+Variete JA 11121
+Velbert JA 25620
+Veranstaltungen JA 11122
+Verarbeitendes Gewerbe JA 11123
+Verbände JA 11124
+Verbraucherberatung JA 11125
+Verbraucherpreise NEIN 10704
+Verbraucherschutz JA 11127
+Verbrauchertips JA 11128
+Vereine NEIN 11129
+Vereine* Vereinsnachrichten JA 11129
+Vereinigte Staaten JA 20109
+Vereinsnachrichten NEIN 11129
+Vergiftungen JA 11130
+Vergnügungsparks NEIN 11261
+Verkäuferschulung JA 11131
+Verkaufsförderung NEIN 10009
+Verkehrserziehung JA 11132
+Verkehrsinformationen JA 11133
+Verkehrsvereine JA 11135
+Verlage JA 11136
+Vermietungen (Wohnungsmarkt) NEIN 11214
+Vermittlungstechnik JA 11137
+Vermögensanlage JA 11138
+Vermögensberatung NEIN 11138
+Vermögensbildung JA 11140
+Vermögenswirksame Leistungen JA 11141
+Vermögenswirksames Sparen JA 11142
+Verpackungen JA 11143
+Versandbuchhandel JA 10211
+Versandhandel JA 11144
+Versandhäuser JA 11145
+Versicherungen JA 11146
+Versorgungsausgleich JA 11147
+Versorgungsunternehmen JA 11148
+Versteigerungen NEIN 11149
+Versteigerungen* Auktionen JA 11149
+Verwaltungen NEIN 10020
+Videogeräte NEIN 11152
+Videogeräte* Videorekorder JA 11152
+Videokassetten JA 11151
+Videorekorder NEIN 11152
+Videospiele NEIN 11153
+Videospiele* Telespiele JA 11153
+Videotechnik JA 11255
+Videotext JA 11154
+Videotheken JA 11155
+Viehmarkt JA 11156
+Viehzucht NEIN 11088
+Viersen JA 24060
+Visabestimmungen JA 11157
+Vitamine JA 11158
+Volksbanken JA 11159
+Volkseinkommen NEIN 11350
+Volksfeste JA 11160
+Volkshochschulen JA 11161
+Volkswirtschaft JA 11162
+Vorträge JA 11163
+Wachdienste NEIN 11311
+Waffen JA 11169
+Wahlen JA 11170
+Währungen NEIN 10258
+Währungsbestimmungen NEIN 10259
+Wald JA 11171
+Wandern JA 11172
+Wandverkleidung JA 11173
+Warenhäuser NEIN 10618
+Warenkunde JA 11175
+Warentest NEIN 11075
+Wärmedämmung JA 11164
+Wärmepumpen JA 11256
+Wärmeregelung JA 11165
+Wärmetechnik JA 11322
+Warmwasser JA 11176
+Wäsche (Textil) JA 11166
+Wäschepflege JA 11167
+Wäschetrockner JA 11168
+Waschmaschinen JA 11177
+Wasser JA 11277
+Wasserfahrzeuge JA 11178
+Wassersport JA 11180
+Wasserstände JA 11181
+Wasserversorgung JA 11182
+Wechselkurse JA 11183
+Wehrdienst JA 11184
+Weihnachten JA 11395
+Wein JA 11185
+Weiterbildung NEIN 10405
+Weltreisen JA 11186
+Werbeagenturen JA 11187
+Werbeartikel JA 11188
+Werbefilme JA 11189
+Werbefotographie JA 11190
+Werften JA 11323
+Werkzeuge JA 11192
+Werkzeugmaschinen JA 11193
+Wertpapiere NEIN 11194
+Wertpapiere* Anleihen JA 11194
+Wertpapierkurse JA 11195
+Wesel JA 24230
+Weser/Ems JA 20110
+Wesseling JA 25047
+Westerwald JA 20111
+Westfalen JA 10112
+Wettbewerbsrecht JA 11196
+Wetter JA 11197
+Wetterau JA 20133
+Wetzlar JA 26330
+Wien JA 20113
+Wiesbaden JA 26200
+Wildparks NEIN 11085
+Wilhelmshaven JA 22940
+Windsurfen NEIN 11047
+Wintersport JA 11199
+Winterurlaub JA 11200
+Wirkwaren NEIN 11039
+Wirtschaft JA 11201
+Wirtschaftsberatung NEIN 11113
+Wirtschaftsförderung JA 11278
+Wirtschaftsnachrichten JA 11202
+Wirtschaftsorganisationen JA 11203
+Wirtschaftspolitik JA 11204
+Wirtschaftsprüfung JA 11205
+Wirtschaftsrecht JA 11206
+Wirtschaftsstatistik JA 11207
+Wirtschaftswissenschaften JA 11208
+Witze NEIN 10558
+Wohnbedarf JA 11211
+Wohngeld JA 11212
+Wohnmobile NEIN 11217
+Wohnungen JA 11213
+Wohnungsangebote JA 11214
+Wohnungsbau JA 11215
+Wohnungsgesuche JA 11216
+Wohnwagen NEIN 11217
+Wohnwagen* Wohnmobile JA 11217
+Wolle JA 11218
+Wörterbücher JA 11210
+Wuppertal JA 15600
+Wurst- und Fleischwaren JA 11219
+Württemberg JA 20008
+Würzburg JA 28700
+Zahlungsverkehr NEIN 10451
+Zahnärzte JA 11220
+Zahnärztebedarf JA 11325
+Zahnmedizin JA 11221
+Zahnpflege NEIN 11222
+Zahnpflege* Mundhygiene JA 11222
+Zahntechnik NEIN 11223
+Zahntechnik* Dentaltechnik JA 11223
+Zeichenbedarf JA 11224
+Zeitarbeit JA 11225
+Zeitgeschichte JA 11226
+Zeitschriften JA 11227
+Zeitschriftenabonnements NEIN 10007
+Zeitungen JA 11228
+Zeitungsabonnements NEIN 10007
+Zelte und Planen JA 11294
+Zentralbanken JA 11229
+Zimmereien JA 11230
+Zimmernachweis JA 11231
+Zimmerpflanzen JA 11232
+Zimmerreservierung JA 11233
+Zimmervermittlung JA 11234
+Zinsen JA 11235
+Zirkus JA 11236
+Zivilschutz JA 11318
+Zollbestimmungen JA 11237
+Zoologische Gärten NEIN 11085
+Zubringerdienste JA 11319
+Zugverbindungen NEIN 10123
+Zustelldienste JA 11238
+Zwischenfinanzierung JA 11239
+Zypern JA 20141
+Ägypten JA 20001
+Leichte Musik NEIN 11111
+Insolvenzen * Konkurse JA 10587
+Insolvenzen NEIN 10587
+Zoologische Handlungen NEIN 11087
+Übergewicht NEIN 10935
