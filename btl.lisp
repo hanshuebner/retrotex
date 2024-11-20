@@ -62,7 +62,7 @@
   (decode-field buffer
                 'bd:bcd+ length offset 0))
 
-(defmacro define-btl-class (name layout-file)
+(defmacro define-btl-class (name (layout-file) &optional extra-slots)
   (let* ((definitions (bd:parse-layout-file layout-file))
          (field-names (mapcar (lambda (field)
                                 (intern (string (bd:field-name field))))
@@ -72,7 +72,8 @@
          ((buffer :initarg :buffer :reader buffer)
           ,@(mapcar (lambda (name)
                       (list name :reader name))
-                    field-names)))
+                    field-names)
+          ,@extra-slots))
        (defmethod initialize-instance ((,name ,name) &key buffer)
          (call-next-method)
          (setf ,@(mapcan (lambda (slot-name field)
@@ -96,7 +97,7 @@
        (unless (zerop (,ptr sk))
          (subseq (buffer sk) (,ptr sk) (+ (,ptr sk) (,len sk)))))))
 
-(define-btl-class sk "sk-layout.txt")
+(define-btl-class sk ("sk-layout.txt"))
 
 (define-range-reader SKOAM)
 (define-range-reader SKODR)
@@ -156,7 +157,10 @@
           for offset from 1 below (1+ (* count 3)) by 3
           collect (decode-field (SKOBV sk) 'bd:bcd 3 offset 0))))
 
-(define-btl-class sf "sf-layout.txt")
+(define-btl-class sf ("sf-layout.txt")
+  ((bdhqsfe :initarg :bdhqsfe :reader bdhqsfe)
+   (bdhqstd :initarg :bdhqstd :reader bdhqstd)
+   (bdhqspm :initarg :bdhqspm :reader bdhqspm)))
 
 (defmethod feld-definition-list ((sf sf))
   (list :data-len (SFBFDLTH sf)
@@ -181,7 +185,11 @@
   (when (SKOFB sk)
     (loop for feld from 0 below (SKOFBANZ sk)
           for start = (+ (SKOFBOF1 sk) (* feld 20))
-          collect (make-instance 'sf :buffer (subseq (SKOFB sk) start (+ start 20))))))
+          collect (make-instance 'sf
+                                 :buffer (subseq (SKOFB sk) start (+ start 20))
+                                 :bdhqsfe (SKOFB sk)
+                                 :bdhqstd (SKOTD sk)
+                                 :bdhqspm (SKOPM sk)))))
 
 (defun print-if-defined (format value)
   (when value
@@ -222,6 +230,7 @@
   (print-if-defined "SKOSDRQ2 Decoder-Definition 2: ~A" (SKOSDRQ2 sk))
   (print-if-defined "SKOSDRQ3 Decoder-Definition 3: ~A" (SKOSDRQ3 sk))
   (print-if-defined "SKOFB TV-Defaultdaten: ~A" (SKOFB sk))
+  (print-if-defined "SKOPM Prompting Messages: ~A" (SKOPM sk))
   (print-string "SKOHQ1 Zeile 1: ~S" (SKOHQ1 sk))
   (print-string "SKOHQ4 Zeile 20/24: ~S" (SKOHQ4 sk))
   (print-length "SKODR Dekoder-Daten: ~A bytes" (SKODR sk))
