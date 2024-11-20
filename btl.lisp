@@ -158,28 +158,62 @@
           collect (decode-field (SKOBV sk) 'bd:bcd 3 offset 0))))
 
 (define-btl-class sf ("sf-layout.txt")
-  ((bdhqsfe :initarg :bdhqsfe :reader bdhqsfe)
-   (bdhqstd :initarg :bdhqstd :reader bdhqstd)
-   (bdhqspm :initarg :bdhqspm :reader bdhqspm)))
+  ((BDHQSFE :initarg :BDHQSFE :reader BDHQSFE)
+   (BDHQSTD :initarg :BDHQSTD :reader BDHQSTD)
+   (BDHQSPM :initarg :BDHQSPM :reader BDHQSPM)))
+
+(defmethod feld-attributes ((sf sf))
+  `(,@(when (SFBATTR1 sf) '(:numeric))
+    ,@(when (SFBATTR2 sf) '(:alphabetic))
+    ,@(when (SFBATTR3 sf) '(:no-echo))
+    ,@(when (SFBATTR4 sf) '(:no-cursor))
+    ,@(when (SFBATTR5 sf) '(:protected))))
+
+(defparameter *sysvar-mappings* '("&S001" :tln-name             "Name des Teilnehmers/Mitbenutzers"
+                                  "&S002" :tln-name-zusatz      "Zusatz zum Namen des Teilnehmers /Mitbenutzers"
+                                  "&S003" :tln-straße           "Straße des Teilnehmers/Mitbenutzers"
+                                  "&S004" :tln-plz              "Postleitzahl des Teilnehmers /Mitbenutzers"
+                                  "&S005" :tln-ort              "Ort des Teilnehmers /Mitbenutzers"
+                                  "&S006" :tln-btx-nr           "Btxnummer (Mitbenutzernummer) des Teilnehmers bzw. Mitbenutzers"
+                                  "&S007" :tln-tln-nr           "Teilnehmernummer des Teilnehmers/Mitbenutzers"
+                                  "&S008" :tln-mb-suf           "Mitbenutzersuffix des Teilnehmers/Mitbenutzers"
+                                  "&S009" :tln-anrede           "Anrede des Teilnehmers /Mitbenutzers"
+                                  "&S021" :datum-abruf          "Datum des Seitenabrufs"
+                                  "&S022" :uhrzeit-abruf        "Uhrzeit des Seitenabrufs"
+                                  "&S023" :datum-uhrzeit-abruf  "Datum und Uhrzeit des Seitenabrufs"
+                                  "&S010" :tfi                  "Terminal Facility Identifier"
+                                  "&S031" :empf-name            "Name des Empfängers"
+                                  "&S032" :empf-name-zusatz     "Zusatz zum Namen des Empfängers"
+                                  "&S033" :empf-tln-nr          "Teilnehmernummer des Empfängers"
+                                  "&S034" :empf-mb-suf          "Mitbenutzersuffix des Empfängers"
+                                  "&S036" :enthält-werbung      "Mitteilung enthält Werbung"))
+
+(defparameter *sysvar-names* (let ((map (make-hash-table :test #'equal)))
+                               (loop for (code name) on *sysvar-mappings* by #'cdddr
+                                     do (setf (gethash code map) name))
+                               map))
 
 (defmethod feld-definition-list ((sf sf))
-  (list :data-len (SFBFDLTH sf)
-        :row (SFBBROWS sf)
-        :column (SFBBCOLM sf)
-        :attributes `(,@(when (SFBATTR1 sf) '(:numeric))
-                      ,@(when (SFBATTR2 sf) '(:alphabetic))
-                      ,@(when (SFBATTR3 sf) '(:no-echo))
-                      ,@(when (SFBATTR4 sf) '(:no-cursor))
-                      ,@(when (SFBATTR5 sf) '(:protected)))
-        :SFBFOFFS (SFBFOFFS sf)
-        :SFPPOFFS (SFBPOFFS sf)
-        :SFBLPRPT (SFBLPRPT sf)
-        :SFBSYSVA (SFBSYSVA sf)
-        :SFBBLEER (SFBBLEER sf)))
+  `(:data-len ,(SFBFDLTH sf)
+    :row ,(SFBBROWS sf)
+    :column ,(SFBBCOLM sf)
+    :attributes ,(feld-attributes sf)
+    :SFBFOFFS ,(SFBFOFFS sf)
+    :SFPPOFFS ,(SFBPOFFS sf)
+    :SFBLPRPT ,(SFBLPRPT sf)
+    :SFBSYSVA ,(SFBSYSVA sf)
+    :SFBBLEER ,(SFBBLEER sf)
+    ,@(unless (zerop (SFBPOFFS sf))
+        (list :prompting-message (subseq (BDHQSPM sf) (SFBPOFFS sf) (+ (SFBPOFFS sf) (SFBLPRPT sf)))))
+    ,@(unless (zerop (SFBFOFFS sf))
+        (let ((transparentp (and (not (SFBATTR1 sf)) (not (SFBATTR2 sf)) (= (SFBBLEER sf) 8))))
+          (if transparentp
+              (list :transparent-data (subseq (BDHQSTD sf) (SFBFOFFS sf) (+ (SFBFOFFS sf) (SFBFDLTH sf))))
+              (list :default (subseq (BDHQSFE sf) (SFBFOFFS sf) (+ (SFBFOFFS sf) (SFBFDLTH sf)))))))))
 
 (defmethod print-object ((sf sf) stream)
   (print-unreadable-object (sf stream :type t :identity t)
-    (format stream "~{~S~^ ~}" (feld-definition-list sf))))
+    (format stream "~A/~A (LEN ~D ~@[SYSVAR ~A ~]~{~A~^ ~})" (SFBBROWS sf) (SFBBCOLM sf) (SFBFDLTH sf) (gethash (SFBSYSVA sf) *sysvar-names* (SFBSYSVA sf)) (feld-attributes sf))))
 
 (defmethod sk-feld-definitionen ((sk sk))
   (when (SKOFB sk)
@@ -187,9 +221,9 @@
           for start = (+ (SKOFBOF1 sk) (* feld 20))
           collect (make-instance 'sf
                                  :buffer (subseq (SKOFB sk) start (+ start 20))
-                                 :bdhqsfe (SKOFB sk)
-                                 :bdhqstd (SKOTD sk)
-                                 :bdhqspm (SKOPM sk)))))
+                                 :BDHQSFE (SKOFB sk)
+                                 :BDHQSTD (SKOTD sk)
+                                 :BDHQSPM (SKOPM sk)))))
 
 (defun print-if-defined (format value)
   (when value
