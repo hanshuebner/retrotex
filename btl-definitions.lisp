@@ -4,7 +4,6 @@
   (:nicknames :bd)
   (:use :cl :alexandria)
   (:export
-   #:*btl-definitions*
    #:field
    #:field-name
    #:field-level
@@ -14,19 +13,17 @@
    #:field-offset
    #:field-description
    #:field-usage
-   #:+btl-size+
    #:bin
    #:bit
    #:bcd
    #:bcd+
    #:bits
-   #:cept))
+   #:cept
+   #:parse-layout-file))
 
 (in-package :btl-definitions)
 
 (named-readtables:in-readtable :interpol-syntax)
-
-(defconstant +btl-size+ 206)
 
 (defclass field ()
   ((name :initarg :name :reader field-name)
@@ -46,38 +43,38 @@
 
 (defun parse-usage (s)
   (unless (equal s "")
-    (ecase (intern (string-upcase s))
-      (m 'mandatory)
-      (o 'optional))))
+    (ecase (intern (string-upcase s) :keyword)
+      (:m 'mandatory)
+      (:o 'optional))))
 
-(defun parse-btl-definitions (&optional (input-file "btl-header.txt"))
-  (mapcar (lambda (line)
-            (multiple-value-bind (match regs)
-                (ppcre:scan-to-strings #?r"([A-Z][A-Z0-9]+) (\d) (|BIN|BIT|BCD|BCD\+|BITS|CEPT) ?(\d+|\d Bits?) (\d+(?:\(\d\)|)) (.*?) ?([mo]|)$"
-                                       line)
-              (unless match
-                (error "not matched: ~A~%" line))
-              (destructuring-bind (name level type length offset descripton usage) (coerce regs 'list)
-                (let* ((bitsp (ppcre:scan #?r" Bit$" length))
-                       (bit-number (when bitsp
-                                     (multiple-value-bind (match regs) (ppcre:scan-to-strings #?r"^(\d+)\((\d)\)$" offset)
-                                       (assert match)
-                                       (setf offset (aref regs 0))
-                                       (parse-integer (aref regs 1))))))
-                  (multiple-value-bind (match regs) (ppcre:scan-to-strings #?r"(\d) Bit$" length)
-                    (setf length (if match
-                                     (/ (parse-integer (aref regs 0)) 8)
-                                     (parse-integer length :junk-allowed t))))
-                  (make-instance 'field
-                                 :name (intern name)
-                                 :level (parse-integer level)
-                                 :type (unless (equal type "")
-                                         (intern type))
-                                 :length length
-                                 :offset (parse-integer offset)
-                                 :bit-number bit-number
-                                 :description descripton
-                                 :usage (parse-usage usage))))))
-          (uiop:read-file-lines input-file)))
-
-(defparameter *btl-definitions* (remove-if 'null (parse-btl-definitions) :key #'field-type))
+(defun parse-layout-file (input-file)
+  (let* ((lines (uiop:read-file-lines input-file))
+         (definitions (mapcar (lambda (line)
+                                (multiple-value-bind (match regs)
+                                    (ppcre:scan-to-strings #?r"([A-Z][A-Z0-9]+) (\d) (|BIN|BIT|BCD|BCD\+|BITS|CEPT) ?(\d+|\d Bits?) ?(\d+(?:\(\d\)|)) (.*?) ?([mo]|)$"
+                                                           line)
+                                  (unless match
+                                    (error "not matched: ~A~%" line))
+                                  (destructuring-bind (name level type length offset descripton usage) (coerce regs 'list)
+                                    (let* ((bitsp (ppcre:scan #?r" Bit$" length))
+                                           (bit-number (when bitsp
+                                                         (multiple-value-bind (match regs) (ppcre:scan-to-strings #?r"^(\d+)\((\d)\)$" offset)
+                                                           (assert match)
+                                                           (setf offset (aref regs 0))
+                                                           (parse-integer (aref regs 1))))))
+                                      (multiple-value-bind (match regs) (ppcre:scan-to-strings #?r"(\d) Bit$" length)
+                                        (setf length (if match
+                                                         (/ (parse-integer (aref regs 0)) 8)
+                                                         (parse-integer length :junk-allowed t))))
+                                      (make-instance 'field
+                                                     :name (intern name 'btl-definitions)
+                                                     :level (parse-integer level)
+                                                     :type (unless (equal type "")
+                                                             (intern type 'btl-definitions))
+                                                     :length length
+                                                     :offset (parse-integer offset)
+                                                     :bit-number bit-number
+                                                     :description descripton
+                                                     :usage (parse-usage usage))))))
+                              lines)))
+    (remove-if 'null definitions :key #'field-type)))

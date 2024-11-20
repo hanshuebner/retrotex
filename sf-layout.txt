@@ -1,0 +1,22 @@
+SFBELEM 1 20 0 Feldbeschreibung
+SFBFDLTH 2 BIN 2 0 Länge des Datenteils d. TV-Dialog-(ohne Prefix) od Transparenten Feldes
+SFBBROWS 2 BIN 1 2 Zeile Feldbeginn
+SFBBCOLM 2 BIN 1 3 Spalte Feldbeginn
+SFBAROWS 2 BIN 1 4 interne Verwendung
+SFBACOLM 2 BIN 1 5 interne Verwendung
+SFBATTRB 2 1 6 Attribut des Feldes
+SFBATTR1 3 BIT 1 Bit 6(0) numerisch
+SFBATTR2 3 BIT 1 Bit 6(1) alphabetisch
+SFBATTR3 3 BIT 1 Bit 6(2) echoplexen mit "-"
+SFBATTR4 3 BIT 1 Bit 6(3) Cursor unsichtbar
+SFBATTR5 3 BIT 1 Bit 6(4) geschütztes Feld
+SFBATTR6 3 BIT 1 Bit 6(5) spätere Realisierung
+SFBMUSSF 3 BIT 1 Bit 6(6) spätere Realisierung
+SFBATTR8 3 BIT 1 Bit 6(7) interne Verwendung
+SFBFSTAT 2 1 7 interne Verwendung
+SFBFOFFS 2 BIN 2 8 Offset d. Defaultwertes zum Beginn des zugeord. Datenbereichs v. Anfang BDHQSFE oder BDHQSTD
+SFBPOFFS 2 BIN 2 10 Offset der Prompting-Message im Teil BDHQSPM
+SFBLPRFF 2 BIN 1 12 spätere Realisierung
+SFBLPRPT 2 BIN 1 13 Länge des Prompting-Textes
+SFBSYSVA 2 CEPT 5 14 Systemvariable
+SFBBLEER 2 BIN 1 19 weitere Feldattribute
