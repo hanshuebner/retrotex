@@ -2,15 +2,9 @@
 
 (defpackage :webserver
   (:use :cl :alexandria :lparallel.queue)
-  (:export
-   #:start
-   #:*client-init-hook*))
+  (:export #:start))
 
 (in-package :webserver)
-
-(defvar *client-init-hook*
-  (lambda ()
-    (cept:dump-printable-chars 0 1)))
 
 (defclass binary-websocket-stream (trivial-gray-streams:fundamental-binary-input-stream
                                    trivial-gray-streams:fundamental-binary-output-stream
@@ -47,15 +41,14 @@
 (defmethod hunchensocket:client-connected ((resource cept-websocket-resource)
                                            (client binary-websocket-stream))
   (format t "; client connected~%")
-  (when *client-init-hook*
-    (bt:make-thread (lambda ()
-                      (handler-case
-                          (retrotex:handle-client client)
-                        (error (e)
-                          (format t "; error handling client: ~A~%" e))))
-                    :name "Websocket client handler process"
-                    :initial-bindings (cons (cons 'cept:*cept-stream* client)
-                                            bt:*default-special-bindings*))))
+  (bt:make-thread (lambda ()
+                    (handler-case
+                        (funcall (acceptor-handler *acceptor*) client)
+                      (error (e)
+                        (format t "; error handling client: ~A~%" e))))
+                  :name "Websocket client handler process"
+                  :initial-bindings (cons (cons 'cept:*cept-stream* client)
+                                          bt:*default-special-bindings*)))
 
 (defmethod hunchensocket:client-disconnected ((resource cept-websocket-resource)
                                               (client binary-websocket-stream))
@@ -67,7 +60,7 @@
 (defvar *acceptor* nil)
 
 (defclass acceptor (hunchensocket:websocket-acceptor hunchentoot:easy-acceptor)
-  ())
+  ((handler :initarg :handler :reader acceptor-handler)))
 
 (defun no-cache-callback (file content-type)
   (declare (ignore file content-type))
@@ -79,8 +72,8 @@
                                                               nil
                                                               'no-cache-callback)))
 
-(defun start (&key (port 8881))
+(defun start (handler &key (port 8881))
   (when *acceptor*
     (hunchentoot:stop *acceptor*))
-  (setf *acceptor* (make-instance 'acceptor :port port))
+  (setf *acceptor* (make-instance 'acceptor :port port :handler handler))
   (hunchentoot:start *acceptor*))

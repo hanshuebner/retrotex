@@ -47,7 +47,8 @@
            #:define-colors
            #:color-definition-bytes
            #:reset-colors
-           #:delete-to-end-of-line))
+           #:delete-to-end-of-line
+           #:read-byte))
 
 (in-package :cept)
 
@@ -465,3 +466,4 @@
   (dotimes (color 8)
     (foreground-color (- 7 color))
     (write-cept (loop for i below 40 collect (code-char (+ (char-code #\0) (mod i 10)))))))
+

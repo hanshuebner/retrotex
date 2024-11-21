@@ -1,9 +1,9 @@
 ;; -*- Lisp -*-
 
-(defpackage :btl
+(defpackage :btl-page
   (:use :cl :alexandria))
 
-(in-package :btl)
+(in-package :btl-page)
 
 (defconstant +sk-size+ 206)
 
@@ -285,3 +285,33 @@
                  (print-sk sk)))
           finally (format t "~A Seiten~%" (/ i #x0800)))))
 
+(defun load-btl-file (pathname)
+  (with-input-from-file (f pathname :element-type '(unsigned-byte 8))
+    (loop for i from #x4000 below (file-length f) by #x0800
+          for buffer = (make-array #x800 :element-type '(unsigned-byte 8))
+          do (file-position f i)
+             (read-sequence buffer f)
+          collect (make-instance 'sk :buffer buffer)
+          finally (format t "~&; ~A Seiten aus ~A gelesen~%" (/ i #x0800) pathname))))
+
+(defun load-btl-directory (directory-pathname db)
+  (let ((btl-pathnames (remove-if-not (curry #'string-equal "btl")
+                                      (directory (merge-pathnames #p"*.*" directory-pathname)) :key #'pathname-type)))
+    (dolist (btl-pathname btl-pathnames db)
+      (dolist (sk (load-btl-file btl-pathname))
+        (setf (gethash (SKOSNRBP sk) db) sk)))))
+
+(defparameter *btl-directory* (or (uiop:getenv "BTL_DIRECTORY") #p"BTL/"))
+
+(defmethod page:load-pages progn ((class-name (eql 'sk)) db)
+  (load-btl-directory *btl-directory* db))
+
+(defmethod page:display ((sk sk) stream)
+  (format t "; showing page ~A~%" sk)
+  (cept:with-cept-stream (stream)
+    (dolist (accessor '(SKOSDRQ1 SKOSDRQ2 SKOSDRQ3))
+      (when-let (dekoder-page-number (funcall accessor sk))
+        (if-let (dekoder-page (gethash dekoder-page-number y(page:page-db sk)))
+          (cept:write-cept (SKODR dekoder-page))
+          (warn "; ~A decoder page ~A for ~A not found" accessor dekoder-page-number sk))))
+    (cept:write-cept (SKOAC sk))))
