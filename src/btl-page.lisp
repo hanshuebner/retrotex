@@ -1,7 +1,10 @@
 ;; -*- Lisp -*-
 
 (defpackage :btl-page
-  (:use :cl :alexandria))
+  (:use :cl :alexandria)
+  (:export
+   #:load-btl-directory
+   #:load-btl-file))
 
 (in-package :btl-page)
 

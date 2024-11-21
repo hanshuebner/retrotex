@@ -14,7 +14,7 @@
 
 (defparameter *bind-last-client-p* t)
 
-(defvar *client-handler* 'hello-world-handler)
+(defvar *client-handler* 'standard-btx-handler)
 
 (defun handle-client (stream)
   (when *bind-last-client-p*
@@ -98,71 +98,22 @@
       (destructuring-bind (title text) article
         (show-article title text :sleep sleep)))))
 
-(defun handle-input (page)
-  (cept:service-jump)
-  (cept:delete-to-end-of-line)
-  (unwind-protect
-       (let ((input (make-array 40 :fill-pointer 0 :element-type 'character))
-             first-char)
-         (loop
-           (let* ((input-byte (read-byte cept:*cept-stream*))
-                  (input-char (char-upcase (code-char input-byte))))
-             (when (= 1 (length input))
-               (setf first-char (aref input 0)))
-             (cond
-               ;; * => clear input
-               ((= input-byte #x13)
-                (cept:goto 23 0)
-                (cept:delete-to-end-of-line)
-                (setf (fill-pointer input) 0)
-                (vector-push #\* input)
-                (cept:write-cept #\*))
-               ;; # => end of input
-               ((= input-byte #x1c)
-                (cept:write-cept #\#)
-                (return (cond
-                          ;; just # -> lookup "#" choice, otherwise stay on this page
-                          ((zerop (length input))
-                           (gethash "#" (page:page-choices page) page))
-                          ;; *# -> this page (?)
-                          ((equal input "*")
-                           page)
-                          ;; *<digit...># -> find page
-                          ((eql (aref input 0) #\*)
-                           (gethash (subseq input 1) (page:page-db page)))
-                          ;; stay on page in all other cases
-                          (t
-                           page))))
-               ;; delete => delete character
-               ((member input-char '(#\backspace #\delete))
-                (when (zerop (length input))
-                  (return))
-                (vector-pop input)
-                (cept:write-cept #\backspace #\space #\backspace))
-               ;; digits => stuff into buffer
-               ((digit-char-p input-char)
-                (vector-push input-char input)
-                (cept:write-cept input-char))
-               ;; * was typed => collect alphanumeric characters
-               ((and (eql first-char #\*)
-                     (alphanumericp input-char))
-                (vector-push input-char input)
-                (cept:write-cept input-char)))
-             ;; check choice
-             (when (ppcre:scan "^[0-9]" input)
-               (when-let (page (gethash input (page:page-choices page)))
-                 (format t "; shortcut ~S => ~A~%" input page)
-                 (return page))
-               (when (= (length input) 2)
-                 ;; two digits entered, no shortcut found
-                 (format t "; no shortcut ~S found, returning ~A~%" input page)
-                 (return page))))))
-    (cept:service-jump-return)))
-
 (defun hello-world-handler (stream)
   (cept:with-cept-stream (stream)
     (cept:write-cept "Hello world! "))
   (loop until (= (read-byte stream) (char-code #\q))))
+
+(defun make-page-directory (pages)
+  (let ((directory (make-hash-table :test #'equal)))
+    (dolist (page pages directory)
+      (setf (gethash (page:nummer page) directory) page))))
+
+(defun standard-btx-handler (stream)
+  (let* ((pages (make-page-directory (btl-page:load-btl-file "BTL/CCC.BTL")))
+         (page (gethash "655321a" pages)))
+    (loop
+      (page:display page stream)
+      (setf page (gethash (page:handle-input page stream) pages page)))))
 
 (defun start ()
   (format t "; starting serial server~%")
