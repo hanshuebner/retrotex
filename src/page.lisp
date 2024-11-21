@@ -5,17 +5,13 @@
   (:export #:page
            #:display
            #:load-pages
-           #:db
            #:choices
            #:nummer))
 
 (in-package :page)
 
 (defclass page ()
-  ((db :initarg :db
-       :reader db
-       :documentation "Datenbank, in der diese Seite abgelegt ist")
-   (nummer :initarg :nummer
+  ((nummer :initarg :nummer
            :reader nummer
            :documentation "Seitennummer inklusive Blattkennzeichen")
    (choices :initarg :choices
