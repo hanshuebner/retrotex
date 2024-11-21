@@ -2,30 +2,25 @@
 
 (defpackage :page
   (:use :cl :alexandria)
-  (:export #:choice
-           #:page
+  (:export #:page
            #:display
            #:load-pages
-           #:page-db
-           #:page-number
-           #:page-choices))
+           #:db
+           #:choices
+           #:nummer))
 
 (in-package :page)
 
 (defclass page ()
   ((db :initarg :db
-       :reader page-db
+       :reader db
        :documentation "Datenbank, in der diese Seite abgelegt ist")
-   (number :initarg :number
-           :reader page-number
+   (nummer :initarg :nummer
+           :reader nummer
            :documentation "Seitennummer inklusive Blattkennzeichen")
    (choices :initarg :choices
-            :reader page-choices
-            :documentation "Hashtable mit Schlüssel Auswahlstring und Wert Seitennummer")))
+            :reader choices
+            :documentation "Hashtable Auswahlstring => Seitennummer")))
 
 (defgeneric display (page stream)
   (:documentation "Ausgeben der angegebenen Seite"))
-
-(defgeneric load-pages (class-name db)
-  (:documentation "Laden der Seiten mir der angegebenen Klasse in die Datenbank")
-  (:method-combination progn))

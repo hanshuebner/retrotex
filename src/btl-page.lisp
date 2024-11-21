@@ -62,13 +62,13 @@
   (decode-field buffer
                 'bd:bcd+ length offset 0))
 
-(defmacro define-btl-class (name (layout-file) &optional extra-slots)
+(defmacro define-btl-class (name superclasses extra-slots (&key layout-file))
   (let* ((definitions (bd:parse-layout-file layout-file))
          (field-names (mapcar (lambda (field)
                                 (intern (string (bd:field-name field))))
                               definitions)))
     `(progn
-       (defclass ,name ()
+       (defclass ,name ,superclasses
          ((buffer :initarg :buffer :reader buffer)
           ,@(mapcar (lambda (name)
                       (list name :reader name))
@@ -97,7 +97,9 @@
        (unless (zerop (,ptr sk))
          (subseq (buffer sk) (,ptr sk) (+ (,ptr sk) (,len sk)))))))
 
-(define-btl-class sk ("sk-layout.txt"))
+(define-btl-class sk (page:page)
+  ()
+  (:layout-file "sk-layout.txt"))
 
 (define-range-reader SKOAM)
 (define-range-reader SKODR)
@@ -157,10 +159,11 @@
           for offset from 1 below (1+ (* count 3)) by 3
           collect (decode-field (SKOBV sk) 'bd:bcd 3 offset 0))))
 
-(define-btl-class sf ("sf-layout.txt")
+(define-btl-class sf ()
   ((BDHQSFE :initarg :BDHQSFE :reader BDHQSFE)
    (BDHQSTD :initarg :BDHQSTD :reader BDHQSTD)
-   (BDHQSPM :initarg :BDHQSPM :reader BDHQSPM)))
+   (BDHQSPM :initarg :BDHQSPM :reader BDHQSPM))
+  (:layout-file "sf-layout.txt"))
 
 (defmethod feld-attributes ((sf sf))
   `(,@(when (SFBATTR1 sf) '(:numeric))
@@ -294,24 +297,26 @@
           collect (make-instance 'sk :buffer buffer)
           finally (format t "~&; ~A Seiten aus ~A gelesen~%" (/ i #x0800) pathname))))
 
-(defun load-btl-directory (directory-pathname db)
+(defmethod initialize-instance :after ((sk sk) &key)
+  (setf (slot-value sk 'page:nummer) (SKOSNRBP sk)
+        (slot-value sk 'page:choices) (loop with map = (make-hash-table :test #'equal)
+                                            for (choice nummer) in (sk-auswahlmöglichkeiten sk)
+                                            do (setf (gethash choice map) nummer)
+                                            finally (return map))))
+
+(defun load-btl-directory (directory-pathname)
   (let ((btl-pathnames (remove-if-not (curry #'string-equal "btl")
                                       (directory (merge-pathnames #p"*.*" directory-pathname)) :key #'pathname-type)))
-    (dolist (btl-pathname btl-pathnames db)
-      (dolist (sk (load-btl-file btl-pathname))
-        (setf (gethash (SKOSNRBP sk) db) sk)))))
+    (mappend 'load-btl-file btl-pathnames)))
 
 (defparameter *btl-directory* (or (uiop:getenv "BTL_DIRECTORY") #p"BTL/"))
-
-(defmethod page:load-pages progn ((class-name (eql 'sk)) db)
-  (load-btl-directory *btl-directory* db))
 
 (defmethod page:display ((sk sk) stream)
   (format t "; showing page ~A~%" sk)
   (cept:with-cept-stream (stream)
     (dolist (accessor '(SKOSDRQ1 SKOSDRQ2 SKOSDRQ3))
       (when-let (dekoder-page-number (funcall accessor sk))
-        (if-let (dekoder-page (gethash dekoder-page-number y(page:page-db sk)))
+        (if-let (dekoder-page (gethash dekoder-page-number (page:db sk)))
           (cept:write-cept (SKODR dekoder-page))
           (warn "; ~A decoder page ~A for ~A not found" accessor dekoder-page-number sk))))
     (cept:write-cept (SKOAC sk))))
