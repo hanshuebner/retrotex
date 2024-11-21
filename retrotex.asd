@@ -17,14 +17,16 @@
                "lparallel"
                "usocket"
                "yason")
-  :components ((:file "cept")
-               (:file "drcs")
-               (:file "page")
-               (:file "rafi")
-               (:file "webserver")
-               (:file "tcp-server")
-               (:file "json-page")
-               (:file "btx-index")
-               (:file "btl-definitions")
-               (:file "btl-page")
-               (:file "retrotex")))
+  :components ((:module "src"
+                :serial t
+                :components ((:file "cept")
+                             (:file "drcs")
+                             (:file "page")
+                             (:file "rafi")
+                             (:file "webserver")
+                             (:file "tcp-server")
+                             (:file "json-page")
+                             (:file "btx-index")
+                             (:file "btl-definitions")
+                             (:file "btl-page")
+                             (:file "retrotex")))))
