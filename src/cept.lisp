@@ -86,7 +86,7 @@
   (write-cept #x0c))
 
 (defun service-break (&optional (line 23))
-  (write-cept #x1f #x2f #x40 (+ #x40 line)))
+  (write-cept #x1f #x2f #x40 (+ #x41 line)))
 
 (defun service-break-return ()
   (write-cept #x1F #x2F #x4F))

@@ -17,9 +17,7 @@
 (defvar *client-handler* 'standard-btx-handler)
 
 (defun handle-client (stream)
-  (when *bind-last-client-p*
-    (setf cept:*cept-stream* stream)
-    (format t "; bound *cept-stream* to ~A~%" stream))
+
   (funcall *client-handler* stream))
 
 (defmacro define-cept-client-handler (() &body body)
@@ -110,12 +108,26 @@
 
 (defparameter *default-btl-pathname* #P"ccc.btl")
 
+(defun confirm-payment (preis)
+  (page:display-system-line (format nil "Anzeigen für DM ~D,~2,'0D? Ja: #" (floor preis 100) (mod preis 100)))
+  (equal (read-byte cept:*cept-stream*) #x1c))
+
 (defun standard-btx-handler (stream)
+  (when *bind-last-client-p*
+    (setf cept:*cept-stream* stream)
+    (format t "; bound *cept-stream* to ~A~%" stream))
   (let* ((pages (make-page-directory (btl-page:load-btl *default-btl-pathname*)))
-         (page (gethash (random-elt (hash-table-keys pages)) pages)))
+         (page (gethash (random-elt (hash-table-keys pages)) pages))
+         (session (page:make-session stream)))
     (loop
-      (page:display page stream)
-      (setf page (gethash (page:handle-input page stream) pages page)))))
+      (page:display page session)
+      (let* ((next-page-nummer (page:handle-input page session))
+             (next-page (gethash next-page-nummer pages)))
+        (if next-page
+            (when (or (zerop (page:preis next-page))
+                      (confirm-payment (page:preis next-page)))
+              (setf page next-page))
+            (page:display-system-line "Seite nicht vorhanden"))))))
 
 #+(or)
 (defun instance-diff (a b)

@@ -328,15 +328,27 @@
 
 (defparameter *btl-directory* (or (uiop:getenv "BTL_DIRECTORY") #p"BTL/"))
 
-(defmethod page:display ((sk sk) stream)
+(defclass btl-session (page:session)
+  ((loaded-decoder-pages :initform (make-list 3) :accessor loaded-decoder-pages)))
+
+(defmethod page:impressum ((sk sk))
+  (SKOHQ1 sk))
+
+(defmethod page:preis ((sk sk))
+  (SKOEBETR sk))
+
+(defmethod page:display ((sk sk) session)
+  (change-class session 'btl-session)
   (format t "; showing page ~A~%" sk)
-  (cept:with-cept-stream (stream)
-    (dolist (accessor '(SKOSDRQ1 SKOSDRQ2 SKOSDRQ3))
-      (when-let (dekoder-page-number (funcall accessor sk))
-        (if-let (dekoder-page (gethash dekoder-page-number (db sk)))
-          (cept:write-cept (SKODR dekoder-page))
-          (warn "; ~A decoder page ~A for ~A not found" accessor dekoder-page-number sk))))
-    (cept:write-cept (SKOAC sk))))
+  (let ((decoder-pages (remove nil (list (SKOSDRQ1 sk) (SKOSDRQ2 sk) (SKOSDRQ3 sk)))))
+    (unless (equal (loaded-decoder-pages session) decoder-pages)
+      (format t "; loading decoder pages ~S~%" decoder-pages)
+      (dolist (nummer decoder-pages)
+        (if-let (decoder-page (gethash nummer (db sk)))
+          (cept:write-cept (SKODR decoder-page))
+          (warn "; decoder page ~S not found" nummer)))
+      (setf (loaded-decoder-pages session) decoder-pages)))
+  (cept:write-cept (SKOAC sk)))
 
 (defun check-btl-cross-refences (pathname)
   (let ((pages (load-btl-file pathname)))
