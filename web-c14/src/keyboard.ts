@@ -118,7 +118,20 @@ const initKeyboard = (send: (ceptCodes: number[]) => void) => {
     svgDoc.documentElement.focus()
   }
   const handleKeyDownEvent = (event: KeyboardEvent) => {
-    console.log('event.code', event.code)
+    console.log(
+      'event code',
+      event.code,
+      'key',
+      event.key,
+      'shiftKey',
+      event.shiftKey,
+      'ctrlKey',
+      event.ctrlKey,
+      'altKey',
+      event.altKey,
+      'metaKey',
+      event.metaKey,
+    )
     let keyElement = svgDoc.getElementById(`key-${event.code}`)
     switch (event.key) {
       case 'F1': // '*'
@@ -126,6 +139,7 @@ const initKeyboard = (send: (ceptCodes: number[]) => void) => {
         keyElement = svgDoc.getElementById(`key-c14Star`)
         break
       case 'F2': // '#'
+      case 'Enter':
         send([0x1c])
         keyElement = svgDoc.getElementById(`key-c14Hash`)
         break
@@ -139,9 +153,24 @@ const initKeyboard = (send: (ceptCodes: number[]) => void) => {
         keyElement = svgDoc.getElementById('key-c14Reveal')
         break
       default:
-        if (event.key.length === 1 && !event.altKey && !event.metaKey) {
+        if (
+          event.key.length === 1 &&
+          !event.altKey &&
+          !event.metaKey &&
+          !event.shiftKey
+        ) {
           console.log(`sending ${event.key.charCodeAt(0)}`)
           send([event.key.charCodeAt(0)])
+        } else if (
+          (event.code === 'Digit8' || event.code === 'BracketRight') &&
+          event.shiftKey
+        ) {
+          send([0x13])
+        } else if (
+          event.code === 'Backslash' ||
+          (event.code === 'Digit3' && event.shiftKey)
+        ) {
+          send([0x1c])
         } else {
           console.log(`ignored key ${event.key}`)
           keyElement = null

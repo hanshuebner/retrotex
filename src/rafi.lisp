@@ -128,12 +128,12 @@
       ((probe-file *current-filename*)
        (load-page *current-filename*))
       (t
-       (cept:service-jump-return)
+       (cept:service-break-return)
        (cept:clear-page)
-       (cept:service-jump 23)))))
+       (cept:service-break 23)))))
 
 (defun local-command ()
-  (cept:service-jump 23)
+  (cept:service-break 23)
   (cept:write-cept "[L]oad [S]ave [F]ilename ")
   (unwind-protect
        (case (code-char (prog1
@@ -144,7 +144,7 @@
          (#\f (set-filename))
          #+(or)
          (#\q (throw 'exit nil)))
-    (cept:service-jump-return)))
+    (cept:service-break-return)))
 
 (defun handle-byte (stream byte)
   (format t "<~2,'0X ~C~%" byte (if (<= 32 byte 127) (code-char byte) #\?))

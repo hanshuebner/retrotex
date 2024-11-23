@@ -108,12 +108,27 @@
     (dolist (page pages directory)
       (setf (gethash (page:nummer page) directory) page))))
 
+(defparameter *default-btl-pathname* #P"ccc.btl")
+
 (defun standard-btx-handler (stream)
-  (let* ((pages (make-page-directory (btl-page:load-btl-file "BTL/CCC.BTL")))
-         (page (gethash "655321a" pages)))
+  (let* ((pages (make-page-directory (btl-page:load-btl *default-btl-pathname*)))
+         (page (gethash (random-elt (hash-table-keys pages)) pages)))
     (loop
       (page:display page stream)
       (setf page (gethash (page:handle-input page stream) pages page)))))
+
+#+(or)
+(defun instance-diff (a b)
+  (dolist (slot (mapcar 'closer-mop:slot-definition-name (closer-mop:class-slots (class-of a))))
+    (unless (equalp (slot-value a slot) (slot-value b slot))
+      (format t "~A ~S <=> ~S~%" slot (slot-value a slot) (slot-value b slot)))))
+
+#+(or)
+(defun show-instance (i)
+  (dolist (slot (mapcar 'closer-mop:slot-definition-name (closer-mop:class-slots (class-of i))))
+    (let ((value (slot-value i slot)))
+      (unless (or (equal 0 value) (not value))
+        (format t "~A => ~S~%" slot (slot-value i slot))))))
 
 (defun start ()
   (format t "; starting serial server~%")

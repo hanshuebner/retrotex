@@ -11,8 +11,8 @@
            #:test
            #:disable-system-line
            #:clear-page
-           #:service-jump
-           #:service-jump-return
+           #:service-break
+           #:service-break-return
            #:reset-page
            #:show-cursor
            #:hide-cursor
@@ -85,10 +85,10 @@
 (defun clear-page ()
   (write-cept #x0c))
 
-(defun service-jump (&optional (line 23))
+(defun service-break (&optional (line 23))
   (write-cept #x1f #x2f #x40 (+ #x40 line)))
 
-(defun service-jump-return ()
+(defun service-break-return ()
   (write-cept #x1F #x2F #x4F))
 
 (defun delete-to-end-of-line ()

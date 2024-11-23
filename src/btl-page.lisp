@@ -3,8 +3,8 @@
 (defpackage :btl-page
   (:use :cl :alexandria)
   (:export
-   #:load-btl-directory
-   #:load-btl-file))
+   #:load-btl-file
+   #:load-btl))
 
 (in-package :btl-page)
 
@@ -101,7 +101,8 @@
          (subseq (buffer sk) (,ptr sk) (+ (,ptr sk) (,len sk)))))))
 
 (define-btl-class sk (page:page)
-  ((db :initarg :db :reader db))
+  ((file :initarg :file :reader file)
+   (db :initarg :db :reader db))
   (:layout-file "sk-layout.txt"))
 
 (define-range-reader SKOAM)
@@ -127,7 +128,7 @@
 
 (defmethod print-object ((sk sk) stream)
   (print-unreadable-object (sk stream :type t :identity t)
-    (format stream "~A (~A)" (SKOSNRBP sk) (sk-page-type sk))))
+    (format stream "~A ~A (~A)" (SKOSNRBP sk) (file sk) (sk-page-type sk))))
 
 (defmethod sk-choice-mapping ((sk sk))
   (append (list "#" "0")
@@ -291,13 +292,22 @@
                  (print-sk sk)))
           finally (format t "~A Seiten~%" (/ i #x0800)))))
 
+(defun nächstes-blatt (nummer)
+  (ppcre:regex-replace ".$"
+                       nummer
+                       (lambda (match)
+                         (string (code-char (1+ (char-code (aref match 0))))))
+                       :simple-calls t))
+
 (defmethod initialize-instance :after ((sk sk) &key)
   (setf (gethash (SKOSNRBP sk) (db sk)) sk
         (slot-value sk 'page:nummer) (SKOSNRBP sk)
         (slot-value sk 'page:choices) (loop with map = (make-hash-table :test #'equal)
                                             for (choice nummer) in (sk-auswahlmöglichkeiten sk)
                                             do (setf (gethash choice map) nummer)
-                                            finally (return map))))
+                                            finally (return map)))
+  (unless (gethash "#" (page:choices sk))
+    (setf (gethash "#" (page:choices sk)) (nächstes-blatt (page:nummer sk)))))
 
 (defun load-btl-file (pathname)
   (with-input-from-file (f pathname :element-type '(unsigned-byte 8))
@@ -306,13 +316,15 @@
           for buffer = (make-array #x800 :element-type '(unsigned-byte 8))
           do (file-position f i)
              (read-sequence buffer f)
-          collect (make-instance 'sk :buffer buffer :db db)
+          collect (make-instance 'sk :file (pathname-name pathname):buffer buffer :db db)
           finally (format t "~&; ~A Seiten aus ~A gelesen~%" (/ i #x0800) pathname))))
 
-(defun load-btl-directory (directory-pathname)
-  (let ((btl-pathnames (remove-if-not (curry #'string-equal "btl")
-                                      (directory (merge-pathnames #p"*.*" directory-pathname)) :key #'pathname-type)))
-    (mappend 'load-btl-file btl-pathnames)))
+(defun load-btl (pathname)
+  (if (pathname-name pathname)
+      (load-btl-file pathname)
+      (let ((btl-pathnames (remove-if-not (curry #'string-equal "btl")
+                                          (directory (merge-pathnames #p"*.*" pathname)) :key #'pathname-type)))
+        (mappend 'load-btl-file btl-pathnames))))
 
 (defparameter *btl-directory* (or (uiop:getenv "BTL_DIRECTORY") #p"BTL/"))
 
@@ -325,3 +337,15 @@
           (cept:write-cept (SKODR dekoder-page))
           (warn "; ~A decoder page ~A for ~A not found" accessor dekoder-page-number sk))))
     (cept:write-cept (SKOAC sk))))
+
+(defun check-btl-cross-refences (pathname)
+  (let ((pages (load-btl-file pathname)))
+    (dolist (page (sort pages #'string-lessp :key #'page:nummer))
+      (let (has-error-p)
+        (dolist (input (sort (hash-table-keys (page:choices page)) #'string-lessp))
+          (let ((target-page (gethash input (page:choices page)))) 
+            (unless (gethash target-page (db page))
+              (unless has-error-p
+                (format t "~A~%" page)
+                (setf has-error-p t))
+              (format t "  ~A => ~A~%" input target-page))))))))

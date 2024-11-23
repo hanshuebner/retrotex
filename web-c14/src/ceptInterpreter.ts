@@ -144,7 +144,7 @@ export default (
     0x0ff, 0xfff, 0x000, 0xf00, 0x0f0, 0xff0, 0x00f, 0xf0f, 0x0ff, 0xfff,
   ]
 
-  setScreenSize(24, 40) // bla
+  setScreenSize(25, 40) // bla
   let currentWrapAround = true
   let currentMode: AttributeMode = 'serial'
   let currentPalette = 0
