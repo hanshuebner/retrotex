@@ -181,7 +181,7 @@ const initKeyboard = (send: (ceptCodes: number[]) => void) => {
       flashKey(keyElement)
     }
   }
-  svgDoc.addEventListener('keydown', handleKeyDownEvent)
+  svgDoc?.addEventListener('keydown', handleKeyDownEvent)
 
   return { setLed }
 }

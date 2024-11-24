@@ -5,9 +5,8 @@ import ceptDecoder from './ceptDecoder'
 import ceptInterpreter from './ceptInterpreter'
 
 document.addEventListener('DOMContentLoaded', async () => {
-  const display = await initDisplay(
-    document.getElementById('emulator') as HTMLCanvasElement,
-  )
+  const canvas = document.getElementById('emulator') as HTMLCanvasElement
+  const display = await initDisplay(canvas)
   display.drawString(
     'Display initialized',
     0,
@@ -42,6 +41,20 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
   initKeyboard(keyPressed)
 
+  // Fixme DEMO
+  canvas.addEventListener('keypress', (e) => {
+    console.log('canvas key press', e.key)
+    if (e.key === '*') {
+      keyPressed([0x13])
+    } else if (e.key === '#' || e.key === 'Enter') {
+      keyPressed([0x1c])
+    } else if (e.key.match('^[a-zA-Z0-9 ]$')) {
+      keyPressed([e.key.charCodeAt(0)])
+    }
+  })
+  canvas.tabIndex = 1
+  canvas.focus()
+
   // debugger functionality
   let runTo: number | undefined = undefined
 
@@ -54,7 +67,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       : 'none'
   }
 
-  debuggerStatus(false)
+  // fixme demo
+  // debuggerStatus(false)
 
   const updateRunTo = () => {
     if (runTo) {

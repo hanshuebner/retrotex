@@ -15,7 +15,7 @@
    (sub-page :reader page-sub-page)
    (basename :reader page-basename)
    (next-page :reader page-next-page :initform nil)
-   (choices :initform nil :reader page-choices)))
+   (page-choices :initform nil :reader page-choices)))
 
 (defmethod print-object ((page json-page) stream)
   (with-slots (number sub-page basename next-page) page
@@ -29,14 +29,14 @@
         (list s "a"))))
 
 (defmethod make-choices ((page json-page))
-  (with-slots (next-page metadata choices) page
-    (setf choices (make-hash-table :test #'equal))
+  (with-slots (next-page metadata page-choices) page
+    (setf page-choices (make-hash-table :test #'equal))
     (doplist (choice full-page-number (getf metadata :links))
       (destructuring-bind (page-number sub-page) (parse-page-number full-page-number)
         (if-let (choice-page (find-page page-number sub-page))
           (if (string-equal choice "#")
               (setf next-page choice-page)
-              (setf (gethash choice choices) choice-page))
+              (setf (gethash choice page-choices) choice-page))
           (format t "choice ~S from page ~A does not point to valid page ~S, ignored~%" choice page full-page-number))))))
 
 (defmethod page-choices :before ((page json-page))

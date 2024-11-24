@@ -1,29 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terminal Emulator</title>
-    <link rel="stylesheet" href="terminal.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terminal Emulator</title>
+  <link rel="stylesheet" href="terminal.css">
 </head>
 <body>
-<div id="display-container">
-    <canvas id="emulator" width="600" height="300"></canvas>
-</div>
-<div id="keyboard-container">
+<div id="terminal">
+  <h1>Web-CEPT-Emulator</h1>
+  <div id="display-container">
+    <canvas id="emulator" width="600" height="300" tabindex="1"></canvas>
+  </div>
+  <div id="keyboard-container">
     <object id="keyboard-svg" data="rafi-editing-keyboard.svg" type="image/svg+xml"></object>
-</div>
-<script src="bundle.js"></script>
-<div id="cept-debugger">
+  </div>
+  <div id="cept-debugger">
     <div>
-        <input id="run-to"/>
-        <button id="next-step">next step</button>
-        <button id="previous-page">previous page</button>
-        <button id="next-page">next page</button>
-        <label><input type="checkbox" id="tia"/>tia</label>
-        <button id="close-debugger">close debugger</button>
+      <input id="run-to" />
+      <button id="next-step">next step</button>
+      <button id="previous-page">previous page</button>
+      <button id="next-page">next page</button>
+      <label><input type="checkbox" id="tia" />tia</label>
+      <button id="close-debugger">close debugger</button>
     </div>
     <div id="cept-debugger-screen"></div>
+  </div>
+  <p>
+    Ich habe diesen CEPT-Emulator 2024 angefangen, weil ich eine bequeme Anzeigemöglichkeit für historische
+    BTX-Seiten haben wollte. Derzeit habe ich einige BTL-Dumps des Chaos Computer Club, und das CCC-Angebot
+    von 1987 kann hier auch besichtigt werden. Es wäre schön, weitere BTL-Dateien zu haben, um das Online-Museum
+    zu erweitern. Wenn Ihr Kontakte zu ehemaligen BTX-Anbietern habt, fragt sie doch, ob sie noch Backups haben.
+    Ich kann die meisten historischen Medien einlesen.
+  </p>
+  <p>
+    Der Emulator ist derzeit unvollständig, aber er eignet sich schon dazu, die CCC-Seiten durchzublättern. Wenn
+    Ihr besondere Wünsche an die Erweiterung der Emulation habt, meldet Euch gerne. Der Quellcode für den Emulator
+    und den Server ist <a href="https://github.com/hanshuebner/retrotex" target="_blank">auf GitHub</a> abrufbar.
+  </p>
+  <h2>Kontakt</h2>
+  <p>
+    Email: <a href="mailto:hans.huebner@gmail.com" target="_blank">hans.huebner@gmail.com</a><br />
+    Mastodon: <a href="https://mastodon.social/@hanshuebner" target="_blank">@hanshuebner@mastodon.social</a>
+  </p>
+  <h2>Links</h2>
+  <ul>
+    <li><a href="https://btx-museum.de" target="_blank">BTX-Museum</a></li>
+  </ul>
 </div>
+<script src="bundle.js"></script>
 </body>
 </html>

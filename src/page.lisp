@@ -17,9 +17,30 @@
 
 (in-package :page)
 
+(defconstant +max-page-stack+ 50
+  "Anzahl der Seiten, die pro Session für *# gespeichert werden")
+
 (defclass session ()
-  ((cept-stream :initarg :cept-stream :reader cept-stream)
-   (decoder-pages :initform nil :reader decoder-pages)))
+  ((cept-stream :initarg :cept-stream
+                :reader cept-stream)
+   (decoder-pages :initform nil
+                  :reader decoder-pages)
+   (stack :initform nil
+          :accessor stack
+          :documentation "Enthält die aktuelle und bis zu +max-page-stack+ vorher besuchte Seiten")))
+
+(defmethod session-push-page ((session session) nummer)
+  (with-slots (stack) session
+    (unless (equal (car stack) nummer)
+      (when (> (length stack) +max-page-stack+)
+        (setf stack (subseq stack +max-page-stack+)))
+      (push nummer stack))))
+
+(defmethod session-pop-page ((session session) nummer)
+  (with-slots (stack) session
+    (when stack
+      (pop stack)
+      (car stack))))
 
 (defmacro with-session-stream ((session) &body body)
   `(cept:with-cept-stream ((cept-stream ,session))
@@ -48,10 +69,21 @@
     (with-session-stream (session)
       (call-next-method))))
 
+(defgeneric line-1-colors (page)
+  (:method (page) (list 7 0)))
+
+(defgeneric line-24-colors (page)
+  (:method (page) (list 7 0)))
+
 (defgeneric impressum (page)
-  (:documentation "Gibt den Impressums-String für die erste Zeile zurück")
+  (:documentation "Gibt den Impressumstext für die erste Zeile zurück")
   (:method (page)
-    ""))
+    #())
+  (:method :around (page)
+    (subseq (flex:with-output-to-sequence (s)
+              (write-sequence (call-next-method) s)
+              #.(flex:string-to-octets (make-string 32 :initial-element #\space)))
+            0 32)))
 
 (defgeneric preis (page)
   (:documentation "Gibt den Seitenpreis in Pfennig zurück")
@@ -59,22 +91,34 @@
 
 (defmethod display :before ((page page) session)
   (cept:service-break)
-  (let ((nummer (nummer page)))
-    (cept:goto 23 (- 40 (length nummer)))
-    (cept:write-cept nummer))
+  (cept:goto 23 0)
+  (set-foreground-and-background-colors (line-24-colors page))
+  (cept:write-cept #.(make-string 40 :initial-element #\space))
   (cept:service-break-return))
+
+(defun set-foreground-and-background-colors (colors)
+  (destructuring-bind (foreground-color background-color) colors
+    (cept:foreground-color foreground-color)
+    (cept:background-color background-color)))
 
 (defmethod display :after ((page page) session)
   (cept:service-break)
   (cept:goto 0 0)
+  (set-foreground-and-background-colors (line-24-colors page))
   (cept:write-cept (impressum page))
   (cept:goto 0 32)
   (cept:write-cept (format nil " ~D,~2,'0D DM"  (floor (preis page) 100) (mod (preis page) 100)))
-  (cept:service-break-return)
-  (cept:goto 23 0))
+  (let ((nummer (nummer page)))
+  (set-foreground-and-background-colors (line-24-colors page))
+    (cept:goto 23 (- 39 (length nummer)))
+    (cept:write-cept #\space nummer)
+    (session-push-page session nummer))
+  (cept:service-break-return))
 
 (defun display-system-line (&rest things)
   (cept:service-break)
+  (cept:goto 23 0)
+  (cept:write-cept (make-string 32 :initial-element #\space))
   (cept:goto 23 0)
   (apply 'cept:write-cept things)
   (cept:goto 23 0)
@@ -86,6 +130,7 @@
 
 (defmethod handle-input ((page page) session)
   (format t "; handle input, defined choices ~A~%" (sort (hash-table-keys (choices page)) #'string-lessp))
+  (cept:goto 23 0)
   (let ((input (make-array 24 :fill-pointer 0 :element-type 'character))
         first-char)
     (loop
@@ -109,7 +154,8 @@
                       (gethash "#" (choices page) (nummer page)))
                      ;; *# -> this page (?)
                      ((equal input "*")
-                      (nummer page))
+                      (or (session-pop-page session (nummer page))
+                          (nummer page)))
                      ;; *<digit...># -> find page
                      ((eql (aref input 0) #\*)
                       (format nil "~Aa" (subseq input 1)))

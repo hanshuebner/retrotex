@@ -106,7 +106,7 @@
     (dolist (page pages directory)
       (setf (gethash (page:nummer page) directory) page))))
 
-(defparameter *default-btl-pathname* #P"ccc.btl")
+(defparameter *default-btl-pathname* #P"btl/")
 
 (defun confirm-payment (preis)
   (page:display-system-line (format nil "Anzeigen für DM ~D,~2,'0D? Ja: #" (floor preis 100) (mod preis 100)))
@@ -117,17 +117,20 @@
     (setf cept:*cept-stream* stream)
     (format t "; bound *cept-stream* to ~A~%" stream))
   (let* ((pages (make-page-directory (btl-page:load-btl *default-btl-pathname*)))
-         (page (gethash (random-elt (hash-table-keys pages)) pages))
+         (page (gethash "655321a" pages))
          (session (page:make-session stream)))
     (loop
       (page:display page session)
       (let* ((next-page-nummer (page:handle-input page session))
              (next-page (gethash next-page-nummer pages)))
-        (if next-page
-            (when (or (zerop (page:preis next-page))
-                      (confirm-payment (page:preis next-page)))
-              (setf page next-page))
-            (page:display-system-line "Seite nicht vorhanden"))))))
+        (cond
+          (next-page
+           (when (or (zerop (page:preis next-page))
+                     (confirm-payment (page:preis next-page)))
+             (setf page next-page)))
+          (t
+           (page:display-system-line "Seite nicht vorhanden")
+           (sleep 1)))))))
 
 #+(or)
 (defun instance-diff (a b)

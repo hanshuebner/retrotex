@@ -745,11 +745,13 @@ export default (
       parallelAttributes.backgroundColor = 0
     },
     setBgColorOfRow: (color: number) => {
+      color = currentPalette * 8 + color
       log('setBgColorOfRow', { color })
       rowColors[currentRow] = color
       display.setRowColor(currentRow, colors[color])
     },
     setBgColorOfScreen: (color: number) => {
+      color = currentPalette * 8 + color
       log('setBgColorOfScreen', { color })
       screenColor = color
       display.setScreenColor(colors[color])

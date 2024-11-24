@@ -4,7 +4,8 @@
   (:use :cl :alexandria)
   (:export
    #:load-btl-file
-   #:load-btl))
+   #:load-btl
+   #:print-btl-directory))
 
 (in-package :btl-page)
 
@@ -280,18 +281,6 @@
   (print-if-defined "Feld-Definitionen: ~A " (sk-feld-definitionen sk))
   (print-if-defined "Auswahlmöglichkeiten: ~S" (sk-auswahlmöglichkeiten sk)))
 
-(defun print-btl-directory (pathname &optional page)
-  (with-input-from-file (f pathname :element-type '(unsigned-byte 8))
-    (loop with buffer = (make-array #x800)
-          for i from #x4000 below (file-length f) by #x0800
-          do (file-position f i)
-             (read-sequence buffer f)
-             (let ((sk (make-instance 'sk :buffer buffer)))
-               (when (or (not page)
-                         (equal page (SKOSNRBP sk)))
-                 (print-sk sk)))
-          finally (format t "~A Seiten~%" (/ i #x0800)))))
-
 (defun nächstes-blatt (nummer)
   (ppcre:regex-replace ".$"
                        nummer
@@ -326,6 +315,12 @@
                                           (directory (merge-pathnames #p"*.*" pathname)) :key #'pathname-type)))
         (mappend 'load-btl-file btl-pathnames))))
 
+(defun print-btl-directory (pathname)
+  (let ((pages (load-btl-file pathname)))
+    (dolist (page pages)
+      (print-sk page))
+    (format t "~A Seiten~%" (length pages))))
+
 (defparameter *btl-directory* (or (uiop:getenv "BTL_DIRECTORY") #p"BTL/"))
 
 (defclass btl-session (page:session)
@@ -337,21 +332,42 @@
 (defmethod page:preis ((sk sk))
   (SKOEBETR sk))
 
+(defun load-decoder-page (sk nummer)
+  (when nummer
+    (if-let (decoder-page (gethash nummer (db sk)))
+      (cept:write-cept (SKODR decoder-page))
+      (warn "; decoder page ~S not found" nummer))
+    (finish-output cept:*cept-stream*)
+    (sleep 0.5)))
+
+(defmethod load-decoder-pages ((sk sk) session)
+  (with-slots (SKOSDRQ1 SKOSDRQ2 SKOSDRQ3) sk
+    (with-slots (loaded-decoder-pages) session
+      (unless (equal (first loaded-decoder-pages) SKOSDRQ1)
+        (load-decoder-page sk SKOSDRQ1))
+      (unless (member SKOSDRQ2 (rest loaded-decoder-pages) :test #'equal)
+        (load-decoder-page sk SKOSDRQ2))
+      (unless (member SKOSDRQ3 (rest loaded-decoder-pages) :test #'equal)
+        (load-decoder-page sk SKOSDRQ3))
+      (setf loaded-decoder-pages (list SKOSDRQ1 SKOSDRQ2 SKOSDRQ3)))))
+
 (defmethod page:display ((sk sk) session)
   (change-class session 'btl-session)
-  (format t "; showing page ~A~%" sk)
-  (let ((decoder-pages (remove nil (list (SKOSDRQ1 sk) (SKOSDRQ2 sk) (SKOSDRQ3 sk)))))
-    (unless (equal (loaded-decoder-pages session) decoder-pages)
-      (format t "; loading decoder pages ~S~%" decoder-pages)
-      (dolist (nummer decoder-pages)
-        (if-let (decoder-page (gethash nummer (db sk)))
-          (cept:write-cept (SKODR decoder-page))
-          (warn "; decoder page ~S not found" nummer)))
-      (setf (loaded-decoder-pages session) decoder-pages)))
+  (format t "; showing page ~A (Hintergrund ~:[nicht ~;~]halten)~%" sk (SKOFSBGH sk))
+  (when (SKOFSBGH sk)
+    (cept:reset)
+    (cept:clear-page))
+  (load-decoder-pages sk session)
+  (when (plusp (SKOZEILA sk))
+    (loop for row from (SKOZEILA sk) upto (SKOZEILE sk)
+          do (cept:goto row 0)
+             (cept:delete-to-end-of-line))
+    (cept:goto (SKOZEILA sk) 0))
   (cept:write-cept (SKOAC sk)))
 
-(defun check-btl-cross-refences (pathname)
-  (let ((pages (load-btl-file pathname)))
+(defun check-btl-cross-references (pathname)
+  (let ((pages (load-btl-file pathname))
+        (error-count 0))
     (dolist (page (sort pages #'string-lessp :key #'page:nummer))
       (let (has-error-p)
         (dolist (input (sort (hash-table-keys (page:choices page)) #'string-lessp))
@@ -360,4 +376,6 @@
               (unless has-error-p
                 (format t "~A~%" page)
                 (setf has-error-p t))
-              (format t "  ~A => ~A~%" input target-page))))))))
+              (format t "  ~A => ~A~%" input target-page)
+              (incf error-count))))))
+    (format t "~D error~:P~%" error-count)))
