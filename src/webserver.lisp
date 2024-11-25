@@ -62,18 +62,8 @@
 (defclass acceptor (hunchensocket:websocket-acceptor hunchentoot:easy-acceptor)
   ((handler :initarg :handler :reader acceptor-handler)))
 
-(defun no-cache-callback (file content-type)
-  (declare (ignore file content-type))
-  (hunchentoot:no-cache))
-
-(setf hunchentoot:*dispatch-table*
-      (list (hunchentoot:create-folder-dispatcher-and-handler "/"
-                                                              #p"web-c14/public/"
-                                                              nil
-                                                              'no-cache-callback)))
-
 (defun start (handler &key (port 8881))
   (when *acceptor*
     (hunchentoot:stop *acceptor*))
-  (setf *acceptor* (make-instance 'acceptor :port port :handler handler))
+  (setf *acceptor* (make-instance 'acceptor :port port :handler handler :document-root #p"web-c14/public/"))
   (hunchentoot:start *acceptor*))
