@@ -36,13 +36,31 @@ body {
     font-family: 'IBM Plex Serif', Georgia, serif;
 }
 
-p {
+.container {
+    display: flex;
+}
+
+.left {
+    width: 20px; /* Feste Breite für die linke Spalte */
+}
+
+.middle {
+    flex: 300px;
+}
+
+.right {
+    flex: 1;
+}
+
+p, ul{
     margin: 2em;
+    margin-left: 100px;
+    max-width: 50em;
 }
 
 h1, h2, h3 {
     font-family: 'IBM Plex Sans', Arial, sans-serif;
-    margin-left: 20px;
+    margin-left: 60px;
     margin-right: 2em;
 }
 

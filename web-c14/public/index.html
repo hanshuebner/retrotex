@@ -9,34 +9,61 @@
 <body>
 <div id="terminal">
   <h1>Web-CEPT-Emulator</h1>
-  <div id="display-container">
-    <canvas id="emulator" width="600" height="300" tabindex="1"></canvas>
-  </div>
-  <div id="keyboard-container">
-    <object id="keyboard-svg" data="rafi-editing-keyboard.svg" type="image/svg+xml"></object>
-  </div>
-  <div id="cept-debugger">
-    <div>
-      <input id="run-to" />
-      <button id="next-step">next step</button>
-      <button id="previous-page">previous page</button>
-      <button id="next-page">next page</button>
-      <label><input type="checkbox" id="tia" />tia</label>
-      <button id="close-debugger">close debugger</button>
+  <div class="container">
+    <div class="left"></div>
+    <div class="middle">
+      <div id="display-container">
+        <canvas id="emulator" width="600" height="300" tabindex="1"></canvas>
+      </div>
+      <div id="keyboard-container">
+        <object id="keyboard-svg" data="rafi-editing-keyboard.svg" type="image/svg+xml"></object>
+      </div>
+      <div id="cept-debugger">
+        <div>
+          <input id="run-to" />
+          <button id="next-step">next step</button>
+          <button id="previous-page">previous page</button>
+          <button id="next-page">next page</button>
+          <label><input type="checkbox" id="tia" />tia</label>
+          <button id="close-debugger">close debugger</button>
+        </div>
+        <div id="cept-debugger-screen"></div>
+      </div>
     </div>
-    <div id="cept-debugger-screen"></div>
+    <div class="right">
+    </div>
   </div>
+  <h2>Über diesen Emulator</h2>
   <p>
-    Ich habe diesen CEPT-Emulator 2024 angefangen, weil ich eine bequeme Anzeigemöglichkeit für historische
-    BTX-Seiten haben wollte. Derzeit habe ich einige BTL-Dumps des Chaos Computer Club, und das CCC-Angebot
-    von 1987 kann hier auch besichtigt werden. Es wäre schön, weitere BTL-Dateien zu haben, um das Online-Museum
-    zu erweitern. Wenn Ihr Kontakte zu ehemaligen BTX-Anbietern habt, fragt sie doch, ob sie noch Backups haben.
-    Ich kann die meisten historischen Medien einlesen.
+    Dieser CEPT-Emulator ist in Typescript programmiert und verwendet
+    als Datenbasis für die angezeigten BTX-Seiten die ursprünglichen
+    BTL-Dateien im Bulk-Update-Format (FTZ 157 D2).  Diese Dateien wurden
+    von Anbietern verwendet, um ihre lokal bearbeiteten Seiten per
+    Filetransfer im BTX-Zentralsystem zu veröffentlichen.
   </p>
   <p>
-    Der Emulator ist derzeit unvollständig, aber er eignet sich schon dazu, die CCC-Seiten durchzublättern. Wenn
-    Ihr besondere Wünsche an die Erweiterung der Emulation habt, meldet Euch gerne. Der Quellcode für den Emulator
-    und den Server ist <a href="https://github.com/hanshuebner/retrotex" target="_blank">auf GitHub</a> abrufbar.
+    Ich habe 2024 angefangen, diesen CEPT-Emulator zu programmieren,
+    weil ich eine bequeme Anzeigemöglichkeit für BTL-Dateien haben
+    wollte. Derzeit habe ich das Angebot des Chaos Computer Club von
+    1987 im BTL-Format und es kann hier besichtigt werden. Es wäre
+    schön, weitere BTL-Dateien zu haben, um das Online-Museum zu
+    erweitern. Wenn Ihr Kontakte zu ehemaligen BTX-Anbietern habt,
+    fragt sie doch, ob sie noch Backups haben.  Ich kann die meisten
+    historischen Medien einlesen.
+  </p>
+  <p>
+    Dieser Server bietet die BTX-Seiten nicht nur im Webinterface,
+    sondern auch über den TCP-Port 20000 an.  Hinweise zur Verwendung
+    von DOS-Decodern mit TCP finden sich auf der GitHub-Hauptseite des
+    <a href="https://github.com/bildschirmtext/bildschirmtext?tab=readme-ov-file" target="_blank">bildschirmtext-Projektes</a>.
+  </p>
+  <p>
+    Der Emulator ist derzeit unvollständig, aber er eignet sich schon
+    dazu, die CCC-Seiten durchzublättern. Wenn Ihr besondere Wünsche
+    an die Erweiterung der Emulation habt, meldet Euch gerne. Der
+    Quellcode für den Emulator und den Server
+    ist <a href="https://github.com/hanshuebner/retrotex"
+    target="_blank">auf GitHub</a> abrufbar.
   </p>
   <h2>Kontakt</h2>
   <p>
@@ -46,6 +73,7 @@
   <h2>Links</h2>
   <ul>
     <li><a href="https://btx-museum.de" target="_blank">BTX-Museum</a></li>
+    <li><a href="https://github.com/bildschirmtext" target="_blank">Bildschirmtext-Projekt auf GitHub</a>
   </ul>
 </div>
 <script src="bundle.js"></script>
