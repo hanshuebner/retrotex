@@ -1,5 +1,5 @@
 (defsystem "retrotex"
-  :description "retrotex: A simple editing and signage system for the RAFI C14 Bildschirmtext terminal"
+  :description "retrotex: A Bildschirmtext server and terminal emulation system"
   :author "Hans Hübner <hans.huebner@example.com>"
   :license "MIT"
   :version "0.1"

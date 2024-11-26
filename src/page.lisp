@@ -82,7 +82,7 @@
   (:method :around (page)
     (subseq (flex:with-output-to-sequence (s)
               (write-sequence (call-next-method) s)
-              #.(flex:string-to-octets (make-string 32 :initial-element #\space)))
+              (write-sequence #.(flex:string-to-octets (make-string 32 :initial-element #\space)) sqq))
             0 32)))
 
 (defgeneric preis (page)
