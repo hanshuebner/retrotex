@@ -48,7 +48,8 @@
            #:color-definition-bytes
            #:reset-colors
            #:delete-to-end-of-line
-           #:read-byte))
+           #:read-byte
+           #:format-cept))
 
 (in-package :cept)
 
@@ -72,6 +73,9 @@
   (let ((octets (to-octets stuff)))
     (write-sequence (make-array (length octets) :element-type '(unsigned-byte 8) :initial-contents octets)
                     *cept-stream*)))
+
+(defun format-cept (format &rest args)
+  (write-cept (cept:string-to-bytes (apply 'format nil format args))))
 
 (defun reset ()
   (write-cept 1 #x64))

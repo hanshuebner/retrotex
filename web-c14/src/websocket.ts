@@ -37,7 +37,7 @@ const makeWebsocket = (): Websocket => {
     console.error(`Error interpreting ${currentChunkAsString()}`, msg)
   }
 
-  const socketUrl = `wss://${window.location.host}/cept/ws`
+  const socketUrl = `${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.host}/cept/ws`
   let socket: WebSocket
 
   const send = (data: Uint8Array) => {

@@ -63,8 +63,10 @@
     (list (ldb (byte 4 4) byte) (ldb (byte 4 0) byte))))
 
 (defun decode-bcd+ (buffer &optional (offset 0) (length 8))
-  (decode-field buffer
-                'bd:bcd+ length offset 0))
+  (decode-field buffer 'bd:bcd+ length offset 0))
+
+(defun decode-bcd (buffer &optional (offset 0) (length (- (length buffer) offset)))
+  (decode-field buffer 'bd:bcd length offset 0))
 
 (defmacro define-btl-class (name superclasses extra-slots (&key layout-file))
   (let* ((definitions (bd:parse-layout-file layout-file))
@@ -308,11 +310,64 @@
           collect (make-instance 'sk :file (pathname-name pathname):buffer buffer :db db)
           finally (format t "~&; ~A Seiten aus ~A gelesen~%" (/ i #x0800) pathname))))
 
+(defparameter *archive-directory* #P"archive/")
+
+(defun btl-files-in-directory (pathname)
+  (remove-if-not (curry #'string-equal "btl")
+                 (directory (merge-pathnames #p"*.*" pathname)) :key #'pathname-type))
+
+(defclass btl-directory-page (page:page)
+  ((btl-files :reader btl-files)
+   (base-directory :initarg :base-directory :reader base-directory))
+  (:default-initargs :base-directory *archive-directory*))
+
+(defmethod initialize-instance :after ((page btl-directory-page) &key)
+  (with-slots (base-directory btl-files) page
+    (setf base-directory (merge-pathnames base-directory)
+          btl-files (btl-files-in-directory base-directory))))
+
+(defun btl-file-date (btl-pathname)
+  (let ((bcd-date (make-array 3 :element-type '(unsigned-byte 8))))
+    (with-open-file (f btl-pathname :element-type '(unsigned-byte 8))
+      (file-position f #x30)
+      (read-sequence bcd-date f))
+    (let ((year (decode-bcd bcd-date 0 1))
+          (month (decode-bcd bcd-date 1 1))
+          (date (decode-bcd bcd-date 2 1)))
+      (format nil "~2D.~2,'0D.~4D" date month (+ 1900 year)))))
+
+(defmethod page:nummer ((page btl-directory-page))
+  "0a")
+
+(defun format-date (universal-time)
+  (multiple-value-bind (second minute hour date month year) (decode-universal-time universal-time)
+    (declare (ignore second minute hour))
+    (format nil "~2D.~2,'0D.~4,'0D" date month year)))
+
+(defmethod page:impressum ((page btl-directory-page))
+  (flex:string-to-octets "Verzeichnis der BTL-Dateien"))
+
+(defmethod page:display ((page btl-directory-page) session)
+  (cept:clear-page)
+  (cept:define-colors 0 '((0 0 0) (5 5 5) (7 7 7)))
+  (cept:screen-color 0)
+  (loop with files = (btl-files-in-directory (merge-pathnames #p"**/" (base-directory page)))
+        for i below 11
+        for btl-file-pathname = (nth i files)
+        for row = (1+ (* 2 i))
+        do (cept:goto row 0)
+           (cept:background-color (1+ (mod i 2)))
+           (cept:format-cept "~2D ~A"
+                             (1+ i)
+                             (btl-file-date btl-file-pathname))
+           (cept:goto (1+ row) 0)
+           (cept:background-color (1+ (mod i 2)))
+           (cept:format-cept "   ~37A" (enough-namestring btl-file-pathname (base-directory page)))))
+
 (defun load-btl (pathname)
   (if (pathname-name pathname)
       (load-btl-file pathname)
-      (let ((btl-pathnames (remove-if-not (curry #'string-equal "btl")
-                                          (directory (merge-pathnames #p"*.*" pathname)) :key #'pathname-type)))
+      (let ((btl-pathnames (btl-files-in-directory pathname)))
         (mappend 'load-btl-file btl-pathnames))))
 
 (defun print-btl-directory (pathname)

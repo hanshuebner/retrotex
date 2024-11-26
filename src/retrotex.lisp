@@ -106,7 +106,7 @@
     (dolist (page pages directory)
       (setf (gethash (page:nummer page) directory) page))))
 
-(defparameter *default-btl-pathname* #P"btl/")
+(defparameter *default-btl-pathname* #P"ccc.btl")
 
 (defun confirm-payment (preis)
   (page:display-system-line (format nil "Anzeigen für DM ~D,~2,'0D? Ja: #" (floor preis 100) (mod preis 100)))
