@@ -62,8 +62,14 @@
 (defclass acceptor (hunchensocket:websocket-acceptor hunchentoot:easy-acceptor)
   ((handler :initarg :handler :reader acceptor-handler)))
 
+(hunchentoot:define-easy-handler (home :uri "/hello") ()
+  "hello")
+
 (defun start (handler &key (port 8881))
   (when *acceptor*
     (hunchentoot:stop *acceptor*))
-  (setf *acceptor* (make-instance 'acceptor :port port :handler handler :document-root #p"web-c14/public/"))
+  (setf *acceptor* (make-instance 'acceptor
+                                  :port port
+                                  :handler handler
+                                  :document-root #p"web-c14/public/"))
   (hunchentoot:start *acceptor*))

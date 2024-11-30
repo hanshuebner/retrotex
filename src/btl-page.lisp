@@ -352,14 +352,15 @@
   (cept:define-colors 0 '((0 0 0) (5 5 5) (7 7 7)))
   (cept:screen-color 0)
   (loop with files = (btl-files-in-directory (merge-pathnames #p"**/" (base-directory page)))
-        for i below 11
+        for i below 10
         for btl-file-pathname = (nth i files)
-        for row = (1+ (* 2 i))
+        for row = (+ (* 2 i) 2)
         do (cept:goto row 0)
            (cept:background-color (1+ (mod i 2)))
-           (cept:format-cept "~2D ~A"
+           (cept:format-cept "~2D ~10A~27A"
                              (1+ i)
-                             (btl-file-date btl-file-pathname))
+                             (btl-file-date btl-file-pathname)
+                             "")
            (cept:goto (1+ row) 0)
            (cept:background-color (1+ (mod i 2)))
            (cept:format-cept "   ~37A" (enough-namestring btl-file-pathname (base-directory page)))))
