@@ -77,49 +77,55 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  document.location.search.replace(/\WrunTo=(\d+)/, (match, runToString) => {
-    runTo = parseInt(runToString)
-    debuggerStatus(true)
-    updateRunTo()
-    return match
-  })
-
-  document
-    .getElementById('run-to')!
-    .addEventListener('blur', (event: Event) => {
-      runTo = parseInt((event.target as HTMLInputElement).value)
-      if (runTo < atStep) {
-        document.location.search = `?runTo=${runTo}`
-      }
+  if (document.getElementById('cept-debugger')) {
+    document.location.search.replace(/\WrunTo=(\d+)/, (match, runToString) => {
+      runTo = parseInt(runToString)
+      debuggerStatus(true)
+      updateRunTo()
+      return match
     })
 
-  if (runTo) {
     document
-      .getElementById('next-step')!
-      .addEventListener('click', (event: Event) => {
-        if (runTo) {
-          runTo += 1
-          updateRunTo()
+      .getElementById('run-to')!
+      ?.addEventListener('blur', (event: Event) => {
+        runTo = parseInt((event.target as HTMLInputElement).value)
+        if (runTo < atStep) {
+          document.location.search = `?runTo=${runTo}`
         }
       })
-  } else {
-    document.getElementById('next-step')!.style.display = 'none'
-  }
 
-  document
-    .getElementById('previous-page')!
-    .addEventListener('click', () => websocket.send(new Uint8Array(1).fill(8)))
-  document
-    .getElementById('next-page')!
-    .addEventListener('click', () => websocket.send(new Uint8Array(1).fill(32)))
-  document
-    .getElementById('close-debugger')!
-    .addEventListener('click', () => debuggerStatus(false))
-  document
-    .getElementById('tia')!
-    .addEventListener('change', (e) =>
-      interpreter.setTia((e.target as HTMLInputElement).checked),
-    )
+    if (runTo) {
+      document
+        .getElementById('next-step')!
+        .addEventListener('click', (event: Event) => {
+          if (runTo) {
+            runTo += 1
+            updateRunTo()
+          }
+        })
+    } else {
+      document.getElementById('next-step')!.style.display = 'none'
+    }
+
+    document
+      .getElementById('previous-page')!
+      .addEventListener('click', () =>
+        websocket.send(new Uint8Array(1).fill(8)),
+      )
+    document
+      .getElementById('next-page')!
+      .addEventListener('click', () =>
+        websocket.send(new Uint8Array(1).fill(32)),
+      )
+    document
+      .getElementById('close-debugger')!
+      .addEventListener('click', () => debuggerStatus(false))
+    document
+      .getElementById('tia')!
+      .addEventListener('change', (e) =>
+        interpreter.setTia((e.target as HTMLInputElement).checked),
+      )
+  }
 
   while (true) {
     await ceptDecoder(

@@ -263,15 +263,17 @@ export default (
       clearTimeout(updateTimer)
     }
     updateTimer = setTimeout(() => {
-      renderDebugDisplay(
-        glyphs,
-        attrs,
-        rowColors,
-        colors,
-        screenColor,
-        currentRow,
-        currentColumn,
-      )
+      if (document.getElementById('cept-debugger')) {
+        renderDebugDisplay(
+          glyphs,
+          attrs,
+          rowColors,
+          colors,
+          screenColor,
+          currentRow,
+          currentColumn,
+        )
+      }
       redraw()
       updateTimer = undefined
     }, 100)

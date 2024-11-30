@@ -41,6 +41,7 @@
 (defmethod hunchensocket:client-connected ((resource cept-websocket-resource)
                                            (client binary-websocket-stream))
   (format t "; client connected~%")
+  (format t "; moo ~A~%" (hunchentoot:session-value 'moo))
   (bt:make-thread (lambda ()
                     (handler-case
                         (funcall (acceptor-handler *acceptor*) client)
@@ -62,8 +63,32 @@
 (defclass acceptor (hunchensocket:websocket-acceptor hunchentoot:easy-acceptor)
   ((handler :initarg :handler :reader acceptor-handler)))
 
-(hunchentoot:define-easy-handler (home :uri "/hello") ()
-  "hello")
+(defmacro with-html (() &body body)
+  `(with-output-to-string (s)
+     (xhtml-generator:with-xhtml (s)
+       ,@body)))
+
+(hunchentoot:define-easy-handler (home :uri "/emulator") ()
+  (if (hunchentoot:session-value 'moo)
+      (incf (hunchentoot:session-value 'moo))
+      (setf (hunchentoot:session-value 'moo) 1))
+  (with-html ()
+    (:html (:head
+            (:title "CEPT Terminal Emulator")
+            ((:meta :charset "UTF-8"))
+            ((:meta :name "viewport" :content "width=device-width, initial-scale=1.0"))
+            ((:link :rel "stylesheet" :href "terminal.css")))
+           (:body
+            (:h1 "Web-CEPT-Emulator")
+            ((:div :class "container")
+             ((:div :class "left") " ")
+             ((:div :class "middle")
+              ((:div :id "display-container")
+               ((:canvas :id "emulator" :width "600" :height "300" :tabindex "1")))
+              ((:div :id "keyboard-container")
+               ((:object :id "keyboard-svg" data="rafi-editing-keyboard.svg" :type "image/svg+xml"))))
+             ((:div :class "right") " "))
+            ((:script :src "bundle.js"))))))
 
 (defun start (handler &key (port 8881))
   (when *acceptor*
