@@ -5,7 +5,7 @@ export interface Websocket {
   send: (data: Uint8Array) => void
 }
 
-const makeWebsocket = (): Websocket => {
+const initWebsocket = (): Websocket => {
   const buffer: number[] = []
   let index = 0
   const currentChunk: number[] = []
@@ -82,4 +82,4 @@ const makeWebsocket = (): Websocket => {
   return { next, putback, currentChunk, send }
 }
 
-export default makeWebsocket
+export default initWebsocket
