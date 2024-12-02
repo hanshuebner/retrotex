@@ -8,14 +8,24 @@
            #:choices
            #:nummer
            #:handle-input
-           #:make-session
            #:decoder-pages
            #:session
            #:impressum
            #:preis
-           #:display-system-line))
+           #:display-system-line
+           #:handle-client
+           #:display-page
+           #:make-page-directory
+           #:pages
+           #:current-page
+           #:goto-page))
 
 (in-package :page)
+
+(defun make-page-directory (pages)
+  (let ((directory (make-hash-table :test #'equal)))
+    (dolist (page pages directory)
+      (setf (gethash (page:nummer page) directory) page))))
 
 (defconstant +max-page-stack+ 50
   "Anzahl der Seiten, die pro Session für *# gespeichert werden")
@@ -27,7 +37,10 @@
                   :reader decoder-pages)
    (stack :initform nil
           :accessor stack
-          :documentation "Enthält die aktuelle und bis zu +max-page-stack+ vorher besuchte Seiten")))
+          :documentation "Enthält die aktuelle und bis zu +max-page-stack+ vorher besuchte Seiten")
+   (pages :initargs :pages
+          :accessor pages)
+   (current-page :accessor current-page)))
 
 (defmethod session-push-page ((session session) nummer)
   (with-slots (stack) session
@@ -46,9 +59,6 @@
   `(cept:with-cept-stream ((cept-stream ,session))
      ,@body))
 
-(defun make-session (stream)
-  (make-instance 'session :cept-stream stream))
-
 (defclass page ()
   ((nummer :initarg :nummer
            :reader nummer
@@ -66,8 +76,12 @@
 (defgeneric handle-input (page session)
   (:documentation "Verabeiten von Benutzereingaben auf der Seite")
   (:method :around (page session)
-    (with-session-stream (session)
-      (call-next-method))))
+    (handler-case
+        (with-session-stream (session)
+          (call-next-method))
+      (end-of-file (e)
+        (declare (ignore e))
+        (throw 'stream-closed nil)))))
 
 (defgeneric line-1-colors (page)
   (:method (page) (list 7 0)))
@@ -82,7 +96,7 @@
   (:method :around (page)
     (subseq (flex:with-output-to-sequence (s)
               (write-sequence (call-next-method) s)
-              (write-sequence #.(flex:string-to-octets (make-string 32 :initial-element #\space)) sqq))
+              (write-sequence #.(flex:string-to-octets (make-string 32 :initial-element #\space)) s))
             0 32)))
 
 (defgeneric preis (page)
@@ -187,3 +201,30 @@
             (dotimes (i (length input))
               (cept:write-cept #\backspace #\space #\backspace))
             (setf (fill-pointer input) 0)))))))
+
+(defun confirm-payment (preis)
+  (page:display-system-line (format nil "Anzeigen für DM ~D,~2,'0D? Ja: #" (floor preis 100) (mod preis 100)))
+  (equal (read-byte cept:*cept-stream*) #x1c))
+
+(defun handle-client (session)
+  (catch 'stream-closed
+    (let (next-page-nummer)
+      (loop
+        (setf next-page-nummer
+              (catch 'display-page
+                (format t "display-page - next-page-nummer ~A~%" next-page-nummer)
+                (page:display (current-page session) session)
+                (let* ((next-page-nummer (or next-page-nummer (page:handle-input (current-page session) session)))
+                       (next-page (gethash next-page-nummer (pages session))))
+                  (cond
+                    (next-page
+                     (when (or (zerop (page:preis next-page))
+                               (confirm-payment (page:preis next-page)))
+                       (setf (current-page session) next-page)))
+                    (t
+                     (page:display-system-line "Seite nicht vorhanden")
+                     (sleep 1))))))))))
+
+(defun goto-page (page-nummer)
+  (format t "; goto-page ~A~%" page-nummer)
+  (throw 'display-page page-nummer))

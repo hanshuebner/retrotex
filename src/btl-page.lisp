@@ -2,10 +2,10 @@
 
 (defpackage :btl-page
   (:use :cl :alexandria)
-  (:export
-   #:load-btl-file
-   #:load-btl
-   #:print-btl-directory))
+  (:export #:load-btl-file
+           #:load-btl
+           #:print-btl-directory
+           #:btl-session))
 
 (in-package :btl-page)
 
@@ -435,3 +435,10 @@
               (format t "  ~A => ~A~%" input target-page)
               (incf error-count))))))
     (format t "~D error~:P~%" error-count)))
+
+(defparameter *default-btl-pathname* #P"ccc.btl")
+
+(defmethod initialize-instance :after ((session btl-session) &key)
+  (let ((pages (page:make-page-directory (btl-page:load-btl *default-btl-pathname*))))
+    (setf (page:pages session) pages
+          (page:current-page session) (gethash "655321a" pages))))
