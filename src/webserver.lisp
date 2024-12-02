@@ -38,18 +38,25 @@
                                         (opcode (eql hunchensocket::+binary-frame+))
                                         length total))
 
+(defmethod hunchentoot:process-request :around ((request hunchensocket::websocket-request))
+  (let ((hunchentoot:*request* request))
+    (call-next-method)))
+
 (defmethod hunchensocket:client-connected ((resource cept-websocket-resource)
                                            (client binary-websocket-stream))
-  (format t "; client connected~%")
-  (format t "; moo ~A~%" (hunchentoot:session-value 'moo))
-  (bt:make-thread (lambda ()
-                    (handler-case
-                        (funcall (acceptor-handler *acceptor*) client)
-                      (error (e)
-                        (format t "; error handling client: ~A~%" e))))
-                  :name "Websocket client handler process"
-                  :initial-bindings (cons (cons 'cept:*cept-stream* client)
-                                          bt:*default-special-bindings*)))
+  (setf (hunchentoot:session-value 'cept-thread)
+        (bt:make-thread (lambda ()
+                          (catch 'stop-handling-client
+                            (handler-bind
+                                ((error (lambda (e)
+                                          (format t "; error handling client: ~A~%~A~%"
+                                                  e
+                                                  (hunchentoot::get-backtrace))
+                                          (throw 'stop-handling-client nil))))
+                              (funcall (acceptor-handler *acceptor*) client))))
+                        :name "Websocket client handler process"
+                        :initial-bindings `((cept:*cept-stream* . ,client)
+                                            ,@bt:*default-special-bindings*))))
 
 (defmethod hunchensocket:client-disconnected ((resource cept-websocket-resource)
                                               (client binary-websocket-stream))
@@ -68,10 +75,17 @@
      (xhtml-generator:with-xhtml (s)
        ,@body)))
 
+(hunchentoot:define-easy-handler (goto-page :uri "/goto-page") (number)
+  (let ((thread (hunchentoot:session-value 'cept-thread)))
+    (cond
+      (thread (bt:interrupt-thread thread 'page:goto-page number)
+              "OK")
+      (t (setf (hunchentoot:return-code*) 400)))))
+
+(hunchentoot:define-easy-handler (load-btl :uri "/load-btl") ())
+
 (hunchentoot:define-easy-handler (home :uri "/emulator") ()
-  (if (hunchentoot:session-value 'moo)
-      (incf (hunchentoot:session-value 'moo))
-      (setf (hunchentoot:session-value 'moo) 1))
+  (hunchentoot:start-session)
   (with-html ()
     (:html (:head
             (:title "CEPT Terminal Emulator")

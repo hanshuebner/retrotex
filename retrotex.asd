@@ -16,6 +16,7 @@
                "trivial-gray-streams"
                "lparallel"
                "usocket"
+               "xhtmlgen"
                "yason")
   :components ((:module "src"
                 :serial t
