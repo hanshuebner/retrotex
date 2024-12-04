@@ -1,15 +1,18 @@
 ;; -*- Lisp -*-
 
 (defpackage :webserver
-  (:use :cl :alexandria :lparallel.queue)
-  (:export #:start))
+  (:use :cl :alexandria)
+  (:export #:start)
+  (:local-nicknames
+   (:lq :lparallel.queue)
+   (:ee :event-emitter)))
 
 (in-package :webserver)
 
 (defclass binary-websocket-stream (trivial-gray-streams:fundamental-binary-input-stream
                                    trivial-gray-streams:fundamental-binary-output-stream
                                    hunchensocket:websocket-client)
-  ((queue :initform (make-queue) :accessor queue)))
+  ((queue :initform (lq:make-queue) :accessor queue)))
 
 (defmethod initialize-instance :after ((stream binary-websocket-stream) &key)
   (format t "; setting *cept-stream* to ~A~%" stream)
@@ -17,11 +20,11 @@
 
 (defmethod hunchensocket:binary-message-received (resource (stream binary-websocket-stream) data)
   (loop for byte across data
-        do (push-queue byte (queue stream))))
+        do (lq:push-queue byte (queue stream))))
 
 (defmethod trivial-gray-streams:stream-read-byte ((stream binary-websocket-stream))
   (with-slots (queue) stream
-    (pop-queue queue)))
+    (lq:pop-queue queue)))
 
 (defmethod trivial-gray-streams:stream-write-byte ((stream binary-websocket-stream) byte)
   (hunchensocket:send-binary-message stream (make-array 1 :element-type '(unsigned-byte 8) :initial-element byte)))
@@ -53,7 +56,7 @@
                                                   e
                                                   (hunchentoot::get-backtrace))
                                           (throw 'stop-handling-client nil))))
-                              (funcall (acceptor-handler *acceptor*) client))))
+                              (funcall (acceptor-websocket-handler *acceptor*) client))))
                         :name "Websocket client handler process"
                         :initial-bindings `((cept:*cept-stream* . ,client)
                                             ,@bt:*default-special-bindings*))))
@@ -61,28 +64,35 @@
 (defmethod hunchensocket:client-disconnected ((resource cept-websocket-resource)
                                               (client binary-websocket-stream))
   (format t "; client disconnected~%")
-  (push-queue :eof (queue client)))
+  (lq:push-queue :eof (queue client)))
 
 (setf hunchensocket:*websocket-dispatch-table* (list (constantly (make-instance 'cept-websocket-resource))))
 
 (defvar *acceptor* nil)
 
 (defclass acceptor (hunchensocket:websocket-acceptor hunchentoot:easy-acceptor)
-  ((handler :initarg :handler :reader acceptor-handler)))
+  ((websocket-handler :initarg :websocket-handler :reader acceptor-websocket-handler)))
 
 (defmacro with-html (() &body body)
   `(with-output-to-string (s)
      (xhtml-generator:with-xhtml (s)
        ,@body)))
 
-(hunchentoot:define-easy-handler (goto-page :uri "/goto-page") (number)
+(defun send-emulator-command (command &rest arguments)
   (let ((thread (hunchentoot:session-value 'cept-thread)))
     (cond
-      (thread (bt:interrupt-thread thread 'page:goto-page number)
-              "OK")
-      (t (setf (hunchentoot:return-code*) 400)))))
+      (thread
+       (bt:interrupt-thread thread (lambda () (apply 'ee:emit command page:*session* arguments)))
+       "OK")
+      (t
+       (setf (hunchentoot:return-code*) 400)
+       "No emulator attached to session"))))
 
-(hunchentoot:define-easy-handler (load-btl :uri "/load-btl") ())
+(hunchentoot:define-easy-handler (goto-page :uri "/goto-page") (number)
+  (send-emulator-command :goto-page number))
+
+(hunchentoot:define-easy-handler (load-btl-file :uri "/load-btl-file") (btl-filename)
+  (send-emulator-command :load-btl-file btl-filename))
 
 (hunchentoot:define-easy-handler (home :uri "/emulator") ()
   (hunchentoot:start-session)
@@ -95,7 +105,10 @@
            (:body
             (:h1 "Web-CEPT-Emulator")
             ((:div :class "container")
-             ((:div :class "left") " ")
+             ((:div :class "left btl-info")
+              ((:table)
+               (:tr (:th "Name") (:td "ccc.btl"))
+               (:tr (:th "Datum") (:td "20.02.1987"))))
              ((:div :class "middle")
               ((:div :id "display-container")
                ((:canvas :id "emulator" :width "600" :height "300" :tabindex "1")))
@@ -104,11 +117,11 @@
              ((:div :class "right") " "))
             ((:script :src "bundle.js"))))))
 
-(defun start (handler &key (port 8881))
+(defun start (websocket-handler &key (port 8881))
   (when *acceptor*
     (hunchentoot:stop *acceptor*))
   (setf *acceptor* (make-instance 'acceptor
                                   :port port
-                                  :handler handler
+                                  :websocket-handler websocket-handler
                                   :document-root #p"web-c14/public/"))
   (hunchentoot:start *acceptor*))

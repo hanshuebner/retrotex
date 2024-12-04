@@ -8,21 +8,11 @@
            #:editor
            #:start
            #:show-article-file
-           #:handle-client))
+           #:load-btl-file))
 
 (in-package :retrotex)
 
 (defparameter *bind-last-client-p* t)
-
-(defvar *client-handler* 'standard-btx-handler)
-
-(defun handle-client (stream)
-
-  (funcall *client-handler* stream))
-
-(defmacro define-cept-client-handler (() &body body)
-  `(setf *client-handler* (lambda ()
-                            ,@body)))
 
 (defun slideshow (pages &key sleep)
   (let ((i 0))
@@ -101,11 +91,13 @@
     (cept:write-cept "Hello world! "))
   (loop until (= (read-byte stream) (char-code #\q))))
 
+(defparameter *default-btl-pathname* #P"ccc.btl")
+
 (defun client-handler (stream)
   (when *bind-last-client-p*
     (setf cept:*cept-stream* stream)
     (format t "; bound *cept-stream* to ~A~%" stream))
-  (let ((session (make-instance 'btl-page:btl-session :cept-stream stream)))
+  (let ((session (make-instance 'btl-page:btl-session :cept-stream stream :filename *default-btl-pathname*)))
     (page:handle-client session)))
 
 #+(or)
@@ -122,6 +114,7 @@
         (format t "~A => ~S~%" slot (slot-value i slot))))))
 
 (defun start ()
+  (setf bt:*default-special-bindings* '((page:*session*)))
   (format t "; starting serial server~%")
   (rafi:start-serial-server 'client-handler)
   (format t "; starting web server~%")

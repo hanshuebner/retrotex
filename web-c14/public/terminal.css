@@ -33,7 +33,11 @@ body {
     flex-direction: column;
     height: 100vh;
     background-color: white;
-    font-family: 'IBM Plex Serif', Georgia, serif;
+    font-family: 'IBM Plex Sans', sans-serif;
+}
+
+.btl-info th {
+    text-align: left;
 }
 
 .container {
