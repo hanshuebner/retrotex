@@ -27,6 +27,29 @@
   (write-byte (char-code #\ack) stream)
   (finish-output stream))
 
+(defun listener (handler port modem-type)
+  (catch 'exit
+    (let ((socket (usocket:socket-listen "0.0.0.0" port :reuse-address t)))
+      (unwind-protect
+           (loop
+             (let ((client-socket (usocket:socket-accept socket :element-type '(unsigned-byte 8))))
+               ;; fixme start thread
+               (format t "Connection accepted~%")
+               (handler-case
+                   (let ((stream (usocket:socket-stream client-socket)))
+                     #+sbcl
+                     (setf (sb-impl::fd-stream-buffering stream) :none)
+                     (when modem-type
+                       (emulate-modem-dialer modem-type stream))
+                     (unwind-protect
+                          (funcall handler stream)
+                       (ignore-errors (close stream))))
+                 (error (e)
+                   (format t "Error handling client: ~a~%" e)))
+               (usocket:socket-close client-socket)
+               (format t "TCP client disconnected")))
+        (usocket:socket-close socket)))))
+
 (defvar *tcp-server* nil)
 
 (defun stop ()
@@ -38,27 +61,6 @@
 (defun start (handler &key (port 20000) modem-type)
   (stop)
   (setf *tcp-server*
-       (bt:make-thread
-        (lambda ()
-          (catch 'exit
-            (let ((socket (usocket:socket-listen "0.0.0.0" port :reuse-address t)))
-              (unwind-protect
-                   (loop
-                     (let ((client-socket (usocket:socket-accept socket :element-type '(unsigned-byte 8))))
-                       (format t "Connection accepted~%")
-                       (handler-case
-                           (let ((stream (usocket:socket-stream client-socket)))
-                             #+sbcl
-                             (setf (sb-impl::fd-stream-buffering stream) :none)
-                             (when modem-type
-                               (emulate-modem-dialer modem-type stream))
-                             (unwind-protect
-                                  (funcall handler stream)
-                               (ignore-errors (close stream))))
-                         (error (e)
-                           (format t "Error handling client: ~a~%" e)))
-                       (usocket:socket-close client-socket)
-                       (format t "TCP client disconnected")))
-                (usocket:socket-close socket)))))
-        :name (format nil "CEPT server on port ~A" port))))
+       (bt:make-thread (curry 'listener handler port modem-type)
+                       :name (format nil "CEPT server on port ~A" port))))
 

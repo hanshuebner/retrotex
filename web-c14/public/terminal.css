@@ -33,7 +33,11 @@ body {
     flex-direction: column;
     height: 100vh;
     background-color: white;
-    font-family: 'IBM Plex Serif', Georgia, serif;
+    font-family: 'IBM Plex Sans', sans-serif;
+}
+
+.btl-info th {
+    text-align: left;
 }
 
 .container {
@@ -41,21 +45,15 @@ body {
 }
 
 .left {
-    width: 20px; /* Feste Breite für die linke Spalte */
+    flex: 1;
 }
 
 .middle {
-    flex: 300px;
+    flex: 3;
 }
 
 .right {
     flex: 1;
-}
-
-p, ul{
-    margin: 2em;
-    margin-left: 100px;
-    max-width: 50em;
 }
 
 h1, h2, h3 {
@@ -71,6 +69,7 @@ h1 {
 h2 {
     font-size: 200%;
 }
+ 
 #display-container {
     flex: 2;
     display: flex;
@@ -97,4 +96,12 @@ canvas {
     width: 100%;
     height: auto;
     display: block;
+}
+
+.open-btl-file {
+    margin-left: 30px;
+}
+
+.open-btl-file select {
+    margin: 1em;
 }

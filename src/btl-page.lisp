@@ -2,10 +2,18 @@
 
 (defpackage :btl-page
   (:use :cl :alexandria)
-  (:export #:load-btl-file
-           #:load-btl
+  (:export
            #:print-btl-directory
-           #:btl-session))
+           #:btl-session
+           #:current-page
+           #:make-page-directory
+           #:load-session-btl
+           #:read-one-btl-file
+           #:btl-file-date
+           #:btl-files-in-directory
+           #:*archive-directory*)
+  (:local-nicknames
+   (:ee :event-emitter)))
 
 (in-package :btl-page)
 
@@ -300,7 +308,7 @@
   (unless (gethash "#" (page:choices sk))
     (setf (gethash "#" (page:choices sk)) (nächstes-blatt (page:nummer sk)))))
 
-(defun load-btl-file (pathname)
+(defun read-one-btl-file (pathname)
   (with-input-from-file (f pathname :element-type '(unsigned-byte 8))
     (loop with db = (make-hash-table :test #'equal)
           for i from #x4000 below (file-length f) by #x0800
@@ -310,11 +318,17 @@
           collect (make-instance 'sk :file (pathname-name pathname):buffer buffer :db db)
           finally (format t "~&; ~A Seiten aus ~A gelesen~%" (/ i #x0800) pathname))))
 
-(defparameter *archive-directory* #P"archive/")
-
 (defun btl-files-in-directory (pathname)
   (remove-if-not (curry #'string-equal "btl")
                  (directory (merge-pathnames #p"*.*" pathname)) :key #'pathname-type))
+
+(defun read-btl (pathname)
+  (if (pathname-name pathname)
+      (read-one-btl-file pathname)
+      (let ((btl-pathnames (btl-files-in-directory pathname)))
+        (mappend 'read-one-btl-file btl-pathnames))))
+
+(defparameter *archive-directory* (merge-pathnames #P"archive/"))
 
 (defclass btl-directory-page (page:page)
   ((btl-files :reader btl-files)
@@ -365,22 +379,27 @@
            (cept:background-color (1+ (mod i 2)))
            (cept:format-cept "   ~37A" (enough-namestring btl-file-pathname (base-directory page)))))
 
-(defun load-btl (pathname)
-  (if (pathname-name pathname)
-      (load-btl-file pathname)
-      (let ((btl-pathnames (btl-files-in-directory pathname)))
-        (mappend 'load-btl-file btl-pathnames))))
-
 (defun print-btl-directory (pathname)
-  (let ((pages (load-btl-file pathname)))
+  (let ((pages (read-one-btl-file pathname)))
     (dolist (page pages)
       (print-sk page))
     (format t "~A Seiten~%" (length pages))))
 
 (defparameter *btl-directory* (or (uiop:getenv "BTL_DIRECTORY") #p"BTL/"))
 
+(defun load-session-btl (session filename)
+  (let* ((pages (read-btl filename))
+         (page-directory (page:make-page-directory pages)))
+    (setf (page:pages session) page-directory
+          (page:current-page session) (first pages))))
+
 (defclass btl-session (page:session)
   ((loaded-decoder-pages :initform (make-list 3) :accessor loaded-decoder-pages)))
+
+(defmethod initialize-instance :after ((session btl-session) &key filename)
+  (when filename
+    (load-session-btl session filename))
+  (ee:on :load-btl-file session (lambda (filename) (load-session-btl session filename))))
 
 (defmethod page:impressum ((sk sk))
   (SKOHQ1 sk))
@@ -422,7 +441,7 @@
   (cept:write-cept (SKOAC sk)))
 
 (defun check-btl-cross-references (pathname)
-  (let ((pages (load-btl-file pathname))
+  (let ((pages (read-one-btl-file pathname))
         (error-count 0))
     (dolist (page (sort pages #'string-lessp :key #'page:nummer))
       (let (has-error-p)
@@ -435,10 +454,3 @@
               (format t "  ~A => ~A~%" input target-page)
               (incf error-count))))))
     (format t "~D error~:P~%" error-count)))
-
-(defparameter *default-btl-pathname* #P"ccc.btl")
-
-(defmethod initialize-instance :after ((session btl-session) &key)
-  (let ((pages (page:make-page-directory (btl-page:load-btl *default-btl-pathname*))))
-    (setf (page:pages session) pages
-          (page:current-page session) (gethash "655321a" pages))))

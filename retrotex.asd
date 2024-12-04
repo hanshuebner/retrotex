@@ -12,6 +12,7 @@
                "cl-gd"
                "cl-interpol"
                "cl-ppcre"
+               "event-emitter"
                "flexi-streams"
                "trivial-gray-streams"
                "lparallel"
