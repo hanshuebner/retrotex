@@ -79,8 +79,12 @@ h2 {
 }
 
 #keyboard-container {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    padding: 3px;
+    background: #e4e3e6;
     flex: 1;
-    display: none;
+    display: block;
     justify-content: center;
     align-items: center;
 }

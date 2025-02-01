@@ -57,6 +57,12 @@ const initKeyboard = (send: (ceptCodes: number[]) => void) => {
     console.log('key', code)
     if (code in keyToCept) {
       send(keyToCept[code])
+    } else {
+      const match = code.match(/^(?:Keypad|Digit|Key)(.)$/)
+      if (match) {
+        const [, char] = match
+        send([char.charCodeAt(0)])
+      }
     }
     flashKey(target)
   }

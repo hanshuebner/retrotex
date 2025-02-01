@@ -16,15 +16,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     0x000,
   )
   let atStep = 0
+  let debug = !!location.search.match(/debug/)
 
-  const interpreter = ceptInterpreter(
-    (message: string, ...args: any[]) =>
+  const log = (message: string, ...args: any[]) => {
+    if (debug) {
       console.log.apply(console, [
         `${atStep.toString(10).padStart(4, ' ')} [${interpreter.attributeMode()}] ${message}`,
         ...args,
-      ]),
-    display,
-  )
+      ])
+    }
+  }
+
+  const interpreter = ceptInterpreter(log, display)
   const websocket = initWebsocket()
   const keyPressed = (ceptCodes: number[]) => {
     if (ceptCodes[0] === 0xff && ceptCodes[1] === 0xff) {
