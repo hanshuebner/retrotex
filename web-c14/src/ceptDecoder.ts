@@ -542,7 +542,7 @@ const decode = async (
       } else if ((0x20 <= c && c <= 0x7f) || c >= 0xa0) {
         interpreter.putChar(c)
       } else {
-        console.log('ignored', c)
+        console.log('undecoded CEPT byte ignored', c)
       }
   }
 }

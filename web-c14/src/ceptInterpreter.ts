@@ -528,7 +528,6 @@ export default (
       }
     }
     iterateBlocks()
-    console.log('glyph', glyphNumber, 'rows', rows)
     display.defineDrcs(glyphNumber, rows)
   }
 
